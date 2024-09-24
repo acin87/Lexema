@@ -1,0 +1,10 @@
+.lsLayout{
+    display: flex;
+    position: relative;
+}
+
+.lsWrapper{
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+}

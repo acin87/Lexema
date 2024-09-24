@@ -1,0 +1,22 @@
+:root{
+    --ls-font-family: "Roboto Condensed", sans-serif;
+    --ls-body-font-size: 1rem;
+    --ls-body-font-weight: 400;
+    --ls-body-line-height: 1.5;
+    --ls-body-color-primary: #212529;
+    --ls-body-color-secondary: #007bff;
+    --ls-body-bg: #f2f5f6;
+}
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    font-family: var(--ls-font-family);
+    font-size: var(--ls-body-font-size);
+    font-weight: var(--ls-body-font-weight);
+    color: var( --ls-body-bg);
+    line-height: var(--ls-body-line-height);
+    background-color: var(--ls-body-bg);
+    font-style: normal;
+}
