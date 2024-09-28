@@ -1,11 +1,10 @@
 import { FC, lazy, memo, Suspense } from 'react';
-import LeftSkeleton from '../../../pages/Skeletons/LeftSideBar/LeftSkeleton.tsx';
-
+import RightSkeleton from '../../Skeletons/RightSideBar/RightSkeleton.tsx';
 const RightSideBar = lazy(() => import('./RightSideBar.tsx'));
 
 const RightSideBarAsync: FC = memo(() => {
     return (
-        <Suspense fallback={<LeftSkeleton />}>
+        <Suspense fallback={<RightSkeleton />}>
             <RightSideBar />
         </Suspense>
     );

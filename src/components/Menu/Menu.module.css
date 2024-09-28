@@ -19,6 +19,12 @@
 .menuItem:hover > div .svgIcon{
     animation: swing ease-in-out 0.5s 1 alternate;
 }
+.menuItem {
+    color: #ffffff99;
+}
+.menuItem:hover {
+    color: #fff;
+}
 @keyframes swing {
     0%,
     30%,

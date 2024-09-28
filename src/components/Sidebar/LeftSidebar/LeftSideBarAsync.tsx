@@ -1,5 +1,5 @@
 import { FC, lazy, memo, Suspense } from 'react';
-import LeftSkeleton from '../../../pages/Skeletons/LeftSideBar/LeftSkeleton';
+import LeftSkeleton from '../../Skeletons/LeftSideBar/LeftSkeleton.tsx';
 
 const LeftSideBar = lazy(() => import('./LeftSideBar.tsx'));
 

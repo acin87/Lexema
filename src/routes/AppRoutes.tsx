@@ -1,13 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { MenuLayout } from '../layouts/Menu/MenuLayout';
+import { MainLayout } from '../layouts/Main/MainLayout';
 
+import ContentWrapper from '../components/Skeletons/ContentWrapper/ContentWrapper';
 import ErrorPage from '../pages/Error/ErrorPage';
-import ContentWrapper from '../pages/Skeletons/ContentWrapper/ContentWrapper';
 
 export const AppRoutes = createBrowserRouter([
     {
         path: '/',
-        element: <MenuLayout />,
+        element: <MainLayout />,
         children: [
             {
                 path: '/',

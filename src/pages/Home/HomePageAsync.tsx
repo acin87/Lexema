@@ -1,5 +1,5 @@
 import { FC, lazy, memo, Suspense } from 'react';
-import ContentWrapper from '../Skeletons/ContentWrapper/ContentWrapper.tsx';
+import ContentWrapper from '../../components/Skeletons/ContentWrapper/ContentWrapper.tsx';
 
 const HomePage = lazy(() => import('./HomePage.tsx'));
 
