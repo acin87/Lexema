@@ -1,22 +1,31 @@
-import { IconButton, TextField, TextFieldProps } from '@mui/material';
+import { IconButton, InputAdornment, TextField } from '@mui/material';
 import styles from './navbar.module.css';
-
 import { EmailOutlined, NotificationsOutlined } from '@mui/icons-material';
-import { forwardRef } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
+import { FC, memo } from 'react';
+
 //TODO: викинуть обработку инпута в модель
-export const Navbar = forwardRef<HTMLInputElement, TextFieldProps>(({...props}, ref) =>{
+const Navbar: FC = memo(() => {
     return (
         <>
             <nav className={styles.lsNavBar}>
                 <div className={styles.lsNavBarWrap}>
                     <div className="nav-start-wrap">
                         <div className={styles.inputWrapper}>
-                            <TextField {...props}
-                                ref={ref}
+                            <TextField
                                 className={styles.formControl}
                                 size="small"
-                                label="Поиск"
                                 variant="outlined"
+                                sx={{ width: '30ch' }}
+                                slotProps={{
+                                    input: {
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <SearchIcon />
+                                            </InputAdornment>
+                                        ),
+                                    },
+                                }}
                             ></TextField>
                         </div>
                     </div>
@@ -46,3 +55,4 @@ export const Navbar = forwardRef<HTMLInputElement, TextFieldProps>(({...props}, 
         </>
     );
 });
+export default Navbar;

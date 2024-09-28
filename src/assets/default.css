@@ -1,11 +1,12 @@
 :root{
     --ls-font-family: "Roboto Condensed", sans-serif;
-    --ls-body-font-size: 1rem;
-    --ls-body-font-weight: 400;
-    --ls-body-line-height: 1.5;
-    --ls-body-color-primary: #212529;
-    --ls-body-color-secondary: #007bff;
-    --ls-body-bg: #f2f5f6;
+    --ls-font-size: 1rem;
+    --ls-font-weight: 400;
+    --ls-line-height: 1.5;
+    --ls-color-primary: #212529;
+    --ls-color-secondary: #007bff;
+    --ls-font-color-primary: #fff;
+    --ls-font-color-secondary:#f2f5f6;
 }
 *{
     padding: 0;
@@ -13,10 +14,10 @@
 }
 body{
     font-family: var(--ls-font-family);
-    font-size: var(--ls-body-font-size);
-    font-weight: var(--ls-body-font-weight);
-    color: var( --ls-body-bg);
-    line-height: var(--ls-body-line-height);
-    background-color: var(--ls-body-bg);
+    font-size: var(--ls-font-size);
+    font-weight: var(--ls-font-weight);
+    color: var(--ls-font-color-primary);
+    line-height: var(--ls-line-height);
+    background-color: var(--ls-font-color-secondary);
     font-style: normal;
 }

@@ -1,0 +1,10 @@
+.right_side_bar {
+    display: flex;
+    flex-grow: 0;
+    flex-direction: column;
+    width: 350px;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(15px);
+    background-color: rgba(55, 55, 55, 0.1);
+    padding: 20px;
+}

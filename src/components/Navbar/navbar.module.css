@@ -1,15 +1,14 @@
 /** NavBar **/
 .lsNavBar{
-    position: fixed;
     display: flex;
     align-items: center;
-    top: 0;
-    right: 0;
     height: 65px;
     box-shadow: 0 0 1.75rem rgba(0, 0, 0, 0.07);
-    left: 270px;
     padding-top: .5rem;
     padding-bottom: .5rem;
+    background-color: var( --ls-font-color-secondary);
+    border-radius: 5px;
+    backdrop-filter: blur(15px);
 }
 .lsNavBarWrap{
     display: flex;

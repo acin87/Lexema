@@ -1,0 +1,38 @@
+.left_sidebar {
+    display: flex;
+    flex-grow: 0;
+    flex-direction: column;
+    width: 280px;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(15px);
+    background-color: rgba(55, 55, 55, 0.1);
+}
+
+.Icon_btn {
+    color: var(--ls-font-color-primary);
+}
+.sidebar_header {
+    display: flex;
+    height: 65px;
+    align-items: center;
+    padding-right: 10px;
+    justify-content: space-between;
+}
+.head_icon_wrap {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 18px;
+}
+
+.site_icon {
+    width: 35px;
+    height: 35px;
+}
+
+.site_title {
+    color: var(--ls-body-color-secondary);
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    margin-left: 25px;
+}
