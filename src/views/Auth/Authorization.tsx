@@ -29,12 +29,12 @@ const Authorization: FC = memo(() => {
     }, []); // срабатывает при начальной загрузке компонента
 
     const handleClick = () => {
-        console.log(styleChange)
+        console.log(styleChange);
         setStyleChange(!styleChange); // изменяем стиль через кнопку
     };
     console.log(styleChange);
     return (
-        <div className={cn(styles.container , styleChange ?  styles.signIn : styles.signUp)}>
+        <div className={cn(styles.container, styleChange ? styles.signIn : styles.signUp)}>
             <div className={styles.wrapper}>
                 <div className={cn(styles.col, styles.alignItemsCenter, styles.flexCol, styles.signUp)}>
                     <div className={cn(styles.formWrapper, styles.alignItemsCenter)}>

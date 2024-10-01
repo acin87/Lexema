@@ -1,8 +1,8 @@
-import { IconButton, InputAdornment, TextField } from '@mui/material';
-import styles from './navbar.module.css';
 import { EmailOutlined, NotificationsOutlined } from '@mui/icons-material';
 import SearchIcon from '@mui/icons-material/Search';
+import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { FC, memo } from 'react';
+import styles from './navbar.module.css';
 
 //TODO: викинуть обработку инпута в модель
 const Navbar: FC = memo(() => {

@@ -1,5 +1,5 @@
 import { FC, memo } from 'react';
-import styles from './RightSideBar.module.css'
+import styles from './RightSideBar.module.css';
 
 const RightSideBar: FC = memo(() => {
     return (

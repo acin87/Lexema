@@ -1,10 +1,8 @@
 :root {
-
-    --color-light-bg-accent:#0069F7;
-    --color-light-bg-accent-shade-7:#006bf7f3;
+    --color-light-bg-accent: #0069f7;
+    --color-light-bg-accent-shade-7: #006bf7f3;
     --color-light-bg-accent-shade-15: #006bf7e7;
-    --color-light-bg-accent-alpha-30:#0b58bdb4;
-
+    --color-light-bg-accent-alpha-30: #0b58bdb4;
 
     --color-light-text-primary: #0b1f35;
     --color-light-text-primary-inverted: #fff;
@@ -19,6 +17,4 @@
     --color-light-bg-neutral-shade-7: rgb(204, 206, 209);
     --color-light-bg-neutral-shade-15: rgb(186, 189, 191);
     --color-light-bg-neutral-shade-30: rgb(153, 155, 157);
-
-
 }
