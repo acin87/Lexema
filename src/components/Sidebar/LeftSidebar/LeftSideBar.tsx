@@ -3,7 +3,7 @@ import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined';
 import { IconButton } from '@mui/material';
 import { FC, memo } from 'react';
 import { Link } from 'react-router-dom';
-import { useToggle } from '../../../hooks/useToggle';
+import { useToggle } from '../../../app/hooks/useToggle';
 import Menu from '../../Menu/Menu';
 import styles from './LeftSideBar.module.css';
 

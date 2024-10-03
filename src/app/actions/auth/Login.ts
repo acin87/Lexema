@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 import { API } from '../../api/api';
-import { AuthTypes } from '../../types/AuthTypes';
+import { AuthTypes } from './AuthActionTypes';
 
-const Login = createAsyncThunk('LX/login', async (params: { email: string; password: string }) => {
+const Login = createAsyncThunk('user/login', async (params: { email: string; password: string }) => {
     try {
         const { data } = await axios.post<AuthTypes>(API.LOGIN, {
             email: params.email,
