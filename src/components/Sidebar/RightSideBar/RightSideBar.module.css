@@ -1,4 +1,8 @@
 .right_side_bar {
+    position: sticky;
+    top: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
     flex-grow: 0;
     flex-direction: column;

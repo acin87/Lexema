@@ -2,12 +2,8 @@
     display: flex;
     position: relative;
     justify-content: space-around;
-    background-image: url('../../assets/images/material-minimal-shape-8k-lv.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
     padding-left: 10rem;
     padding-right: 10rem;
-    width: 100vw;
     height: 100vh;
 }
 
@@ -16,5 +12,6 @@
     flex-direction: column;
     padding-left: 20px;
     padding-right: 20px;
-    width: 100%;
+    width: calc(100% - 280px - 350px);
+    height: auto;
 }

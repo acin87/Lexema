@@ -2,9 +2,9 @@ import { createBrowserRouter } from 'react-router-dom';
 import { MainLayout } from '../../layouts/Main/MainLayout';
 
 import ErrorPage from '../../pages/Error/ErrorPage';
-import HomePageAsync from '../../pages/Home/HomePageAsync';
-import Authorization from '../../views/Auth/Authorization';
-import RequireAuth from '../../views/Auth/RequireAuth';
+import Authorization from '../../Views/Auth/Authorization';
+import RequireAuth from '../../Views/Auth/RequireAuth';
+import PostList from '../../Views/Posts/postList';
 
 export const AppRoutes = createBrowserRouter([
     {
@@ -17,7 +17,7 @@ export const AppRoutes = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element: <HomePageAsync />,
+                element: <PostList />,
             },
         ],
     },

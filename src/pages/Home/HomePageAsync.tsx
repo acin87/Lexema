@@ -10,5 +10,4 @@ const HomePageAsync: FC = memo(() => {
         </Suspense>
     );
 });
-
 export default HomePageAsync;

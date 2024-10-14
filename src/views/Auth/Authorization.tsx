@@ -1,23 +1,34 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import SendOutlined from '@mui/icons-material/SendOutlined';
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@mui/material';
+import {
+    Button,
+    CircularProgress,
+    FormControl,
+    IconButton,
+    InputAdornment,
+    InputLabel,
+    OutlinedInput,
+    TextField,
+} from '@mui/material';
 import cn from 'classnames';
-import { FC, FormEvent, memo, MouseEvent, useEffect, useState } from 'react';
+import { FC, FormEvent, MouseEvent, useEffect, useState } from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import Login from '../../app/actions/auth/Login';
-import { LoginForm } from '../../app/reducers/auth/AuthSliceTypes';
-import { AppDispath, RootState } from '../../app/store/store';
+
+import { JWT_PERSISTENT_STATE, LoginForm } from '../../app/reducers/auth/authTypes.ts';
+
+import { useLoginUserMutation } from '../../app/reducers/auth/authApi.ts';
+import { saveState } from '../../app/util/LocalStorage.ts';
 import styles from './Auth.module.css';
 
-const Authorization: FC = memo(() => {
+const Authorization: FC = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [styleChange, setStyleChange] = useState(false);
     const [timerStarted, setTimerStarted] = useState(false);
+
     const navigate = useNavigate();
-    const dispatch = useDispatch<AppDispath>();
-    const { jwt, loginErrorMsg } = useSelector((selector: RootState) => selector.auth);
+    const [loginUser, { isError, error, isLoading, isSuccess, data }] = useLoginUserMutation();
+    const errorMsg = isErrorWithMessage(error);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -29,25 +40,32 @@ const Authorization: FC = memo(() => {
         event.preventDefault();
     };
 
-    const handleSubmitLogin = async (event: FormEvent<HTMLFormElement>) => {
-        console.log(event);
+    const handleSubmitLogin = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-       // dispatch(authActions.clearLoginError());
         const target = event.target as typeof event.target & LoginForm;
-
-        const { authEmail, authPassword } = target;
-
-        await sendLogin(authEmail.value, authPassword.value);
+        const { username, password } = target;
+        loginUser({ password: password, username: username });
     };
-    const sendLogin = async (email: string, password: string) => {
-        dispatch(Login({ email, password }));
-    };
+    function isErrorWithMessage(error: unknown): error is { message: string } {
+        return (
+            typeof error === 'object' &&
+            error != null &&
+            'message' in error &&
+            typeof (error as any).message === 'string'
+        );
+    }
+    useEffect(() => {
+        if (isSuccess) {
+            navigate('/');
+            console.log(data)
+            saveState({ jwt: data.accessToken }, JWT_PERSISTENT_STATE);
+        }
+    }, [isSuccess, navigate]);
 
     useEffect(() => {
-        if (jwt) {
-            navigate('/');
-        }
-    }, [jwt, navigate]);
+        console.log(error);
+        console.log(errorMsg);
+    }, [isError]);
 
     useEffect(() => {
         if (!timerStarted) {
@@ -88,9 +106,9 @@ const Authorization: FC = memo(() => {
                             </div>
                             <div className={styles.inputGroup}>
                                 <FormControl sx={{ width: '30ch' }} variant="outlined">
-                                    <InputLabel htmlFor="password">Пароль</InputLabel>
+                                    <InputLabel htmlFor="pass">Пароль</InputLabel>
                                     <OutlinedInput
-                                        id="password"
+                                        id="pass"
                                         type={showPassword ? 'text' : 'password'}
                                         endAdornment={
                                             <InputAdornment position="end">
@@ -150,7 +168,7 @@ const Authorization: FC = memo(() => {
                             <form id="login" onSubmit={handleSubmitLogin} method="post">
                                 <div className={styles.inputGroup}>
                                     <TextField
-                                        id="authEmail"
+                                        id="username"
                                         className={styles.formControl}
                                         label="E-mail"
                                         variant="outlined"
@@ -159,9 +177,9 @@ const Authorization: FC = memo(() => {
                                 </div>
                                 <div className={styles.inputGroup}>
                                     <FormControl sx={{ width: '30ch' }} variant="outlined">
-                                        <InputLabel htmlFor="authPassword">Пароль</InputLabel>
+                                        <InputLabel htmlFor="password">Пароль</InputLabel>
                                         <OutlinedInput
-                                            id="authPassword"
+                                            id="password"
                                             type={showPassword ? 'text' : 'password'}
                                             endAdornment={
                                                 <InputAdornment position="end">
@@ -182,14 +200,16 @@ const Authorization: FC = memo(() => {
                                 </div>
                                 <Button
                                     variant="contained"
-                                    endIcon={<SendOutlined />}
+                                    endIcon={
+                                        isLoading ? <CircularProgress size={25} color="inherit" /> : <SendOutlined />
+                                    }
                                     sx={{ width: '65%' }}
                                     type="submit"
                                 >
                                     Войти
                                 </Button>
                                 <p className={styles.paragraph}>
-                                    <span>Еще не зарегестрированны?</span>
+                                    <span>'Еще не зарегестрированны?{isError} </span>
                                     <Button size="small" onClick={handleStyleChangeClick}>
                                         Регистрация
                                     </Button>
@@ -214,5 +234,5 @@ const Authorization: FC = memo(() => {
             </div>
         </div>
     );
-});
+};
 export default Authorization;

@@ -18,6 +18,9 @@ body {
     font-weight: var(--ls-font-weight);
     color: var(--ls-font-color-primary);
     line-height: var(--ls-line-height);
-    background-color: var(--ls-font-color-secondary);
     font-style: normal;
+    background: url('./images/material-minimal-shape-8k-lv.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
 }
