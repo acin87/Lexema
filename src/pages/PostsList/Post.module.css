@@ -1,12 +1,21 @@
-.postList {
-    display: flex;
-    flex:  0 0 auto;
-    width: 66.66667%;
-    flex-wrap: wrap;
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
+@media (max-width: 992px) {
+    .postList {
+        flex-shrink: 0;
+        width: 100%;
+        max-width: 100%;
+    }
 }
-.post{
+@media (min-width: 992px) {
+    .postList {
+        display: flex;
+        flex: 0 0 auto;
+        width: 66.66667%;
+        flex-wrap: wrap;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+}
+.post {
     padding: 0;
 }

@@ -1,5 +1,6 @@
-import { Button, Paper, useTheme } from '@mui/material';
-import cn from 'classnames';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { Box, Button, Paper, useTheme } from '@mui/material';
 import { FC, memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { uiActions } from '../../../app/reducers/uiSlice/uiSlice';
@@ -23,7 +24,7 @@ const RightSideBar: FC = memo(() => {
     };
 
     return (
-        <Paper className={styles.rightSidebarMini} sx={{transition: 'all 0.3s ease-in-out'}}>
+        <Paper className={styles.rightSidebarMini} sx={{ transition: 'all 0.3s ease-in-out' }}>
             <div className={styles.rightSidebarPanel}>
                 <div className="card shadow-none">
                     <div className="card-body p-0">
@@ -32,16 +33,20 @@ const RightSideBar: FC = memo(() => {
                                 Toggle
                             </Button>
                         </div>
-                        <div
+                        <Box
                             className={styles.rightSidebarToggle}
-                            style={{ backgroundColor: theme.palette.primary.main, color: theme.palette.text.secondary }}
+                            sx={{ backgroundColor: theme.palette.primary.main }}
                             onClick={toggleSidebar}
                         >
-                            <i className={cn('fa-solid fa-arrow-left', styles.sideLeftIcon)}></i>
-                            <i className={cn('fa-solid fa-arrow-right', styles.sideRightIcon)}>
-                                <span className="ms-3 d-inline-block ">43535</span>
-                            </i>
-                        </div>
+                            <KeyboardArrowLeftIcon
+                                className={styles.sideLeftIcon}
+                                sx={{ color: theme.palette.secondary.light }}
+                            />
+                            <KeyboardArrowRightIcon
+                                className={styles.sideRightIcon}
+                                sx={{ color: theme.palette.secondary.light }}
+                            />
+                        </Box>
                     </div>
                 </div>
             </div>

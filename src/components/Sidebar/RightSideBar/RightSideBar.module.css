@@ -16,6 +16,7 @@
 }
 .rightSidebarToggle {
     position: absolute;
+    height: 56px;
     margin-left: -2.75rem;
     background: #fff;
     padding: 0.938rem;

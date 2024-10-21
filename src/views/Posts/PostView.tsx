@@ -58,7 +58,7 @@ export const PostView = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, 
     });
 
     return (
-        <div ref={ref} className="post">
+        <Box ref={ref} className="post">
             <Card sx={{ width: '100%', height: 'calc(100% - 1rem)', paddingBottom: '1rem' }}>
                 <CardHeader
                     avatar={<Avatar sx={{ bgcolor: blue[500] }} aria-label="Avatar" src={userData?.image} />}
@@ -135,6 +135,6 @@ export const PostView = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, 
                     />
                 </Box>
             </Card>
-        </div>
+        </Box>
     );
 });

@@ -3,11 +3,11 @@ import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import { RootState } from '../../app/store/store';
+import '../../assets/styles.css';
 import Navbar from '../../components/Navbar/Navbar';
 import LeftSideBarAsync from '../../components/Sidebar/LeftSidebar/LeftSideBarAsync';
 import RightSideBar from '../../components/Sidebar/RightSideBar/RightSideBar';
 import styles from './MainLayout.module.css';
-
 export const MainLayout: FC = () => {
     const theme = useSelector((s: RootState) => s.ui.theme);
     const [darkOrLight, setDarkOrLight] = useState<string | null>('light');
@@ -32,6 +32,7 @@ export const MainLayout: FC = () => {
             secondary: {
                 main: '#777d74',
                 dark: '#656a63',
+                light: '#777d74',
                 contrastText: '#ffffff',
             },
             background: {
@@ -84,6 +85,7 @@ export const MainLayout: FC = () => {
             secondary: {
                 main: '#777d74',
                 dark: '#656a63',
+                light: '#f8f9fa',
                 contrastText: '#ffffff',
             },
             background: {

@@ -1,13 +1,21 @@
-.row{
+.row {
     display: flex;
     flex-wrap: wrap;
+}
+.row > * {
+    padding-left: calc(1rem * 0.5);
+    padding-right: calc(1rem * 0.5);
+}
+@media (max-width: 992px) {
+    .col4 {
+        flex-shrink: 0;
+        width: 100%;
+        max-width: 100%;
+    }
 }
 @media (min-width: 992px) {
     .col4 {
         flex: 0 0 auto;
         width: 33.33333%;
     }
-}.row>*{
-    padding-left: calc(1rem * .5);
-    padding-right: calc(1rem * .5);
 }
