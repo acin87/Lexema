@@ -1,17 +1,47 @@
-.left_sidebar {
-    display: flex;
-    flex-grow: 0;
-    flex-direction: column;
-    width: 280px;
-    transition: all 0.2s ease;
-    backdrop-filter: blur(15px);
-    background-color: rgba(55, 55, 55, 0.1);
+.lsSidebar {
+    box-shadow: 0 0 1.25rem 0 rgba(0, 0, 0, 0.1);
+    position: fixed;
+    z-index: 1000;
+    top: 4.688rem;
+    width: 250px;
+    height: 100%;
+    transition: all 0.3s ease-in-out;
+}
+
+@media (min-width: 1300px) and (max-width: 1499px) {
+    .lsSidebar {
+        width: 80px;
+    }
+    .lsSidebarMini {
+        width: 250px;
+    }
+    .lsSidebar span {
+        transition: all 0.3s ease-in-out;
+    }
+}
+@media (max-width: 1299px) {
+    .lsSidebar {
+        display: inline-block;
+        z-index: 99;
+        left: -260px;
+    }
+    .lsSidebarMini {
+        width: 260px;
+        left: 0;
+        z-index: 999;
+        top: 72px;
+    }
+}
+@media (min-width: 1500px) {
+    .lsSidebarMini {
+        width: 5rem;
+    }
 }
 
 .Icon_btn {
     color: var(--ls-font-color-primary);
 }
-.sidebar_header {
+body.sidebarMain .sidebar_header {
     display: flex;
     height: 65px;
     align-items: center;
@@ -35,4 +65,12 @@
     font-size: 1.5rem;
     text-transform: uppercase;
     margin-left: 25px;
+}
+@media (max-width: 1299px) {
+    body.sidebarMain .leftSidebar {
+        width: 260px;
+        left: 0;
+        z-index: 999;
+        top: 72px;
+    }
 }

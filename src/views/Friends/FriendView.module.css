@@ -1,0 +1,36 @@
+.friendUserRow {
+    display: flex;
+    padding: 12px 0;
+}
+
+.friendUserRow:first-child {
+    display: flex;
+    justify-content: space-between;
+    border: none;
+    padding-bottom: 12px;
+}
+
+.friendUserPhoto {
+    padding: 0 15px 0 0;
+    flex-grow: 0;
+}
+.friendUserPhoto img {
+    width: 80px;
+    height: 80px;
+}
+.friendUserInfo {
+    padding: 5px 10px 0 0;
+    flex-grow: 1;
+}
+.friendTitle {
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+.friendTitle span:not(:first-child) {
+    font-size: 0.8rem;
+    color: rgb(185, 185, 185);
+}
+.uiAction {
+    flex-grow: 0;
+}

@@ -1,9 +1,7 @@
-import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
-import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined';
-import { IconButton } from '@mui/material';
-import { FC, memo } from 'react';
-import { Link } from 'react-router-dom';
-import { useToggle } from '../../../app/hooks/useToggle';
+import { Paper } from '@mui/material';
+import { FC, memo, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../app/store/store';
 import Menu from '../../Menu/Menu';
 import styles from './LeftSideBar.module.css';
 
@@ -11,46 +9,26 @@ import styles from './LeftSideBar.module.css';
  * Тип для скрытия левой панели
  */
 export type LeftSideBarProps = {
-    hidden: boolean;
+    hidden?: boolean;
 };
 
 const LeftSideBar: FC = memo(() => {
-    const [isVisible, toggleVisible] = useToggle(false);
+    const sidebar = useSelector((s: RootState) => s.ui.sidebar);
+    useEffect(() => {
+        if (sidebar != undefined) {
+            toggleSidebar();
+        }
+    }, [sidebar]);
 
-    //TODO: Переписать поведение sidebar
-    const handleCollapse = () => {
-        toggleVisible();
+    const toggleSidebar = () => {
+        document.querySelector(`.${styles.lsSidebar}`)?.classList.toggle(`${styles.lsSidebarMini}`);
     };
 
-    const handleMouseEnter = () => {};
-    const handleMouseOut = () => {};
-
     return (
-        <div
-            className={styles.left_sidebar}
-            style={{ width: isVisible ? '72px' : '' }}
-            onMouseEnter={handleMouseEnter}
-            onMouseOut={handleMouseOut}
-        >
-            <div className={styles.sidebar_header}>
-                <div className={styles.head_icon_wrap}>
-                    <Link to={'/'}>
-                        <img src="src/assets/icons/favicon.png" alt="Lexema" className={styles.site_icon} />
-                    </Link>
-                    <span className={styles.site_title} hidden={isVisible}>
-                        Lexema
-                    </span>
-                </div>
-                <IconButton onClick={handleCollapse} style={{ visibility: isVisible ? 'hidden' : 'visible' }}>
-                    {isVisible ? (
-                        <ArrowForwardOutlinedIcon className={styles.Icon_btn} />
-                    ) : (
-                        <ArrowBackOutlinedIcon className={styles.Icon_btn} />
-                    )}
-                </IconButton>
-            </div>
-            <Menu hidden={isVisible} />
-        </div>
+        <Paper className={styles.lsSidebar}>
+            <div className={styles.sidebar_header}></div>
+            <Menu />
+        </Paper>
     );
 });
 export default LeftSideBar;

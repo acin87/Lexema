@@ -1,3 +1,5 @@
+import { User } from "../user/usersTypes";
+
 export type PostResponse = {
     posts: PostTypes[];
     total?: number;
@@ -12,7 +14,8 @@ export type PostResponse = {
     tags: string[]
     reactions: Reaction;
     userId: number;
-    views: number
+    views: number,
+    className: string
   }
   
   export type Reaction = {
@@ -21,5 +24,17 @@ export type PostResponse = {
   }
   export type TagsTypes = {
 
+  }
+  export type CommentResponse = {
+    comments: CommentType[],
+    total?: number;
+    skip?: number;
+    limit?: number;
+  }
+  export type CommentType ={
+    id: number,
+    body: string,
+    likes: number,
+    user: User,
   }
   

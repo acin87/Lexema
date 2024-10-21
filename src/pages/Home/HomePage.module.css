@@ -1,0 +1,13 @@
+.row{
+    display: flex;
+    flex-wrap: wrap;
+}
+@media (min-width: 992px) {
+    .col4 {
+        flex: 0 0 auto;
+        width: 33.33333%;
+    }
+}.row>*{
+    padding-left: calc(1rem * .5);
+    padding-right: calc(1rem * .5);
+}

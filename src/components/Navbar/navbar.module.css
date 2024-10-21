@@ -1,33 +1,68 @@
-.lsNavBar {
+.lsNavbar {
+    box-shadow: 0 0 1.25rem 0 rgba(0, 0, 0, 0.1);
+    padding: 0 0.938rem;
     position: sticky;
     top: 0;
-    display: flex;
-    align-items: center;
-    height: 65px;
-    box-shadow: 0 0 1.75rem rgba(0, 0, 0, 0.07);
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    background-color: var(--ls-font-color-secondary);
-    border-radius: 5px;
-    backdrop-filter: blur(15px);
-    z-index: 9999;
-}
-.lsNavBarWrap {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    min-height: 4.563rem;
+    line-height: 4.563rem;
+    left: auto;
+    right: 0;
     width: 100%;
-    padding-left: 2rem;
-    padding-right: 2rem;
-}
-.navEndWrap ul {
     display: flex;
-    flex-direction: row;
-    align-items: baseline;
-    list-style: none;
-    margin-bottom: 0;
+    z-index: 1000;
+    margin: 0;
+    transition: all 0.3s ease-in-out;
 }
-.navList .navItem:last-child {
+.lsNavbarWrap {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between !important;
+    width: 100%;
+}
+.navbarLogoWrap{
+    display: flex;
+    align-items: center;
+    padding: 0;
+    width: auto;
+    position: relative;
+    transition: all .3s ease-in-out;
+    background: 0 0;
+}
+.navbarLogoWrap > a{
+    display: flex;
+    align-items: flex-start;
+}
+.navbarLogoWrap > a img{
+    height: 2.813rem;
+    max-width: 100%;
+}
+.navbarLogoWrap > a span{
+    font-family: Poppins, sans-serif;
+    margin-left: .625rem;
+    font-size: 1.75rem;
+    line-height: 2.813rem;
+    flex: 1;
+    transition: all .3s ease-in-out;
+}
+.navBarEnd {
+    flex-basis: 100%;
+    align-items: center;
+}
+.navBarEnd .navList {
+    display: flex;
+    list-style: none;
+    margin: 0;
+}
+.navList li {
+    padding: 0 0.938rem;
+    line-height: 4.563rem;
+    min-height: 4.688rem;
+}
+.navList li:last-child{
+    display: flex;
+    align-items: center;
     padding-left: 0.5rem;
 }
 .inputWrapper {
@@ -41,7 +76,7 @@
 }
 .avatarWrap {
     position: relative;
-    display: inline-block;
+    display: flex;
     width: 4rem;
     height: 4rem;
     background-color: transparent;
@@ -54,3 +89,74 @@
     height: 100%;
     border-radius: 50%;
 }
+.leftMenuCollapseBtn{
+    padding: 0;
+}
+
+@media (min-width: 992px) {
+    .lsNavbar {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+    }
+    .navBarEnd {
+        display: flex;
+        flex-basis: auto;
+    }
+    .collapse{
+        display: none !important;
+    }
+}
+@media (max-width: 1199.98px) {
+    .lsNavbar {
+        width: 100%;
+        left: 0;
+        right: 0;
+    }
+    .inputWrapper {
+        width: 21.875rem;
+    }
+}
+@media (max-width: 991.98px) {
+    .lsNavbar {
+        position: relative;
+    }
+    .navBarEnd {
+        display: flex;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        animation: show .4s ease;
+    }
+    .show{
+        display: none !important;
+    }
+    .navList{
+        margin-left: auto !important;
+    }
+}
+@media (max-width: 767.98px) {
+    .inputWrapper {
+        display: none;
+    }
+    .navBarEnd {
+        margin-top: 0.813rem;
+    }
+}
+@media (max-width: 1400px) {
+    .navBarEnd {
+        display: flex;
+        flex-basis: auto;
+    }
+}
+@keyframes show {
+    from{
+        opacity: 0;
+        top: 0;
+    }
+    to{
+       opacity: 1;
+       top: 100%;
+    }
+}
+

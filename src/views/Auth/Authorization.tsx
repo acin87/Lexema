@@ -11,13 +11,13 @@ import {
     TextField,
 } from '@mui/material';
 import cn from 'classnames';
-import { FC, FormEvent, MouseEvent, useEffect, useState } from 'react';
+import { FC, FormEvent, useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { JWT_PERSISTENT_STATE, LoginForm } from '../../app/reducers/auth/authTypes.ts';
+import { JWT_PERSISTENT_STATE, LoginForm } from '../../app/reducers/user/usersTypes.ts';
 
-import { useLoginUserMutation } from '../../app/reducers/auth/authApi.ts';
+import { useLoginUserMutation } from '../../app/reducers/user/userApi.ts';
 import { saveState } from '../../app/util/LocalStorage.ts';
 import styles from './Auth.module.css';
 
@@ -31,14 +31,6 @@ const Authorization: FC = () => {
     const errorMsg = isErrorWithMessage(error);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-    const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-    };
-
-    const handleMouseUpPassword = (event: MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-    };
 
     const handleSubmitLogin = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -57,15 +49,9 @@ const Authorization: FC = () => {
     useEffect(() => {
         if (isSuccess) {
             navigate('/');
-            console.log(data)
             saveState({ jwt: data.accessToken }, JWT_PERSISTENT_STATE);
         }
     }, [isSuccess, navigate]);
-
-    useEffect(() => {
-        console.log(error);
-        console.log(errorMsg);
-    }, [isError]);
 
     useEffect(() => {
         if (!timerStarted) {
@@ -115,8 +101,6 @@ const Authorization: FC = () => {
                                                 <IconButton
                                                     aria-label="toggle password visibility"
                                                     onClick={handleClickShowPassword}
-                                                    onMouseDown={handleMouseDownPassword}
-                                                    onMouseUp={handleMouseUpPassword}
                                                     edge="end"
                                                 >
                                                     {showPassword ? <VisibilityOff /> : <Visibility />}
@@ -138,8 +122,6 @@ const Authorization: FC = () => {
                                                 <IconButton
                                                     aria-label="toggle password visibility"
                                                     onClick={handleClickShowPassword}
-                                                    onMouseDown={handleMouseDownPassword}
-                                                    onMouseUp={handleMouseUpPassword}
                                                     edge="end"
                                                 >
                                                     {showPassword ? <VisibilityOff /> : <Visibility />}
@@ -162,21 +144,23 @@ const Authorization: FC = () => {
                         </div>
                     </div>
                 </div>
+
                 <div className={cn(styles.col, styles.alignItemsCenter, styles.flexCol, styles.signIn)}>
                     <div className={cn(styles.formWrapper, styles.alignItemsCenter)}>
                         <div className={cn(styles.form, styles.signIn)}>
                             <form id="login" onSubmit={handleSubmitLogin} method="post">
                                 <div className={styles.inputGroup}>
                                     <TextField
+                                        error={isError}
                                         id="username"
                                         className={styles.formControl}
-                                        label="E-mail"
+                                        label="Логин"
                                         variant="outlined"
                                         sx={{ width: '30ch' }}
                                     ></TextField>
                                 </div>
                                 <div className={styles.inputGroup}>
-                                    <FormControl sx={{ width: '30ch' }} variant="outlined">
+                                    <FormControl sx={{ width: '30ch' }} variant="outlined" error={isError}>
                                         <InputLabel htmlFor="password">Пароль</InputLabel>
                                         <OutlinedInput
                                             id="password"
@@ -186,9 +170,6 @@ const Authorization: FC = () => {
                                                     <IconButton
                                                         aria-label="toggle password visibility"
                                                         onClick={handleClickShowPassword}
-                                                        onMouseDown={handleMouseDownPassword}
-                                                        onMouseUp={handleMouseUpPassword}
-                                                        edge="end"
                                                     >
                                                         {showPassword ? <VisibilityOff /> : <Visibility />}
                                                     </IconButton>
@@ -206,7 +187,7 @@ const Authorization: FC = () => {
                                     sx={{ width: '65%' }}
                                     type="submit"
                                 >
-                                    Войти
+                                    {isError ? errorMsg : 'Войти'}
                                 </Button>
                                 <p className={styles.paragraph}>
                                     <span>'Еще не зарегестрированны?{isError} </span>

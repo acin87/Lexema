@@ -2,9 +2,11 @@ import { createBrowserRouter } from 'react-router-dom';
 import { MainLayout } from '../../layouts/Main/MainLayout';
 
 import ErrorPage from '../../pages/Error/ErrorPage';
-import Authorization from '../../Views/Auth/Authorization';
-import RequireAuth from '../../Views/Auth/RequireAuth';
-import PostList from '../../Views/Posts/postList';
+import FriendList from '../../pages/Friends/FriendList';
+import HomePage from '../../pages/Home/HomePage';
+import UserProfile from '../../pages/User/UserProfile';
+import Authorization from '../../views/Auth/Authorization';
+import RequireAuth from '../../views/Auth/RequireAuth';
 
 export const AppRoutes = createBrowserRouter([
     {
@@ -17,7 +19,15 @@ export const AppRoutes = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element: <PostList />,
+                element: <HomePage />,
+            },
+            {
+                path: '/friends',
+                element: <FriendList />,
+            },
+            {
+                path: '/friends/user/:id',
+                element: <UserProfile />,
             },
         ],
     },

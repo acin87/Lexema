@@ -1,14 +1,17 @@
+import { Box } from '@mui/material';
 import { FC, memo } from 'react';
+import { UpcomingBirthday } from '../../widgets/birthday/UpcomingBirthday';
+import PostsList from '../PostsList/PostsList';
+import styles from './HomePage.module.css';
 
 const HomePage: FC = memo(() => {
     return (
-        <div>
-            <span>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quisquam perspiciatis necessitatibus
-                provident, molestiae, tempora quasi debitis reiciendis nostrum eum dolor placeat eveniet. Reiciendis
-                porro perspiciatis fugiat dolore exercitationem! Numquam, nam!
-            </span>
-        </div>
+        <Box className={styles.row}>
+            <PostsList />
+            <Box className={styles.col4}>
+                <UpcomingBirthday />
+            </Box>
+        </Box>
     );
 });
 

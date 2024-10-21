@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API } from '../../api/api';
-import { PostResponse, PostTypes } from './postTypes';
+import { CommentResponse, PostResponse, PostTypes } from './postTypes';
 
 export const postsApi = createApi({
     reducerPath: 'postsApi',
@@ -40,6 +40,11 @@ export const postsApi = createApi({
                 url: `/posts/${id}`,
             }),
         }),
+        fetchCommentById: bulder.query<CommentResponse, {id: number}>({
+            query: ({id = 1}) => ({
+                url: `/comments/post/${id}`,
+            }),
+        }),
     }),
 });
-export const { useFetchAllPostsQuery, useFetchPostByIdQuery } = postsApi;
+export const { useFetchAllPostsQuery, useFetchPostByIdQuery, useFetchCommentByIdQuery } = postsApi;
