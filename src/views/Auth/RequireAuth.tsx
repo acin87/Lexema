@@ -7,7 +7,7 @@ const RequireAuth = memo(({ children }: { children: ReactNode }) => {
     const jwt = loadState(JWT_PERSISTENT_STATE);
 
     if (!jwt) {
-        return <Navigate to="/auth" replace></Navigate>;
+        return <Navigate to="/auth" replace />;
     }
     return children;
 });

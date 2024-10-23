@@ -27,8 +27,8 @@ const Authorization: FC = () => {
     const [timerStarted, setTimerStarted] = useState(false);
 
     const navigate = useNavigate();
-    const [loginUser, { isError, error, isLoading, isSuccess, data }] = useLoginUserMutation();
-    const errorMsg = isErrorWithMessage(error);
+    const [loginUser, { isError, isLoading, isSuccess, data }] = useLoginUserMutation();
+
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -38,14 +38,6 @@ const Authorization: FC = () => {
         const { username, password } = target;
         loginUser({ password: password, username: username });
     };
-    function isErrorWithMessage(error: unknown): error is { message: string } {
-        return (
-            typeof error === 'object' &&
-            error != null &&
-            'message' in error &&
-            typeof (error as any).message === 'string'
-        );
-    }
     useEffect(() => {
         if (isSuccess) {
             navigate('/');
@@ -187,7 +179,7 @@ const Authorization: FC = () => {
                                     sx={{ width: '65%' }}
                                     type="submit"
                                 >
-                                    {isError ? errorMsg : 'Войти'}
+                                    {isError ? 'error' : 'Войти'}
                                 </Button>
                                 <p className={styles.paragraph}>
                                     <span>'Еще не зарегестрированны?{isError} </span>

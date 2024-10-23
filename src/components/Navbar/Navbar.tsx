@@ -31,7 +31,7 @@ const Navbar: FC = memo(() => {
         <Paper className={styles.lsNavbar}>
             <div className={styles.lsNavbarWrap}>
                 <div className={styles.navbarLogoWrap}>
-                    <NavLink to={'/'}>
+                    <NavLink to='/'>
                         <img src="src/assets/icons/favicon.png" alt="Lexema" className={styles.siteIcon} />
                         <span>Lexema</span>
                     </NavLink>

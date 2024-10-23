@@ -20,7 +20,7 @@ const PostsList: FC = () => {
 
     const postItem = posts?.posts.map((post, index) => {
         if (index + 1 === posts.posts.length) {
-            return <PostView key={post.id} {...post} ref={ref} className={'show'}></PostView>;
+            return <PostView key={post.id} {...post} ref={ref} className='show'></PostView>;
         }
         return <PostView key={post.id} {...post}></PostView>;
     });

@@ -38,7 +38,7 @@ export const PostView = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, 
         return (
             <Box sx={{ display: 'flex', padding: '1rem' }} id={`${post.id}-${index}`} key={index}>
                 <Box>
-                    <Avatar src="../../src/assets/icons/avatar.jpg"></Avatar>
+                    <Avatar src="../../src/assets/icons/avatar.jpg" />
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'column', marginLeft: '1.25rem' }}>
                     <Typography variant="body2" component="span">
@@ -61,14 +61,23 @@ export const PostView = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, 
         <Box ref={ref} className="post">
             <Card sx={{ width: '100%', height: 'calc(100% - 1rem)', paddingBottom: '1rem' }}>
                 <CardHeader
-                    avatar={<Avatar sx={{ bgcolor: blue[500] }} aria-label="Avatar" src={userData?.image} />}
+                    avatar={
+                        <Avatar
+                            sx={{ bgcolor: blue[500] }}
+                            aria-label="Avatar"
+                            src={userData?.image}
+                        />
+                    }
                     action={
                         <IconButton aria-label="settings">
                             <MoreVertIcon />
                         </IconButton>
                     }
                     title={
-                        <NavLink style={{ textDecoration: 'none' }} to={`friends/user/${userData?.id}`}>
+                        <NavLink
+                            style={{ textDecoration: 'none' }}
+                            to={`friends/user/${userData?.id}`}
+                        >
                             {userData?.firstName} {userData?.lastName}
                         </NavLink>
                     }

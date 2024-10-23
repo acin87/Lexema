@@ -15,7 +15,7 @@ import {
 import { FC, memo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useGetAllUsersQuery } from '../../app/reducers/user/userApi';
-import styles from './birthday.module.css'
+import styles from './birthday.module.css';
 
 export const UpcomingBirthday: FC = memo(() => {
     const usersFieldList = 'id,firstName,lastName,image,birthDate';
