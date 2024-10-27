@@ -29,121 +29,154 @@ import { useGetUserByIdQuery } from '../../app/reducers/user/userApi';
 
 export const PostView = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, ref) => {
     const { data: userData } = useGetUserByIdQuery({ id: post.userId });
-    const { data: comment } = useFetchCommentByIdQuery({ id: post.id });
+    const {
+        data: commentData,
+        isLoading,
+        isSuccess,
+        isFetching,
+    } = useFetchCommentByIdQuery({ postId: post.id });
 
-    const comments = comment?.comments.map((key, index) => {
-        if (index > 1) {
-            return '';
-        }
+    if (isLoading) {
+        return <>Loading...</>;
+    }
+    if (isFetching) {
+        return <>Загрузка...</>;
+    }
+    if (isSuccess) {
         return (
-            <Box sx={{ display: 'flex', padding: '1rem' }} id={`${post.id}-${index}`} key={index}>
-                <Box>
-                    <Avatar src="../../src/assets/icons/avatar.jpg" />
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', marginLeft: '1.25rem' }}>
-                    <Typography variant="body2" component="span">
-                        {key.user.fullName}
-                    </Typography>
-                    <Typography variant="body2" component="span">
-                        {key.body}
-                    </Typography>
-                    <ButtonGroup variant="text" aria-label="Ui button group" size="small">
-                        <Button sx={{ paddingLeft: 0 }}>Понравилось</Button>
-                        <Button>Поделится</Button>
-                        <Button>Перевести</Button>
-                    </ButtonGroup>
-                </Box>
+            <Box ref={ref} className="post">
+                <Card sx={{ width: '100%', height: 'calc(100% - 1rem)', paddingBottom: '1rem' }}>
+                    <CardHeader
+                        avatar={
+                            <Avatar
+                                sx={{ bgcolor: blue[500] }}
+                                aria-label="Avatar"
+                                src={userData?.image}
+                            />
+                        }
+                        action={
+                            <IconButton aria-label="settings">
+                                <MoreVertIcon />
+                            </IconButton>
+                        }
+                        title={
+                            <NavLink
+                                style={{ textDecoration: 'none' }}
+                                to={`friends/user/${userData?.id}`}
+                            >
+                                {userData?.firstName} {userData?.lastName}
+                            </NavLink>
+                        }
+                        subheader={`User ID - ${post.id}`}
+                    ></CardHeader>
+                    <CardContent>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                            {post.body}
+                        </Typography>
+                    </CardContent>
+                    <CardMedia
+                        component="img"
+                        height="194"
+                        image="../../src/assets/images/1361476761_621333142.jpg"
+                        alt="Paella dish"
+                    />
+                    <CardActions sx={{ justifyContent: 'space-between' }}>
+                        <ButtonGroup
+                            variant="text"
+                            aria-label="Реакция друзей"
+                            disableElevation
+                            sx={{ marginLeft: '0.5rem' }}
+                        >
+                            <Button sx={{ paddingRight: '1rem' }}>
+                                <FavoriteIcon />
+                                <span style={{ marginLeft: '0.5rem' }}>{post.reactions.likes}</span>
+                            </Button>
+                            <Button sx={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+                                <CommentOutlinedIcon />
+                                <span style={{ marginLeft: '0.5rem' }}>22</span>
+                            </Button>
+                            <Button sx={{ paddingLeft: '1rem' }}>
+                                <ShareIcon />
+                                <span style={{ marginLeft: '0.5rem' }}>
+                                    {post.reactions.dislikes}
+                                </span>
+                            </Button>
+                        </ButtonGroup>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Tooltip title={`Посмотрели ${post.views} человек`}>
+                                <RemoveRedEyeOutlinedIcon fontSize="small"></RemoveRedEyeOutlinedIcon>
+                            </Tooltip>
+                            <Typography
+                                variant="body2"
+                                component="span"
+                                sx={{ marginLeft: '0.5rem' }}
+                            >
+                                {post.views}
+                            </Typography>
+                        </Box>
+                    </CardActions>
+                    <Divider />
+                    <Box>
+                        {commentData?.comments.map((key, index) => {
+                            if (index > 1) {
+                                return '';
+                            }
+                            return (
+                                <Box
+                                    sx={{ display: 'flex', padding: '1rem' }}
+                                    id={`${post.id}-${index}`}
+                                    key={index}
+                                >
+                                    <Box>
+                                        <Avatar src="../../src/assets/icons/avatar.jpg" />
+                                    </Box>
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            marginLeft: '1.25rem',
+                                        }}
+                                    >
+                                        <Typography variant="body2" component="span">
+                                            {key.user.fullName}
+                                        </Typography>
+                                        <Typography variant="body2" component="span">
+                                            {key.body}
+                                        </Typography>
+                                        <ButtonGroup
+                                            variant="text"
+                                            aria-label="Ui button group"
+                                            size="small"
+                                        >
+                                            <Button sx={{ paddingLeft: 0 }}>Понравилось</Button>
+                                            <Button>Поделится</Button>
+                                            <Button>Перевести</Button>
+                                        </ButtonGroup>
+                                    </Box>
+                                </Box>
+                            );
+                        })}
+                    </Box>
+
+                    <Box sx={{ p: 2 }}>
+                        <TextField
+                            placeholder="Написать коментарий"
+                            fullWidth
+                            slotProps={{
+                                input: {
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <CommentOutlinedIcon />
+                                        </InputAdornment>
+                                    ),
+                                },
+                            }}
+                            variant="outlined"
+                            size="small"
+                        />
+                    </Box>
+                </Card>
             </Box>
         );
-    });
-
-    return (
-        <Box ref={ref} className="post">
-            <Card sx={{ width: '100%', height: 'calc(100% - 1rem)', paddingBottom: '1rem' }}>
-                <CardHeader
-                    avatar={
-                        <Avatar
-                            sx={{ bgcolor: blue[500] }}
-                            aria-label="Avatar"
-                            src={userData?.image}
-                        />
-                    }
-                    action={
-                        <IconButton aria-label="settings">
-                            <MoreVertIcon />
-                        </IconButton>
-                    }
-                    title={
-                        <NavLink
-                            style={{ textDecoration: 'none' }}
-                            to={`friends/user/${userData?.id}`}
-                        >
-                            {userData?.firstName} {userData?.lastName}
-                        </NavLink>
-                    }
-                    subheader={`User ID - ${post.id}`}
-                ></CardHeader>
-                <CardContent>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        {post.body}
-                    </Typography>
-                </CardContent>
-                <CardMedia
-                    component="img"
-                    height="194"
-                    image="../../src/assets/images/1361476761_621333142.jpg"
-                    alt="Paella dish"
-                />
-                <CardActions sx={{ justifyContent: 'space-between' }}>
-                    <ButtonGroup
-                        variant="text"
-                        aria-label="Реакция друзей"
-                        disableElevation
-                        sx={{ marginLeft: '0.5rem' }}
-                    >
-                        <Button sx={{ paddingRight: '1rem' }}>
-                            <FavoriteIcon />
-                            <span style={{ marginLeft: '0.5rem' }}>{post.reactions.likes}</span>
-                        </Button>
-                        <Button sx={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
-                            <CommentOutlinedIcon />
-                            <span style={{ marginLeft: '0.5rem' }}>22</span>
-                        </Button>
-                        <Button sx={{ paddingLeft: '1rem' }}>
-                            <ShareIcon />
-                            <span style={{ marginLeft: '0.5rem' }}>{post.reactions.dislikes}</span>
-                        </Button>
-                    </ButtonGroup>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Tooltip title={`Посмотрели ${post.views} человек`}>
-                            <RemoveRedEyeOutlinedIcon fontSize="small"></RemoveRedEyeOutlinedIcon>
-                        </Tooltip>
-                        <Typography variant="body2" component="span" sx={{ marginLeft: '0.5rem' }}>
-                            {post.views}
-                        </Typography>
-                    </Box>
-                </CardActions>
-                <Divider />
-                <Box>{comments}</Box>
-
-                <Box sx={{ p: 2 }}>
-                    <TextField
-                        placeholder="Написать коментарий"
-                        fullWidth
-                        slotProps={{
-                            input: {
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <CommentOutlinedIcon />
-                                    </InputAdornment>
-                                ),
-                            },
-                        }}
-                        variant="outlined"
-                        size="small"
-                    />
-                </Box>
-            </Card>
-        </Box>
-    );
+    }
 });

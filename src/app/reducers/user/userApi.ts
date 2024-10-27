@@ -24,10 +24,10 @@ export const userApi = createApi({
                 headers: { Authorization: `Bearer ${data.jwt}` },
             }),
         }),
-        getAllUsers: builder.query<UsersResponse, { limit: number; skip: number; select: string }>({
-            query: ({ limit = 30, skip = 0, select = 'id,age,firstName,lastName' }) => ({
+        getAllUsers: builder.query<UsersResponse, { limit: number; start: number }>({
+            query: ({ limit = 30, start = 0}) => ({
                 url: 'users',
-                params: { limit: limit, skip: skip, select: select },
+                params: { _limit: limit, _start: start },
             }),
             serializeQueryArgs: ({ endpointName }) => {
                 return endpointName;
@@ -41,15 +41,13 @@ export const userApi = createApi({
                 ];
                 return {
                     users: updatedData,
-                    limit: newItems.limit,
-                    skip: newItems.skip,
                 };
             },
             forceRefetch({ currentArg, previousArg }) {
                 return currentArg !== previousArg;
             },
         }),
-        getUserById: builder.query<User, {id: number}>({
+        getUserById: builder.query<User, {id: number | undefined}>({
             query: ({id}) =>({
                 url: `users/${id}`,
             })

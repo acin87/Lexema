@@ -24,9 +24,6 @@ export interface UserPersistentState {
 
 export type UsersResponse = {
     users: User[]
-    limit?: number,
-    skip?: number ,
-    total?: number
 }
 
 export type User = {

@@ -1,5 +1,5 @@
 export enum API {
-    USER = 'https://dummyjson.com',
+    USER = 'http://localhost:3000/',
     REGISTRATION = 'auth/register',
-    POSTS ='https://dummyjson.com/'
+    POSTS ='http://localhost:3000'
 }
