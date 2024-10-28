@@ -25,6 +25,7 @@ export type CommentResponse = { comments: CommentType[] };
 export type CommentType = {
     id: number;
     body: string;
+    data: string,
     postId?: number;
     likes: number;
     user: User;

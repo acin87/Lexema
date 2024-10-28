@@ -2107,6 +2107,7 @@
         {
             "id": "1",
             "body": "This is some awesome thinking!",
+            "data": "28.10.2024, 22:12:40",
             "postId": 2,
             "likes": 3,
             "user": { "id": 15, "username": "emmac", "fullName": "Emma Wilson" }
@@ -2114,6 +2115,7 @@
         {
             "id": "2",
             "body": "What terrific math skills you're showing!",
+            "data": "28.10.2024, 22:10:40",
             "postId": 1,
             "likes": 4,
             "user": { "id": 18, "username": "cameronp", "fullName": "Cameron Perez" }
@@ -2121,6 +2123,7 @@
         {
             "id": "3",
             "body": "You are an amazing writer!",
+            "data": "28.10.2024, 22:06:40",
             "postId": 3,
             "likes": 2,
             "user": { "id": 1, "username": "emilys", "fullName": "Emily Johnson" }
@@ -2128,6 +2131,7 @@
         {
             "id": "4",
             "body": "Wow! You have improved so much!",
+            "data": "28.10.2024, 21:36:40",
             "postId": 1,
             "likes": 1,
             "user": { "id": 9, "username": "braydenf", "fullName": "Brayden Fleming" }
@@ -2135,6 +2139,7 @@
         {
             "id": "5",
             "body": "Nice idea!",
+            "data": "28.10.2024, 21:36:40",
             "postId": 12,
             "likes": 1,
             "user": { "id": 9, "username": "wyattp", "fullName": "Wyatt Perry" }
