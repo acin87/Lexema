@@ -19,8 +19,11 @@ server.get('/posts', (req, res) => {
     const _limit = Number(req.query._limit || 10);
     const _start = Number(req.query._start || 0);
     const posts = {
-        posts: [ ...router.db.getState().posts.slice(_start, _start + _limit) ],
+        posts: [...router.db.getState().posts.slice(_start, _start + _limit)],
     };
+    // setTimeout(() => {
+    //     res.status(200).jsonp(posts);
+    // }, 2000);
     res.status(200).jsonp(posts);
 });
 
@@ -29,7 +32,7 @@ server.get('/users', (req, res) => {
     const _limit = Number(req.query._limit || 10);
     const _start = Number(req.query._start || 0);
     const users = {
-        users: [ ...router.db.getState().users.slice(_start, _start + _limit)  ],
+        users: [...router.db.getState().users.slice(_start, _start + _limit)],
     };
     res.status(200).jsonp(users);
 });
@@ -48,12 +51,11 @@ server.get('/posts/:id', (req, res) => {
 server.get('/comments/post/:postId', (req, res, next) => {
     const postId = req.params.postId;
     const comments = {
-        comments: [
-            ...router.db.getState().comments.filter((comment) => comment.postId == postId),
-        ],
+        comments: [...router.db.getState().comments.filter((comment) => comment.postId == postId)],
     };
-    console.log(router.db.getState().comments.filter((comment) => comment.postId == postId))
-    res.status(200).jsonp(comments);
+    setTimeout(() => {
+        res.status(200).jsonp(comments);
+    }, 2000);
 });
 
 server.use(middlewares);

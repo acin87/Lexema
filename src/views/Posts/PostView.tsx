@@ -16,148 +16,183 @@ import {
     Divider,
     IconButton,
     InputAdornment,
+    Skeleton,
     TextField,
     Tooltip,
     Typography,
 } from '@mui/material';
 import { blue } from '@mui/material/colors';
-import { forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useFetchCommentByIdQuery } from '../../app/reducers/posts/postsApi ';
 import { PostTypes } from '../../app/reducers/posts/postTypes';
 import { useGetUserByIdQuery } from '../../app/reducers/user/userApi';
 
 export const PostView = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, ref) => {
-    const { data: userData } = useGetUserByIdQuery({ id: post.userId });
-    const {
-        data: commentData,
-        isLoading,
-        isSuccess,
-        isFetching,
-    } = useFetchCommentByIdQuery({ postId: post.id });
+    const { data: userData, isLoading: loading } = useGetUserByIdQuery({ id: post.userId });
+    const { data: commentData, isLoading } = useFetchCommentByIdQuery({ postId: post.id });
 
-    if (isLoading) {
-        return <>Loading...</>;
-    }
-    if (isFetching) {
-        return <>Загрузка...</>;
-    }
-    if (isSuccess) {
-        return (
-            <Box ref={ref} className="post">
-                <Card sx={{ width: '100%', height: 'calc(100% - 1rem)', paddingBottom: '1rem' }}>
-                    <CardHeader
-                        avatar={
+    const skeletonLoading = loading || isLoading;
+
+    return (
+        <Box ref={ref} className="post" sx={{ width: '100%' }}>
+            <Card sx={{ width: '100%', height: 'calc(100% - 1rem)', paddingBottom: '1rem' }}>
+                <CardHeader
+                    avatar={
+                        skeletonLoading ? (
+                            <Skeleton animation="wave" variant="circular" width={40} height={40} />
+                        ) : (
                             <Avatar
                                 sx={{ bgcolor: blue[500] }}
                                 aria-label="Avatar"
                                 src={userData?.image}
                             />
-                        }
-                        action={
+                        )
+                    }
+                    action={
+                        skeletonLoading ? null : (
                             <IconButton aria-label="settings">
                                 <MoreVertIcon />
                             </IconButton>
-                        }
-                        title={
+                        )
+                    }
+                    title={
+                        skeletonLoading ? (
+                            <Skeleton
+                                animation="wave"
+                                height={10}
+                                width="80%"
+                                style={{ marginBottom: 6 }}
+                            />
+                        ) : (
                             <NavLink
                                 style={{ textDecoration: 'none' }}
                                 to={`friends/user/${userData?.id}`}
                             >
                                 {userData?.firstName} {userData?.lastName}
                             </NavLink>
-                        }
-                        subheader={`User ID - ${post.id}`}
-                    ></CardHeader>
-                    <CardContent>
+                        )
+                    }
+                    subheader={
+                        skeletonLoading ? (
+                            <Skeleton animation="wave" height={10} width="40%" />
+                        ) : (
+                            `User ID - ${post.id}`
+                        )
+                    }
+                ></CardHeader>
+                <CardContent>
+                    {skeletonLoading ? (
+                        <Skeleton
+                            style={{ marginBottom: 6 }}
+                            animation="wave"
+                            height={10}
+                            width="80%"
+                        />
+                    ) : (
                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                             {post.body}
                         </Typography>
-                    </CardContent>
+                    )}
+                </CardContent>
+                {skeletonLoading ? (
+                    <Skeleton animation="wave" variant="rectangular" height={194} />
+                ) : (
                     <CardMedia
                         component="img"
                         height="194"
+                        width="100%"
                         image="../../src/assets/images/1361476761_621333142.jpg"
                         alt="Paella dish"
                     />
-                    <CardActions sx={{ justifyContent: 'space-between' }}>
-                        <ButtonGroup
-                            variant="text"
-                            aria-label="Реакция друзей"
-                            disableElevation
-                            sx={{ marginLeft: '0.5rem' }}
-                        >
-                            <Button sx={{ paddingRight: '1rem' }}>
-                                <FavoriteIcon />
-                                <span style={{ marginLeft: '0.5rem' }}>{post.reactions.likes}</span>
-                            </Button>
-                            <Button sx={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
-                                <CommentOutlinedIcon />
-                                <span style={{ marginLeft: '0.5rem' }}>22</span>
-                            </Button>
-                            <Button sx={{ paddingLeft: '1rem' }}>
-                                <ShareIcon />
-                                <span style={{ marginLeft: '0.5rem' }}>
-                                    {post.reactions.dislikes}
-                                </span>
-                            </Button>
-                        </ButtonGroup>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Tooltip title={`Посмотрели ${post.views} человек`}>
-                                <RemoveRedEyeOutlinedIcon fontSize="small"></RemoveRedEyeOutlinedIcon>
-                            </Tooltip>
-                            <Typography
-                                variant="body2"
-                                component="span"
-                                sx={{ marginLeft: '0.5rem' }}
-                            >
-                                {post.views}
-                            </Typography>
-                        </Box>
-                    </CardActions>
-                    <Divider />
-                    <Box>
-                        {commentData?.comments.map((key, index) => {
-                            if (index > 1) {
-                                return '';
-                            }
-                            return (
-                                <Box
-                                    sx={{ display: 'flex', padding: '1rem' }}
-                                    id={`${post.id}-${index}`}
-                                    key={index}
-                                >
-                                    <Box>
-                                        <Avatar src="../../src/assets/icons/avatar.jpg" />
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            marginLeft: '1.25rem',
-                                        }}
-                                    >
-                                        <Typography variant="body2" component="span">
-                                            {key.user.fullName}
-                                        </Typography>
-                                        <Typography variant="body2" component="span">
-                                            {key.body}
-                                        </Typography>
-                                        <ButtonGroup
-                                            variant="text"
-                                            aria-label="Ui button group"
-                                            size="small"
-                                        >
-                                            <Button sx={{ paddingLeft: 0 }}>Понравилось</Button>
-                                            <Button>Поделится</Button>
-                                            <Button>Перевести</Button>
-                                        </ButtonGroup>
-                                    </Box>
-                                </Box>
-                            );
-                        })}
-                    </Box>
+                )}
 
+                <CardActions sx={{ justifyContent: 'space-between' }}>
+                    {skeletonLoading ? null : (
+                        <React.Fragment>
+                            <Box sx={{ display: 'flex' }}>
+                                <Box sx={{ display: 'flex' }}>
+                                    <Button size="small">
+                                        <FavoriteIcon />
+                                        <span style={{ marginLeft: '0.5rem' }}>
+                                            {post.reactions.likes}
+                                        </span>
+                                    </Button>
+                                </Box>
+                                <Box sx={{ paddingLeft: 1, paddingRight: 1, display: 'flex' }}>
+                                    <Button size="small">
+                                        <CommentOutlinedIcon />
+                                        <span style={{ marginLeft: '0.5rem' }}>22</span>
+                                    </Button>
+                                </Box>
+                                <Box sx={{ display: 'flex' }}>
+                                    <Button size="small">
+                                        <ShareIcon />
+                                        <span style={{ marginLeft: '0.5rem' }}>
+                                            {post.reactions.dislikes}
+                                        </span>
+                                    </Button>
+                                </Box>
+                            </Box>
+
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <Tooltip title={`Посмотрели ${post.views} человек`}>
+                                    <RemoveRedEyeOutlinedIcon fontSize="small"></RemoveRedEyeOutlinedIcon>
+                                </Tooltip>
+                                <Typography
+                                    variant="body2"
+                                    component="span"
+                                    sx={{ marginLeft: '0.5rem' }}
+                                >
+                                    {post.views}
+                                </Typography>
+                            </Box>
+                        </React.Fragment>
+                    )}
+                </CardActions>
+                <Divider />
+                <Box>
+                    {commentData?.comments.map((key, index) => {
+                        if (index > 1) {
+                            return '';
+                        }
+                        return (
+                            <Box
+                                sx={{ display: 'flex', padding: '1rem' }}
+                                id={`${post.id}-${index}`}
+                                key={index}
+                            >
+                                <Box>
+                                    <Avatar src="../../src/assets/icons/avatar.jpg" />
+                                </Box>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        marginLeft: '1.25rem',
+                                    }}
+                                >
+                                    <Typography variant="body2" component="span">
+                                        {key.user.fullName}
+                                    </Typography>
+                                    <Typography variant="body2" component="span">
+                                        {key.body}
+                                    </Typography>
+                                    <ButtonGroup
+                                        variant="text"
+                                        aria-label="Ui button group"
+                                        size="small"
+                                    >
+                                        <Button sx={{ paddingLeft: 0 }}>Понравилось</Button>
+                                        <Button>Поделится</Button>
+                                        <Button>Перевести</Button>
+                                    </ButtonGroup>
+                                </Box>
+                            </Box>
+                        );
+                    })}
+                </Box>
+                {skeletonLoading ? null : (
                     <Box sx={{ p: 2 }}>
                         <TextField
                             placeholder="Написать коментарий"
@@ -175,8 +210,8 @@ export const PostView = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, 
                             size="small"
                         />
                     </Box>
-                </Card>
-            </Box>
-        );
-    }
+                )}
+            </Card>
+        </Box>
+    );
 });

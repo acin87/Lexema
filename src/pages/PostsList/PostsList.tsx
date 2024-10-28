@@ -10,8 +10,6 @@ const PostsList: FC = () => {
 
     const {
         data: data,
-        isLoading,
-        isSuccess,
         isError,
     } = useFetchAllPostsQuery({ limit: limitPost, start: skipPost });
 
@@ -24,26 +22,19 @@ const PostsList: FC = () => {
         }
     }, [inView, limitPost]);
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
     if (isError) {
         return <div>Error</div>;
     }
 
-    if (isSuccess) {
-        return (
-            <div className={style.postList}>
-                {data?.posts.map((post, index) => {
-                    if (index + 1 === data.posts.length) {
-                        return (
-                            <PostView key={post.id} {...post} ref={ref} className="show"></PostView>
-                        );
-                    }
-                    return <PostView key={post.id} {...post}></PostView>;
-                })}
-            </div>
-        );
-    }
+    return (
+        <div className={style.postList}>
+            {data?.posts.map((post, index) => {
+                if (index + 1 === data.posts.length) {
+                    return <PostView key={post.id} {...post} ref={ref} className="show"></PostView>;
+                }
+                return <PostView key={post.id} {...post}></PostView>;
+            })}
+        </div>
+    );
 };
 export default PostsList;

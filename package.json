@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "prettier": "prettier . --check --ignore-unknown",
     "prettier:fix": "prettier . -w",
-    "server": "json-server -w server/db.json -p 3001 -r server/routes.json"
+    "server": "node server/server.js --delay 500"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
