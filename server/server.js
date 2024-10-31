@@ -21,9 +21,6 @@ server.get('/posts', (req, res) => {
     const posts = {
         posts: [...router.db.getState().posts.slice(_start, _start + _limit)],
     };
-    // setTimeout(() => {
-    //     res.status(200).jsonp(posts);
-    // }, 2000);
     res.status(200).jsonp(posts);
 });
 
@@ -34,7 +31,10 @@ server.get('/users', (req, res) => {
     const users = {
         users: [...router.db.getState().users.slice(_start, _start + _limit)],
     };
-    res.status(200).jsonp(users);
+    setTimeout(()=>{
+        res.status(200).jsonp(users);
+    },2000)
+    
 });
 
 // Маршрут для получения конкретного поста по id

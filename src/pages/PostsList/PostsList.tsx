@@ -18,7 +18,7 @@ const PostsList: FC = () => {
     useEffect(() => {
         if (inView) {
             setSkipPost((skipPost) => skipPost + limitPost);
-            setLimitPost(1);
+            setLimitPost(2);
         }
     }, [inView, limitPost]);
 
