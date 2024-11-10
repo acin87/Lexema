@@ -1,15 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API } from '../../api/api';
-import { CommentResponse, PostResponse, PostTypes } from './postTypes';
+import { API, BASEURL } from '../../api/api';
+import { PostResponse, PostTypes } from './postTypes';
 
 export const postsApi = createApi({
     reducerPath: 'postsApi',
-    baseQuery: fetchBaseQuery({ baseUrl: API.POSTS }),
-    tagTypes: ['Post', 'Comment'],
+    baseQuery: fetchBaseQuery({ baseUrl: BASEURL }),
+    tagTypes: ['Post'],
     endpoints: (bulder) => ({
         fetchAllPosts: bulder.query<PostResponse, { limit: number; start: number }>({
             query: ({ limit = 7, start = 0 }) => ({
-                url: '/posts',
+                url: API.POSTS,
                 params: {
                     _limit: limit,
                     _start: start,
@@ -38,14 +38,9 @@ export const postsApi = createApi({
         }),
         fetchPostById: bulder.query<PostTypes, number>({
             query: (id: number = 1) => ({
-                url: `/posts/${id}`,
-            }),
-        }),
-        fetchCommentById: bulder.query<CommentResponse, { postId: number | undefined }>({
-            query: ({ postId = 1 }) => ({
-                url: `/comments/post/${postId}`,
+                url: `${API.POSTS}/${id}`,
             }),
         }),
     }),
 });
-export const { useFetchAllPostsQuery, useFetchPostByIdQuery, useFetchCommentByIdQuery } = postsApi;
+export const { useFetchAllPostsQuery, useFetchPostByIdQuery } = postsApi;

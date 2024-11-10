@@ -1,15 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API } from '../../api/api';
+import { API, BASEURL } from '../../api/api';
 import { LoginForm, LoginResponse, UserPersistentState, User, UsersResponse } from './usersTypes';
 
 export const userApi = createApi({
     reducerPath: 'userApi',
-    baseQuery: fetchBaseQuery({ baseUrl: API.USER }),
+    baseQuery: fetchBaseQuery({ baseUrl: BASEURL }),
     tagTypes: ['Auth'],
     endpoints: (builder) => ({
         loginUser: builder.mutation<LoginResponse, LoginForm>({
             query: (data) => ({
-                url: 'auth/login',
+                url: API.LOGIN,
                 method: 'POST',
                 body: JSON.stringify({ username: data.username.value, password: data.password.value }),
                 headers: { 'Content-Type': 'application/json' },
@@ -19,14 +19,14 @@ export const userApi = createApi({
         //registerUser: builder.mutation<>({})
         getMe: builder.query<LoginResponse, UserPersistentState>({
             query: (data) => ({
-                url: 'auth/me',
+                url: `${API.ME}/me`,
                 method: 'GET',
                 headers: { Authorization: `Bearer ${data.jwt}` },
             }),
         }),
         getAllUsers: builder.query<UsersResponse, { limit: number; start: number }>({
             query: ({ limit = 30, start = 0}) => ({
-                url: 'users',
+                url: API.USERS,
                 params: { _limit: limit, _start: start },
             }),
             serializeQueryArgs: ({ endpointName }) => {
@@ -49,7 +49,7 @@ export const userApi = createApi({
         }),
         getUserById: builder.query<User, {id: number | undefined}>({
             query: ({id}) =>({
-                url: `users/${id}`,
+                url: `${API.USERS}/${id}`,
             })
         })
     }),

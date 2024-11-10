@@ -12,12 +12,8 @@ export const MainLayout: FC = () => {
     const theme = useSelector((s: RootState) => s.ui.theme);
     const [darkOrLight, setDarkOrLight] = useState<string | null>('light');
 
-    const loadTheme = () => {
-        setDarkOrLight(theme);
-    };
-
     useEffect(() => {
-        loadTheme();
+        setDarkOrLight(theme);
     }, [theme]);
 
     const darkTheme: ThemeOptions = {
@@ -71,6 +67,9 @@ export const MainLayout: FC = () => {
             h6: {
                 fontSize: '875rem',
             },
+            subtitle2: {
+                fontSize: '0.781rem'
+            }
         },
     };
     const lightTheme: ThemeOptions = {
@@ -124,6 +123,9 @@ export const MainLayout: FC = () => {
             h6: {
                 fontSize: '875rem',
             },
+            subtitle2: {
+                fontSize: '0.781rem'
+            }
         },
     };
 

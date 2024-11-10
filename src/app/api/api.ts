@@ -1,5 +1,10 @@
+export const BASEURL = 'http://localhost:3000/'
+
 export enum API {
-    USER = 'http://localhost:3000/',
-    REGISTRATION = 'auth/register',
-    POSTS ='http://localhost:3000'
+    USERS = '/users',
+    LOGIN = 'auth/login',
+    REGISTRATION = '/register',
+    ME = '/me',
+    POSTS ='/posts',
+    COMMENTS = '/comments'
 }

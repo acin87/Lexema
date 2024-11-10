@@ -2105,23 +2105,25 @@
     ],
     "comments": [
         {
-            "id": "1",
+            "id": 1,
             "body": "This is some awesome thinking!",
             "data": "28.10.2024, 22:12:40",
             "postId": 2,
+            "parentId": 0,
             "likes": 3,
             "user": { "id": 15, "username": "emmac", "fullName": "Emma Wilson" }
         },
         {
-            "id": "2",
+            "id": 2,
             "body": "What terrific math skills you're showing!",
             "data": "28.10.2024, 22:10:40",
             "postId": 1,
+            "parentId": 0,
             "likes": 4,
             "user": { "id": 18, "username": "cameronp", "fullName": "Cameron Perez" }
         },
         {
-            "id": "3",
+            "id": 3,
             "body": "You are an amazing writer!",
             "data": "28.10.2024, 22:06:40",
             "postId": 3,
@@ -2129,193 +2131,311 @@
             "user": { "id": 1, "username": "emilys", "fullName": "Emily Johnson" }
         },
         {
-            "id": "4",
+            "id": 4,
             "body": "Wow! You have improved so much!",
             "data": "28.10.2024, 21:36:40",
             "postId": 1,
+            "parentId": 0,
             "likes": 1,
             "user": { "id": 9, "username": "braydenf", "fullName": "Brayden Fleming" }
         },
         {
-            "id": "5",
+            "id": 5,
             "body": "Nice idea!",
             "data": "28.10.2024, 21:36:40",
-            "postId": 12,
+            "postId": 2,
+            "parentId": 1,
             "likes": 1,
             "user": { "id": 9, "username": "wyattp", "fullName": "Wyatt Perry" }
         },
         {
-            "id": "6",
+            "id": 6,
             "body": "You are showing excellent understanding!",
-            "postId": 18,
+            "data": "06.11.2024, 18:36:40",
+            "postId": 2,
+            "parentId": 1,
             "likes": 5,
             "user": { "id": 11, "username": "danielt", "fullName": "Daniel Taylor" }
         },
         {
-            "id": "7",
+            "id": 7,
             "body": "This is clear, concise, and complete!",
+            "data": "22.10.2024, 21:55:40",
             "postId": 2,
+            "parentId": 1,
             "likes": 1,
             "user": { "id": 4, "username": "jamesd", "fullName": "James Davis" }
         },
         {
-            "id": "8",
+            "id": 8,
             "body": "What a powerful argument!",
-            "postId": 23,
+            "postId": 2,
+            "parentId": 5,
             "likes": 0,
             "user": { "id": 14, "username": "lukec", "fullName": "Luke Cooper" }
         },
         {
-            "id": "9",
+            "id": 9,
             "body": "I knew you could do it!",
-            "postId": 20,
+            "postId": 2,
+            "parentId": 5,
             "likes": 3,
             "user": { "id": 2, "username": "jaces", "fullName": "Jace Smith" }
         },
         {
-            "id": "10",
+            "id": 10,
             "body": "Wonderful ideas!",
             "postId": 5,
             "likes": 0,
             "user": { "id": 6, "username": "noram", "fullName": "Nora Mills" }
         },
         {
-            "id": "11",
+            "id": 11,
             "body": "It was a pleasure to grade this!",
-            "postId": 6,
+            "postId": 2,
+            "parentId": 0,
             "likes": 8,
             "user": { "id": 1, "username": "mateob", "fullName": "Mateo Bennett" }
         },
         {
-            "id": "12",
+            "id": 12,
             "body": "Keep up the incredible work!",
-            "postId": 11,
+            "postId": 2,
+            "parentId": 0,
             "likes": 10,
             "user": { "id": 9, "username": "scarlettb", "fullName": "Scarlett Bowman" }
         },
         {
-            "id": "13",
+            "id": 13,
             "body": "My goodness, how impressive!",
             "postId": 10,
             "likes": 10,
             "user": { "id": 7, "username": "hunterg", "fullName": "Hunter Gordon" }
         },
         {
-            "id": "14",
+            "id": 14,
             "body": "You're showing inventive ideas!",
             "postId": 20,
             "likes": 8,
             "user": { "id": 7, "username": "jonathanp", "fullName": "Jonathan Pierce" }
         },
         {
-            "id": "15",
+            "id": 15,
             "body": "You've shown so much growth!",
             "postId": 6,
             "likes": 2,
             "user": { "id": 17, "username": "evelyns", "fullName": "Evelyn Sanchez" }
         },
         {
-            "id": "16",
+            "id": 16,
             "body": "Interesting thoughts!",
             "postId": 14,
             "likes": 5,
             "user": { "id": 19, "username": "viviang", "fullName": "Vivian Carter" }
         },
         {
-            "id": "17",
+            "id": 17,
             "body": "I love your neat work!",
             "postId": 24,
             "likes": 7,
             "user": { "id": 15, "username": "nicholase", "fullName": "Nicholas Edwards" }
         },
         {
-            "id": "18",
+            "id": 18,
             "body": "Doesn't it feel good to do such great work?",
             "postId": 22,
             "likes": 6,
             "user": { "id": 13, "username": "noramx", "fullName": "Nora Russell" }
         },
         {
-            "id": "19",
+            "id": 19,
             "body": "First-rate work!",
             "postId": 2,
+            "parentId": 7,
             "likes": 1,
             "user": { "id": 3, "username": "novab", "fullName": "Nova Cooper" }
         },
         {
-            "id": "20",
+            "id": 20,
             "body": "This is fascinating information!",
             "postId": 17,
             "likes": 4,
             "user": { "id": 3, "username": "lucasg", "fullName": "Lucas Gray" }
         },
         {
-            "id": "21",
+            "id": 21,
             "body": "You inspire me!",
             "postId": 29,
             "likes": 0,
             "user": { "id": 11, "username": "miam", "fullName": "Mia Miller" }
         },
         {
-            "id": "22",
+            "id": 22,
             "body": "This is right on target!",
-            "postId": 9,
+            "postId": 2,
+            "parentId": 7,
             "likes": 5,
             "user": { "id": 13, "username": "miam", "fullName": "Mia Miller" }
         },
         {
-            "id": "23",
+            "id": 23,
             "body": "What an astounding observation!",
-            "postId": 3,
+            "postId": 2,
+            "parentId": 0,
             "likes": 1,
             "user": { "id": 5, "username": "nicholase", "fullName": "Nicholas Edwards" }
         },
         {
-            "id": "24",
+            "id": 24,
             "body": "This is very well thought out!",
-            "postId": 11,
+            "postId": 2,
+            "parentId": 23,
             "likes": 1,
             "user": { "id": 16, "username": "jaxonb", "fullName": "Jaxon Barnes" }
         },
         {
-            "id": "25",
+            "id": 25,
             "body": "I can tell you've been practicing!",
             "postId": 27,
             "likes": 9,
             "user": { "id": 10, "username": "claires", "fullName": "Claire Foster" }
         },
         {
-            "id": "26",
+            "id": 26,
             "body": "You've come a long way!",
             "postId": 79,
             "likes": 7,
             "user": { "id": 5, "username": "ethanf", "fullName": "Ethan Fletcher" }
         },
         {
-            "id": "27",
+            "id": 27,
             "body": "I can tell you've been paying attention!",
             "postId": 5,
             "likes": 9,
             "user": { "id": 3, "username": "nathand", "fullName": "Nathan Dixon" }
         },
         {
-            "id": "28",
+            "id": 28,
             "body": "Reading this made my day!",
             "postId": 20,
             "likes": 8,
             "user": { "id": 17, "username": "xavierw", "fullName": "Xavier Wright" }
         },
         {
-            "id": "29",
+            "id": 29,
             "body": "This is very perceptive!",
             "postId": 3,
             "likes": 2,
             "user": { "id": 12, "username": "lunah", "fullName": "Luna Perez" }
         },
         {
-            "id": "30",
+            "id": 30,
             "body": "What an accomplishment!",
             "postId": 16,
+            "likes": 8,
+            "user": { "id": 4, "username": "braydenf", "fullName": "Brayden Fleming" }
+        },
+        {
+            "id": 31,
+            "body": "This is fascinating information!",
+            "postId": 2,
+            "parentId": 0,
+            "likes": 4,
+            "user": { "id": 3, "username": "lucasg", "fullName": "Lucas Gray" }
+        },
+        {
+            "id": 32,
+            "body": "You inspire me!",
+            "postId": 2,
+            "parentId": 0,
+            "likes": 0,
+            "user": { "id": 11, "username": "miam", "fullName": "Mia Miller" }
+        },
+        {
+            "id": 33,
+            "body": "This is right on target!",
+            "postId": 2,
+            "parentId": 0,
+            "likes": 5,
+            "user": { "id": 13, "username": "miam", "fullName": "Mia Miller" }
+        },
+        {
+            "id": 34,
+            "body": "What an astounding observation!",
+            "postId": 2,
+            "parentId": 0,
+            "likes": 1,
+            "user": { "id": 5, "username": "nicholase", "fullName": "Nicholas Edwards" }
+        },
+        {
+            "id": 35,
+            "body": "This is very well thought out!",
+            "postId": 2,
+            "parentId": 0,
+            "likes": 1,
+            "user": { "id": 16, "username": "jaxonb", "fullName": "Jaxon Barnes" }
+        },
+        {
+            "id": 36,
+            "body": "I can tell you've been practicing!",
+            "postId": 2,
+            "parentId": 0,
+            "likes": 9,
+            "user": { "id": 10, "username": "claires", "fullName": "Claire Foster" }
+        },
+        {
+            "id": 37,
+            "body": "You've come a long way!",
+            "postId": 2,
+            "parentId": 0,
+            "likes": 7,
+            "user": { "id": 5, "username": "ethanf", "fullName": "Ethan Fletcher" }
+        },
+        {
+            "id": 38,
+            "body": "This is very insightful!",
+            "postId": 2,
+            "parentId": 0,
+            "likes": 2,
+            "user": { "id": 3, "username": "nathand", "fullName": "Nathan Dixon" }
+        },
+        {
+            "id": 39,
+            "body": "I 39 can tell you've been paying attention!",
+            "postId": 2,
+            "parentId": 0,
+            "likes": 9,
+            "user": { "id": 3, "username": "nathand", "fullName": "Nathan Dixon" }
+        },
+        {
+            "id": 40,
+            "body": "I can tell you've been paying attention!",
+            "postId": 2,
+            "parentId": 0,
+            "likes": 9,
+            "user": { "id": 3, "username": "nathand", "fullName": "Nathan Dixon" }
+        },
+        {
+            "id": 41,
+            "body": "Reading this made my day!",
+            "postId": 2,
+            "parentId": 0,
+            "likes": 8,
+            "user": { "id": 17, "username": "xavierw", "fullName": "Xavier Wright" }
+        },
+        {
+            "id": 42,
+            "body": "This is very perceptive!",
+            "postId": 2,
+            "parentId": 0,
+            "likes": 2,
+            "user": { "id": 12, "username": "lunah", "fullName": "Luna Perez" }
+        },
+        {
+            "id": 43,
+            "body": "What an accomplishment!",
+           "postId": 2,
+            "parentId": 0,
             "likes": 8,
             "user": { "id": 4, "username": "braydenf", "fullName": "Brayden Fleming" }
         }
