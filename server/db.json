@@ -2435,7 +2435,7 @@
             "id": 43,
             "body": "What an accomplishment!",
            "postId": 2,
-            "parentId": 0,
+            "parentId": 6,
             "likes": 8,
             "user": { "id": 4, "username": "braydenf", "fullName": "Brayden Fleming" }
         }

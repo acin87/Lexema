@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useLazyGetChildCommentsQuery } from '../../app/reducers/comments/commentsApi';
 import { CommentType } from '../../app/reducers/comments/commntsType';
 
@@ -9,8 +10,13 @@ export const Comment: React.FC<CommentItemProps> = ({ comment }) => {
     const hasChildren = !!comment.children?.length;
     const childComments = comment.children || [];
     const [trigger, result] = useLazyGetChildCommentsQuery();
-    
-    if (!hasChildren) {
+
+
+    useEffect(()=>{
+            console.log(result.data)
+    }, [result.data])
+
+    if (!hasChildren) {//корневые комментарии без дочерних комментариев
         return (
             <div style={{ marginLeft: '20px' }}>
                 <p> {comment.body} -- {comment.id}</p>
@@ -18,6 +24,7 @@ export const Comment: React.FC<CommentItemProps> = ({ comment }) => {
         );
     }
 
+    
     
 
     function handleLoadChildren() {
@@ -31,9 +38,9 @@ export const Comment: React.FC<CommentItemProps> = ({ comment }) => {
             {!result.isUninitialized && (
                 <>{result.data?.comments.map((childComment) => <Comment key={childComment.id} comment={childComment} />)}</>
             )}
-            <button disabled={result.isFetching} onClick={handleLoadChildren}>
-                Показать ответы ({result.data ? result.data.comments.length : 0})
-            </button>
+            <a style={{display: result.isFetching? 'none' : 'block', cursor: 'pointer'}} onClick={handleLoadChildren}>
+                Показать ответы ({comment.childCount})
+            </a>
         </div>
     );
 };

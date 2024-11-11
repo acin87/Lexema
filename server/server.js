@@ -45,37 +45,30 @@ server.get('/posts/:id', (req, res) => {
     }
     res.status(200).jsonp(post);
 });
-
+//Маршрут для получения корневых комментариев поста по id
 server.get('/comments/post/:postId', (req, res, next) => {
     const postId = req.params.postId;
-    const limit = req.query._limit;
-    const page = req.query._page;
+    const limit = parseInt(req.query._limit, 10);
+    const page = parseInt(req.query._page, 10);
     let comments = [
         ...router.db.getState().comments.filter((comment) => comment.postId == postId && comment.parentId == 0),
     ];
     const rootCommentCount = Object.keys(comments).length;
-    if (limit != undefined && page != undefined) {
-        comments = comments.slice((Number(page) -1 )* Number(limit) , Number(page) * Number(limit)); //2 - 8
-    
-        console.log(comments.length);
-        comments = buildTree(comments);
-    } else {
+    if (page == 1 && limit == 2) {
         comments = comments.slice(0, 2);
-
-        comments.forEach((comment) => {
-            const child = router.db
-                .getState()
-                .comments.filter(
-                    (childComment) => childComment.postId == postId && childComment.parentId == comment.id,
-                );
-            if (child[0] != null) {
-                comment.children = [];
-                comment.children.push(child[0]);
-                comment.childCount = Object.keys(child).length;
-            }
-        });
+    } else {
+        comments = comments.slice((page - 1) * limit, page * limit); //15-20
     }
-
+    comments.forEach((comment) => {
+        const child = router.db
+            .getState()
+            .comments.filter((childComment) => childComment.postId == postId && childComment.parentId == comment.id);
+        if (child[0] != null) {
+            comment.children = [];
+            comment.children.push(child[0]);
+            comment.childCount = Object.keys(child).length;
+        }
+    });
     res.status(200).jsonp({ comments: comments, totalCount: rootCommentCount });
     comments = [];
 });
@@ -108,19 +101,19 @@ server.get('/comments/post/:postId', (req, res, next) => {
 //     res.status(200).jsonp({ comments: commentsById });
 // });
 
-// // Маршрут для фильтрации дочерних комментариев по postId
-// server.get('/comments/post/:postId/child', (req, res, next) => {
-//     const postId = req.params.postId;
-//     const commentId = req.query.commentId;
+// Маршрут для фильтрации дочерних комментариев по postId
+server.get('/comments/post/:postId/child', (req, res, next) => {
+    const postId = parseInt(req.params.postId, 10);
+    const commentId = parseInt(req.query.commentId, 10);
+    console.log(commentId, postId);
+    const filteredComments = router.db
+        .getState()
+        .comments.filter((comment) => comment.postId == postId && comment.parentId == commentId);
 
-//     const filteredComments = router.db
-//         .getState()
-//         .comments.filter(
-//             (comment) => comment.postId == postId && (comment.parentId == commentId || comment.id == commentId),
-//         );
-//     const commentsById = buildTree(filteredComments, commentId);
-//     res.status(200).jsonp({ comments: commentsById });
-// });
+    const commentsById = buildTree(filteredComments, commentId);
+    console.log(commentsById);
+    res.status(200).jsonp({ comments: commentsById });
+});
 
 // Функция для построения дерева комментариев
 const buildTree = (comments) => {
@@ -143,8 +136,8 @@ const buildTree = (comments) => {
         }
     });
 
-    // Возвращаем только те комментарии, у которых нет родителей (корневые)
-    return comments.filter((comment) => !comment.parentId);
+    // Возвращаем только те комментарии, у которых  родитель = commentId
+    return comments.filter((comment) => !comment.Id);
 };
 
 server.use(middlewares);

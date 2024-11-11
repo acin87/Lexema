@@ -7,19 +7,7 @@ export const commentsApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: BASEURL }),
     tagTypes: ['Comment'],
     endpoints: (builder) => ({
-        getRootComments: builder.query<CommentResponse, { postId: number }>({
-            query: ({ postId }) => ({
-                url: `${API.COMMENTS}/post/${postId}`,
-                method: 'GET',
-                //transformResponse: (response: CommentResponse) => response.comments,
-                providesTags: ['Comment'],
-            }),
-            providesTags: (result) =>
-                result
-                  ? [...result.comments.map(({ id }) => ({ type: 'Comment' as const, id })), 'Comment']
-                  : ['Comment'],
-        }),
-        getAllRootComments: builder.query<CommentResponse, { postId: number; page: number; limit: number }>({
+        getRootComments: builder.query<CommentResponse, { postId: number; page: number; limit: number }>({
             query: ({ postId, page, limit }) => ({
                 url: `${API.COMMENTS}/post/${postId}`,
                 params: {
@@ -27,28 +15,18 @@ export const commentsApi = createApi({
                     _limit: limit,
                 },
                 method: 'GET',
-                providesTags: ['Comment'],
             }),
             providesTags: (result) =>
                 result
-                  ? [...result.comments.map(({ id }) => ({ type: 'Comment' as const, id })), 'Comment']
-                  : ['Comment'],
-        }),
-
-        getAllRootCommentsByPostId: builder.query<CommentResponse, { postId: number; page: number }>({
-            query: ({ postId }) => ({
-                url: `${API.COMMENTS}/post/${postId}`,
-                method: 'GET',
-                //transformResponse: (response: CommentResponse) => response.comments,
-                providesTags: ['Comment'],
-            }),
+                    ? [...result.comments.map(({ id }) => ({ type: 'Comment' as const, id })), 'Comment']
+                    : ['Comment'],
         }),
 
         getChildComments: builder.query<CommentResponse, { parentId: number; postId: number }>({
             query: ({ parentId, postId }) => ({
-                url: `${API.COMMENTS}/post/${postId}`,
+                url: `${API.COMMENTS}/post/${postId}/child`,
                 params: {
-                    parentId: parentId,
+                    commentId: parentId,
                 },
                 method: 'GET',
                 providesTags: ['Comment'],
@@ -72,16 +50,6 @@ export const commentsApi = createApi({
                     ? [...result.comments.map(({ id }) => ({ type: 'Comment' as const, id })), 'Comment']
                     : ['Comment'],
         }),
-        getRootCommentsByPostId: builder.query<CommentResponse, { postId: number }>({
-            query: ({ postId = 1 }) => ({
-                url: `${API.COMMENTS}/post/${postId}/root`,
-            }),
-        }),
     }),
 });
-export const {
-    useGetRootCommentsByPostIdQuery,
-    useGetRootCommentsQuery,
-    useLazyGetChildCommentsQuery,
-    useLazyGetAllRootCommentsQuery,
-} = commentsApi;
+export const { useGetRootCommentsQuery, useLazyGetChildCommentsQuery, useLazyGetRootCommentsQuery } = commentsApi;

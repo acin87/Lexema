@@ -15,10 +15,10 @@ export const postsApi = createApi({
                     _start: start,
                 },
             }),
-            // providesTags: (result) =>
-            //     result
-            //         ? [...result.posts.map(({ id }) => ({ type: 'Post' as const, id })), 'Post']
-            //         : ['Post'],
+            providesTags: (result) =>
+                result
+                    ? [...result.posts.map(({ id }) => ({ type: 'Post' as const, id })), 'Post']
+                    : ['Post'],
             serializeQueryArgs: ({ endpointName }) => {
                 return endpointName;
             },
