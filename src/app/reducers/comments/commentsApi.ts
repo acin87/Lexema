@@ -22,7 +22,7 @@ export const commentsApi = createApi({
                     : ['Comment'],
         }),
 
-        getChildComments: builder.query<CommentResponse, { parentId: number; postId: number }>({
+        getChildComments: builder.query<CommentResponse, { parentId: number | undefined; postId: number }>({
             query: ({ parentId, postId }) => ({
                 url: `${API.COMMENTS}/post/${postId}/child`,
                 params: {

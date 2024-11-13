@@ -1,14 +1,14 @@
 import { Avatar, Box, Link, Typography } from '@mui/material';
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { CommentType } from '../../app/reducers/comments/commntsType';
 import { useGetUserByIdQuery } from '../../app/reducers/user/userApi';
 
 type CommentProps = {
-    childCount: number | undefined;
-    expand: (commentId:number) => void;
+    expand: (commentId:number | undefined) => void;
+
 } & CommentType;
 
-export const ChildCommentLink: FC<CommentProps> = (comment) => {
+export const ChildCommentLink: FC<CommentProps> = memo((comment) => {
     const { data: userData } = useGetUserByIdQuery({ id: comment.user.id });
 
     const avatarSize = 25;
@@ -30,12 +30,12 @@ export const ChildCommentLink: FC<CommentProps> = (comment) => {
                     <Link
                         variant="subtitle2"
                         sx={{ cursor: 'pointer', textDecoration: 'none' }}
-                        onClick={()=> comment.expand(comment.id)}
+                        onClick={()=> comment.expand(comment.parentId)}
                     >
-                        {comment.user?.fullName} ответил(а) и еще {comment.childCount} коментариев
+                        {comment.user?.fullName} ответил(а) и еще {comment.childCount} коментариея
                     </Link>
                 </Typography>
             </Box>
         </Box>
     );
-};
+});

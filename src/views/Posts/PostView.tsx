@@ -26,7 +26,7 @@ import { NavLink } from 'react-router-dom';
 
 import { PostTypes } from '../../app/reducers/posts/postTypes';
 import { useGetUserByIdQuery } from '../../app/reducers/user/userApi';
-import CommentsTree from '../../components/comment/CommentTree';
+import RootComments from '../../components/comment/RootComments';
 
 export const PostView = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, ref) => {
     const [commentsLimit, setCommentsLimit] = useState('parents');
@@ -60,9 +60,7 @@ export const PostView = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, 
                             </NavLink>
                         )
                     }
-                    subheader={
-                        skeletonLoading ? <Skeleton animation="wave" height={15} width="40%" /> : `User ID - ${post.id}`
-                    }
+                    subheader={skeletonLoading ? <Skeleton animation="wave" height={15} width="40%" /> : `User ID - ${post.id}`}
                 ></CardHeader>
                 <CardContent>
                     {skeletonLoading ? (
@@ -80,13 +78,7 @@ export const PostView = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, 
                 {skeletonLoading ? (
                     <Skeleton animation="wave" variant="rectangular" height={194} />
                 ) : (
-                    <CardMedia
-                        component="img"
-                        height="194"
-                        width="100%"
-                        image="../../src/assets/images/1361476761_621333142.jpg"
-                        alt="Paella dish"
-                    />
+                    <CardMedia component="img" height="194" width="100%" image="../../src/assets/images/1361476761_621333142.jpg" alt="Paella dish" />
                 )}
 
                 <CardActions sx={{ justifyContent: 'space-between' }}>
@@ -126,7 +118,7 @@ export const PostView = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, 
                 </CardActions>
                 <Divider />
                 <Box>
-                    <CommentsTree postId={post.id} />
+                    <RootComments postId={post.id} />
 
                     {/* {commentData?.comments.map((comment) => {
                         let child: JSX.Element | undefined | null = null;
