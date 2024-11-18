@@ -7,9 +7,11 @@ export type CommentType = {
     body: string;
     data: string;
     postId: number;
-    parentId?: number;
+    parentId: number;
     children?: CommentType[];
-    childCount?: number;
+    childCount: number;
     likes: number;
+    createdAt: string;
+    upatedAt?: string;
     user: User;
 };

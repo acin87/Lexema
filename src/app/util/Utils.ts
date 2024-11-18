@@ -33,3 +33,44 @@ export const getRelativeTime = (serverDateString: string | undefined): string =>
     }
     return 'error';
 };
+// Функция для преобразования временной метки в строковый формат
+export const formatTimeAgo = (dateString: string): string => {
+    // Преобразуем строку в объект Date
+    const date = new Date(dateString);
+    
+    // Получаем текущее время
+    const now = new Date();
+    console.log(date);
+    // Вычисляем разницу между текущим временем и переданной датой
+    const diffInMs = now.getTime() - date.getTime();
+    
+    // Переводим миллисекунды в секунды
+    const seconds = Math.floor(diffInMs / 1000);
+    
+    if (seconds === 0) {
+        return 'Только что';
+    }
+    
+    if (seconds < 60) {
+        return `${seconds} секунд назад`;
+    }
+    
+    // Переводим секунды в минуты
+    const minutes = Math.floor(seconds / 60);
+    
+    if (minutes < 60) {
+        return `${minutes} минут назад`;
+    }
+    
+    // Переводим минуты в часы
+    const hours = Math.floor(minutes / 60);
+    
+    if (hours < 24) {
+        return `${hours} часов назад`;
+    }
+    
+    // Переводим часы в дни
+    const days = Math.floor(hours / 24);
+    
+    return `${days} дней назад`;
+}

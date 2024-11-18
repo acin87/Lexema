@@ -2107,7 +2107,7 @@
         {
             "id": 1,
             "body": "This is some awesome thinking!",
-            "data": "28.10.2024, 22:12:40",
+            "createdAt": "2024-10-28T21:36:40",
             "postId": 2,
             "parentId": 0,
             "likes": 3,
@@ -2116,7 +2116,7 @@
         {
             "id": 2,
             "body": "What terrific math skills you're showing!",
-            "data": "28.10.2024, 22:10:40",
+            "createdAt": "2024-10-28T21:36:40",
             "postId": 1,
             "parentId": 0,
             "likes": 4,
@@ -2125,7 +2125,7 @@
         {
             "id": 3,
             "body": "You are an amazing writer!",
-            "data": "28.10.2024, 22:06:40",
+           "createdAt": "2024-10-28T21:36:40",
             "postId": 3,
             "likes": 2,
             "user": { "id": 1, "username": "emilys", "fullName": "Emily Johnson" }
@@ -2135,6 +2135,7 @@
             "body": "Wow! You have improved so much!",
             "data": "28.10.2024, 21:36:40",
             "postId": 1,
+            "createdAt": "2024-11-18T21:36:40",
             "parentId": 0,
             "likes": 1,
             "user": { "id": 9, "username": "braydenf", "fullName": "Brayden Fleming" }
@@ -2142,7 +2143,7 @@
         {
             "id": 5,
             "body": "Nice idea!",
-            "data": "28.10.2024, 21:36:40",
+            "createdAt": "2024-11-18T21:36:40",
             "postId": 2,
             "parentId": 1,
             "likes": 1,
@@ -2151,7 +2152,7 @@
         {
             "id": 6,
             "body": "You are showing excellent understanding!",
-            "data": "06.11.2024, 18:36:40",
+            "createdAt": "2024-11-18T21:36:40",
             "postId": 2,
             "parentId": 1,
             "likes": 5,
@@ -2160,7 +2161,7 @@
         {
             "id": 7,
             "body": "This is clear, concise, and complete!",
-            "data": "22.10.2024, 21:55:40",
+            "createdAt": "2024-11-18T21:36:40",
             "postId": 2,
             "parentId": 1,
             "likes": 1,
@@ -2170,6 +2171,7 @@
             "id": 8,
             "body": "What a powerful argument!",
             "postId": 2,
+            "createdAt": "2024-11-18T21:46:40",
             "parentId": 5,
             "likes": 0,
             "user": { "id": 14, "username": "lukec", "fullName": "Luke Cooper" }
@@ -2178,6 +2180,7 @@
             "id": 9,
             "body": "I knew you could do it!",
             "postId": 2,
+            "createdAt": "2024-11-18T20:36:40",
             "parentId": 5,
             "likes": 3,
             "user": { "id": 2, "username": "jaces", "fullName": "Jace Smith" }
@@ -2193,6 +2196,7 @@
             "id": 11,
             "body": "It was a pleasure to grade this!",
             "postId": 2,
+            "createdAt": "2024-11-18T18:36:40",
             "parentId": 0,
             "likes": 8,
             "user": { "id": 1, "username": "mateob", "fullName": "Mateo Bennett" }
@@ -2202,12 +2206,14 @@
             "body": "Keep up the incredible work!",
             "postId": 2,
             "parentId": 0,
+            "createdAt": "2024-11-18T22:06:40",
             "likes": 10,
             "user": { "id": 9, "username": "scarlettb", "fullName": "Scarlett Bowman" }
         },
         {
             "id": 13,
             "body": "My goodness, how impressive!",
+            "createdAt": "2024-11-18T21:36:40",
             "postId": 10,
             "likes": 10,
             "user": { "id": 7, "username": "hunterg", "fullName": "Hunter Gordon" }

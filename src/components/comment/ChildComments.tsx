@@ -1,19 +1,19 @@
-import { memo, useEffect, useState } from 'react';
+import { Fragment, memo, useEffect, useState } from 'react';
 import { useLazyGetChildCommentsQuery } from '../../app/reducers/comments/commentsApi';
 import { CommentType } from '../../app/reducers/comments/commntsType';
-import { ChildCommentLink } from './ChildCommentLink';
+import { ExpandMoreComments } from './ExpandMoreComments';
 import { Comments } from './Comments ';
 
 type CommentItemProps = {
     postId: number;
-    comments: CommentType[];
-    firstChildren?: boolean;
-    childCount?: number;
+    rootComment: CommentType;
+    childCount: number;
+    level: number;
 };
 
-export const ChildComments: React.FC<CommentItemProps> = memo(({ comments, postId, firstChildren, childCount }) => {
+export const ChildComments: React.FC<CommentItemProps> = memo(({ rootComment, postId, childCount, level }) => {
     const [expandCollapse, setExpandCollapse] = useState(false);
-    const [childComments, setChildComments] = useState<CommentType[]>([]);
+    const [comments, setComments] = useState<CommentType[]>([]);
     const [trigger, resultLazy] = useLazyGetChildCommentsQuery();
 
     const expandComments = (commentId: number | undefined) => {
@@ -22,26 +22,35 @@ export const ChildComments: React.FC<CommentItemProps> = memo(({ comments, postI
     };
 
     useEffect(() => {
-        setChildComments(comments);
-    }, [comments]);
-    
+        setComments(rootComment.children || []);
+    }, [rootComment]);
+
     useEffect(() => {
         if (resultLazy.isSuccess) {
-            console.log()
-            const newComments = resultLazy.data.comments.filter((comment) => !childComments.find((c) => c.id === comment.id)); // Исключаем дубликаты
-            setChildComments([...childComments, ...newComments]);
+            console.log(resultLazy.data.comments);
+            const newComments = resultLazy.data.comments.filter((comment) => !comments.find((c) => c.id === comment.id)); // Исключаем дубликаты
+            setComments([...comments, ...newComments]);
         }
-    }, [resultLazy]);// eslint-disable-line react-hooks/exhaustive-deps
+    }, [resultLazy]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const renderComment = childComments.map((comment) => {
-        const childComments = comment.children || [];
+    const renderComment = comments.map((comment) => {
         console.log(comment);
-        if (firstChildren && comments.length === 1 && resultLazy.isUninitialized) {
-            return <ChildCommentLink key={comment.id} {...comment} expand={expandComments} childCount={childCount} />;
-        }else if(!resultLazy.isUninitialized){
-            return <Comments key={comment.id} {...comment} />;
+        if (rootComment.children?.length === 1 && rootComment.childCount > 1 && resultLazy.isUninitialized) {
+            return <ExpandMoreComments key={comment.id} {...comment} expand={expandComments} childCount={childCount}  margin={level*7}/>;
+        } else if (rootComment.children?.length === 1 && rootComment.childCount === 1 && resultLazy.isUninitialized) {
+            return <Comments key={comment.id} comment={comment} sx={{marginLeft: (level*7)}}/>;
+        } else if (!resultLazy.isUninitialized) {
+            if (comment.children?.length === 1 && comment.childCount >= 1) {
+                return (
+                    <Fragment key={comment.id}>
+                        <Comments comment={comment}  sx={{marginLeft: (level*7)}}/>
+                        <ChildComments postId={postId} rootComment={comment} childCount={comment.childCount} level={level + 1} />
+                    </Fragment>
+                );
+            } else if (comment.childCount === 0) {
+                return <Comments key={comment.id} comment={comment} sx={{marginLeft: (level*7)}}/>;
+            }
         }
-        return <ChildComments comments={childComments} key={comment.id} {...comment} firstChildren={true}/>;
     });
 
     return <div>{renderComment}</div>;

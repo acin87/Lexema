@@ -50,9 +50,7 @@ server.get('/comments/post/:postId', (req, res, next) => {
     const postId = req.params.postId;
     const limit = parseInt(req.query._limit, 10);
     const page = parseInt(req.query._page, 10);
-    let comments = [
-        ...router.db.getState().comments.filter((comment) => comment.postId == postId && comment.parentId == 0),
-    ];
+    let comments = [...router.db.getState().comments.filter((comment) => comment.postId == postId && comment.parentId == 0)];
     const rootCommentCount = Object.keys(comments).length;
     if (page == 1 && limit == 2) {
         comments = comments.slice(0, 2);
@@ -60,9 +58,7 @@ server.get('/comments/post/:postId', (req, res, next) => {
         comments = comments.slice((page - 1) * limit, page * limit); //15-20
     }
     comments.forEach((comment) => {
-        const child = router.db
-            .getState()
-            .comments.filter((childComment) => childComment.postId == postId && childComment.parentId == comment.id);
+        const child = router.db.getState().comments.filter((childComment) => childComment.postId == postId && childComment.parentId == comment.id);
         if (child[0] != null) {
             comment.children = [];
             comment.children.push(child[0]);
@@ -106,13 +102,17 @@ server.get('/comments/post/:postId/child', (req, res, next) => {
     const postId = parseInt(req.params.postId, 10);
     const commentId = parseInt(req.query.commentId, 10);
     console.log(commentId, postId);
-    const filteredComments = router.db
-        .getState()
-        .comments.filter((comment) => comment.postId == postId && comment.parentId == commentId);
+    const filteredComments = router.db.getState().comments.filter((comment) => comment.postId == postId && comment.parentId == commentId);
 
-    const commentsById = buildTree(filteredComments, commentId);
-    console.log(commentsById);
-    res.status(200).jsonp({ comments: commentsById });
+    const commentsById = {};
+
+    filteredComments.forEach((comment) => {
+        const children = router.db.getState().comments.filter((childComment) => childComment.postId == postId && childComment.parentId == comment.id);
+        comment.children = [children[0]];
+        comment.childCount = Object.keys(children).length;
+    });
+    console.log(filteredComments);
+    res.status(200).jsonp({ comments: filteredComments });
 });
 
 // Функция для построения дерева комментариев

@@ -5,16 +5,17 @@ import { useGetUserByIdQuery } from '../../app/reducers/user/userApi';
 
 type CommentProps = {
     expand: (commentId:number | undefined) => void;
+    margin: number;
 
-} & CommentType;
+} & CommentType ;
 
-export const ChildCommentLink: FC<CommentProps> = memo((comment) => {
+export const ExpandMoreComments: FC<CommentProps> = memo((comment) => {
     const { data: userData } = useGetUserByIdQuery({ id: comment.user.id });
 
     const avatarSize = 25;
 
     return (
-        <Box sx={{ display: 'flex', padding: '0 1rem' }} data-id={`${comment.postId}-${comment.user.id}`}>
+        <Box sx={{ display: 'flex', padding: '0 1rem', marginLeft: comment.margin }} data-id={`${comment.postId}-${comment.user.id}`}>
             <Box>
                 <Avatar src={userData?.image} sx={{ width: avatarSize, height: avatarSize }} />
             </Box>

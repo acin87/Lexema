@@ -13,23 +13,23 @@ const RootComments = memo<CommentsProps>((props) => {
     const [currentPage, setCurrentPage] = useState(0);
     const limit = 10;
     const [comments, setComments] = useState<CommentType[]>([]);
-    const { data, isSuccess } = useGetRootCommentsQuery({
+    const { data: resultOnLoad, isSuccess } = useGetRootCommentsQuery({
         postId: props.postId,
         page: 1,
         limit: 2,
     });
-    const [trigger, resultLazy] = useLazyGetRootCommentsQuery();
+    const [trigger, resultOnLazy] = useLazyGetRootCommentsQuery();
     useEffect(() => {
         if (isSuccess) {
-            setComments([...data.comments]);
+            setComments([...resultOnLoad.comments]);
         }
-    }, [isSuccess]); //eslint-disable-line react-hooks/exhaustive-deps
+    }, [isSuccess]);//eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
-        if (resultLazy.isSuccess) {
-            const newComments = resultLazy.data.comments.filter((comment) => !comments.find((c) => c.id === comment.id)); // Исключаем дубликаты
+        if (resultOnLazy.isSuccess) {
+            const newComments = resultOnLazy.data.comments.filter((comment) => !comments.find((c) => c.id === comment.id)); // Исключаем дубликаты
             setComments([...comments, ...newComments]);
         }
-    }, [resultLazy]); //eslint-disable-line react-hooks/exhaustive-deps
+    }, [resultOnLazy]); //eslint-disable-line react-hooks/exhaustive-deps
 
     const loadMoreRootComments = () => {
         trigger({ postId: props.postId, page: currentPage + 1, limit: limit });
@@ -39,12 +39,12 @@ const RootComments = memo<CommentsProps>((props) => {
     const renderTree = comments.map((comment) => {
         const childComments = comment.children || [];
         if (childComments.length === 0) {
-            return <Comments key={comment.id} {...comment} />;
+            return <Comments key={comment.id} comment={comment} />;
         }
         return (
             <Fragment key={comment.id}>
-                <Comments {...comment} />
-                <ChildComments postId={props.postId} comments={childComments} firstChildren={true} childCount={comment.childCount}/>
+                <Comments comment={comment} />
+                <ChildComments postId={props.postId} rootComment={comment} childCount={comment.childCount} level={1}/>
             </Fragment>
         );
     });
