@@ -1,9 +1,9 @@
-import { Link } from '@mui/material';
+import { Divider, Link } from '@mui/material';
 import { Fragment, memo, useEffect, useState } from 'react';
 import { useGetRootCommentsQuery, useLazyGetRootCommentsQuery } from '../../app/reducers/comments/commentsApi';
 import { CommentType } from '../../app/reducers/comments/commntsType';
 import { ChildComments } from './ChildComments';
-import { Comments } from './Comments ';
+import { Comment } from './Comment';
 
 type CommentsProps = {
     postId: number;
@@ -39,12 +39,12 @@ const RootComments = memo<CommentsProps>((props) => {
     const renderTree = comments.map((comment) => {
         const childComments = comment.children || [];
         if (childComments.length === 0) {
-            return <Comments key={comment.id} comment={comment} />;
+            return <Fragment key={comment.id}><Comment comment={comment}/><Divider variant="inset"/></Fragment>;
         }
         return (
             <Fragment key={comment.id}>
-                <Comments comment={comment} />
-                <ChildComments postId={props.postId} rootComment={comment} childCount={comment.childCount} level={1}/>
+                <Comment comment={comment}/>
+                <ChildComments postId={props.postId} rootComment={comment} childCount={comment.childCount} level={2}/>
             </Fragment>
         );
     });

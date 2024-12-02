@@ -40,7 +40,6 @@ export const formatTimeAgo = (dateString: string): string => {
     
     // Получаем текущее время
     const now = new Date();
-    console.log(date);
     // Вычисляем разницу между текущим временем и переданной датой
     const diffInMs = now.getTime() - date.getTime();
     
@@ -52,6 +51,7 @@ export const formatTimeAgo = (dateString: string): string => {
     }
     
     if (seconds < 60) {
+    const sec = Intl.PluralRules('ru-RU').select(seconds);
         return `${seconds} секунд назад`;
     }
     
