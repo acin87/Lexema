@@ -16,7 +16,7 @@ type CommentItemProps = {
 export const ChildComments: React.FC<CommentItemProps> = memo(({ rootComment, postId, childCount, level }) => {
     const [expandCollapse, setExpandCollapse] = useState(false);
     const [comments, setComments] = useState<CommentType[]>([]);
-    const [trigger, resultLazy] = useLazyGetChildCommentsQuery();
+    const [trigger, {data: resultLazy, isSuccess, isLoading}] = useLazyGetChildCommentsQuery();
 
     const expandComments = (commentId: number | undefined) => {
         setExpandCollapse(true);
@@ -28,80 +28,51 @@ export const ChildComments: React.FC<CommentItemProps> = memo(({ rootComment, po
     }, [rootComment]);
 
     useEffect(() => {
-        if (resultLazy.isSuccess) {
-            const newComments = resultLazy.data.comments.filter((comment) => !comments.find((c) => c.id === comment.id)); // Исключаем дубликаты
+        if (isSuccess) {
+            const newComments = resultLazy.comments.filter((comment) => !comments.find((c) => c.id === comment.id)); // Исключаем дубликаты
             setComments([...comments, ...newComments]);
         }
     }, [resultLazy]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const renderComment = comments.map((comment) => {
+    const renderComment = () => {
+        console.log(isLoading)
         //Если родительский комментарий имеет  один загруженный дочерний комментарий и более одного дочернего комментария в БД
-        if (rootComment.children?.length === 1 && rootComment.childCount > 1 && resultLazy.isUninitialized) {
-            console.log(comment.id, 'id');
+        if (rootComment.children?.length === 1 && rootComment.childCount > 1 && !isSuccess) {
             //отображаем кнопку для загрузки дочерних комментариев
-            return <MoreCommentsLink key={comment.id} {...comment} expand={expandComments} childCount={childCount} level={level} />;
+            return <MoreCommentsLink {...rootComment.children[0]} expand={expandComments} childCount={childCount} level={level} />;
             //Если родительский комментарий имеет один загруженный дочерний комментарий и нет дочерних комментариев в БД
-        } else if (rootComment.children?.length === 1 && rootComment.childCount === 0 && resultLazy.isUninitialized) {
-            //Отображаем дочерний комментарий
+        // } else if (rootComment.children?.length === 1 && rootComment.childCount === 0 && isLoading) {
+        //     return (
+        //       <Fragment>
+        //         <Comment comment={rootComment.children[0]} />
+        //         <Divider variant="inset" />
+        //       </Fragment>
+        //     );
+        } else if (rootComment.children?.length === 1 && rootComment.childCount === 1 && !isSuccess) {
             return (
-                <Fragment key={comment.id}>
-                    <Comment comment={comment} />
-                    <Divider variant="inset" />
-                </Fragment>
+              <Fragment>
+                <Comment comment={rootComment.children[0]} />
+                <Divider variant="inset" />
+              </Fragment>
             );
-            //Если родительский комментарий имеет один загруженный дочерний комментарий и один дочерний комментарий в БД,
-        } else if (rootComment.children?.length === 1 && rootComment.childCount === 1 && !resultLazy.isUninitialized) {
-            //Отображаем уже загруженный дочерний комментарий
+        } else if (isSuccess) {
             return (
-                <Fragment key={comment.id}>
-                    <Comment comment={comment} />
-                    <Divider variant="inset" />
-                </Fragment>
-            );
-            //Если родительский комментарий имеет один загруженный дочерний комментарий и один дочерний комментарий в БД,
-            //и если загрузка дочернего комментария еще не завершена
-        } else if (rootComment.children?.length === 1 && rootComment.childCount === 1 && resultLazy.isUninitialized) {
-            return (
-                <Fragment key={comment.id}>
-                    <Comment comment={comment} />
-                    <Divider variant="inset" />
-                </Fragment>
-            );
-            //Если инициализация запроса завершена
-        } else if (!resultLazy.isUninitialized) {
-            //Отображаем дочерний комментарий и рекурсивно вызываем функцию для дочернего комментария
-            if (comment.children?.length === 1 && comment.childCount >= 1) {
-                return (
+                <Fragment>
+                  {comments.map((comment) => (
                     <Fragment key={comment.id}>
-                        <Comment comment={comment} />
+                      <Comment comment={comment} />
+                      {comment.children?.length === 1 && comment.childCount >= 1 ? (
                         <ChildComments postId={postId} rootComment={comment} childCount={comment.childCount} level={level + 1} />
-                        <Divider variant="inset" />
+                      ) : null}
+                      <Divider variant="inset" />
                     </Fragment>
-                );
-                //Если дочерний комментарий не имеет дочерних комментариев
-            } else if (comment.children?.length === 1 && comment.childCount === 0) {
-         
-                return (
-                    <Fragment key={comment.id}>
-                        <Comment comment={comment} />
-                        <Divider variant="inset" />
-                    </Fragment>
-                );
-                //Если дочерний комментарий не имеет уже загруженных дочерних комментариев и не имеет дочерних комментариев в БД
-            } else if (comment.childCount === 0) {
-                return (
-                    <Fragment key={comment.id}>
-                        <Comment comment={comment} />
-                        <Divider variant="inset" />
-                    </Fragment>
-                );
-            }
+                  ))}
+                </Fragment>
+              );
         }
-    });
-
-    if (resultLazy.isUninitialized) {
-        return <Fragment>{renderComment}</Fragment>;
-    }else{
-        return <ExpandCollapseButton>{renderComment}</ExpandCollapseButton>;
     }
+
+
+        return <ExpandCollapseButton>{renderComment()}</ExpandCollapseButton>;
+    
 });
