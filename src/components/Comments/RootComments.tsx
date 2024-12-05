@@ -44,7 +44,9 @@ const RootComments = memo<CommentsProps>((props) => {
         return (
             <Fragment key={comment.id}>
                 <Comment comment={comment}/>
+                 
                 <ChildComments postId={props.postId} rootComment={comment} childCount={comment.childCount} level={2}/>
+               <Divider variant="inset" />
             </Fragment>
         );
     });

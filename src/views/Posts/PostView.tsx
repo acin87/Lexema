@@ -26,7 +26,7 @@ import { NavLink } from 'react-router-dom';
 
 import { PostTypes } from '../../app/reducers/posts/postTypes';
 import { useGetUserByIdQuery } from '../../app/reducers/user/userApi';
-import RootComments from '../../components/comment/RootComments';
+import RootComments from '../../components/Comments/RootComments';
 
 export const PostView = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, ref) => {
     const [commentsLimit, setCommentsLimit] = useState('parents');

@@ -9,13 +9,12 @@ type CommentProps = {
 
 } & CommentType ;
 
-export const ExpandMoreComments: FC<CommentProps> = memo((comment) => {
+export const MoreCommentsLink: FC<CommentProps> = memo((comment) => {
     const { data: userData } = useGetUserByIdQuery({ id: comment.user.id });
 
     const avatarSize = 25;
-    console.log(comment.level, comment.id);
     return (
-        <Box sx={{ display: 'flex', padding: '0 1rem', marginLeft: (comment.level * 8)+'%' }} data-id={`${comment.postId}-${comment.user.id}`}>
+        <Box sx={{ display: 'flex', padding: '0 1rem', marginLeft: 7 }} data-id={`${comment.postId}-${comment.user.id}`}>
             <Box>
                 <Avatar src={userData?.image} sx={{ width: avatarSize, height: avatarSize }} />
             </Box>
