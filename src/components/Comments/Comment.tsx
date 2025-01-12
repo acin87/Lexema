@@ -6,16 +6,13 @@ import { useGetUserByIdQuery } from '../../app/reducers/user/userApi';
 import { formatTimeAgo } from '../../app/util/Utils';
 type Props = {
     comment: CommentType;
-
 } & ComponentPropsWithoutRef<'div'>;
 
 export const Comment: FC<Props> = memo((props) => {
     const { data: user } = useGetUserByIdQuery({ id: props.comment.user.id });
 
- 
-
     return (
-        <Card sx={{ boxShadow: 'none'}}>
+        <Card sx={{ boxShadow: 'none', width: '100%' }}>
             <CardHeader
                 sx={{ paddingBottom: 0 }}
                 avatar={<Avatar src={user?.image} />}

@@ -11,6 +11,7 @@ type CommentsProps = {
 
 const RootComments = memo<CommentsProps>((props) => {
     const [currentPage, setCurrentPage] = useState(0);
+    const [isExpand, setIsExpand] = useState<boolean>(false);
     const limit = 10;
     const [comments, setComments] = useState<CommentType[]>([]);
     const { data: resultOnLoad, isSuccess } = useGetRootCommentsQuery({
@@ -19,11 +20,12 @@ const RootComments = memo<CommentsProps>((props) => {
         limit: 2,
     });
     const [trigger, resultOnLazy] = useLazyGetRootCommentsQuery();
+
     useEffect(() => {
         if (isSuccess) {
             setComments([...resultOnLoad.comments]);
         }
-    }, [isSuccess]);//eslint-disable-line react-hooks/exhaustive-deps
+    }, [isSuccess]); //eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (resultOnLazy.isSuccess) {
             const newComments = resultOnLazy.data.comments.filter((comment) => !comments.find((c) => c.id === comment.id)); // Исключаем дубликаты
@@ -36,17 +38,26 @@ const RootComments = memo<CommentsProps>((props) => {
         setCurrentPage((prevPage) => prevPage + 1);
     };
 
+    const expandComments = (opened: boolean) => {
+        setIsExpand(opened);
+    };
+
     const renderTree = comments.map((comment) => {
         const childComments = comment.children || [];
         if (childComments.length === 0) {
-            return <Fragment key={comment.id}><Comment comment={comment}/><Divider variant="inset"/></Fragment>;
+            return (
+                <Fragment key={comment.id}>
+                    <Comment comment={comment} />
+                    <Divider variant="inset" />
+                </Fragment>
+            );
         }
         return (
             <Fragment key={comment.id}>
-                <Comment comment={comment}/>
-                 
-                <ChildComments postId={props.postId} rootComment={comment} childCount={comment.childCount} level={2}/>
-               <Divider variant="inset" />
+                <Comment comment={comment} />
+                {isExpand && <Divider variant="inset" />}
+                <ChildComments postId={props.postId} rootComment={comment} level={2} expand={expandComments} />
+                {!isExpand && <Divider variant="inset" />}
             </Fragment>
         );
     });

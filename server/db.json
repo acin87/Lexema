@@ -2125,7 +2125,7 @@
         {
             "id": 3,
             "body": "You are an amazing writer!",
-           "createdAt": "2024-10-28T21:36:40",
+            "createdAt": "2024-10-28T21:36:40",
             "postId": 3,
             "likes": 2,
             "user": { "id": 1, "username": "emilys", "fullName": "Emily Johnson" }
@@ -2440,7 +2440,7 @@
         {
             "id": 43,
             "body": "What an accomplishment!",
-           "postId": 2,
+            "postId": 2,
             "parentId": 6,
             "likes": 8,
             "user": { "id": 4, "username": "braydenf", "fullName": "Brayden Fleming" }
