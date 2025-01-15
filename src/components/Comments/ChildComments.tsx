@@ -1,6 +1,6 @@
 import { ExpandLess } from '@mui/icons-material';
 import { Box, Button, Collapse, Divider } from '@mui/material';
-import { FC, Fragment, memo, useEffect, useState } from 'react';
+import { FC, Fragment, memo, useCallback, useEffect, useState } from 'react';
 import { useLazyGetChildCommentsQuery } from '../../app/reducers/comments/commentsApi';
 import { CommentType } from '../../app/reducers/comments/commntsType';
 import { Comment } from './Comment';
@@ -8,75 +8,71 @@ import { MoreCommentsLink } from './MoreCommentsLink';
 
 type CommentItemProps = {
     postId: number;
-    rootComment: CommentType;
+    parentComment: CommentType;
     level: number;
-    expand?: (opened: boolean) => void;
+    onToggleExpand?: (opened: boolean) => void; // функция для переключения разделителя для корневого комментария
 };
 
-/**
- * Компонент для рендера комментария
- *
- * @param {CommentItemProps} props - props компонента
- * @returns {JSX.Element} - компонент
- */
-
-export const ChildComments: FC<CommentItemProps> = memo(({ rootComment, postId, level, expand }) => {
+const ChildComments: FC<CommentItemProps> = memo(({ parentComment, postId, level, onToggleExpand }) => {
     const [comments, setComments] = useState<CommentType[]>([]);
-    const [isOpen, setIsOpen] = useState<boolean>(true);
-    const [isExpand, setIsExpand] = useState<boolean>(false);
-    const [trigger, { data: resultLazy, isSuccess }] = useLazyGetChildCommentsQuery();
+    const [isOpen, setIsOpen] = useState(false);
 
-    const expandComments = (commentId: number | undefined) => {
-        if (!isOpen) {
-            setIsOpen(true);
+    const [fetchComments, { data: lazyComments, isSuccess }] = useLazyGetChildCommentsQuery();
+
+    const expandComments = useCallback(
+        (commentId: number | undefined) => {
+            if (!isOpen) {
+                setIsOpen(true);
+            }
+            console.log(isOpen);
+            if (onToggleExpand) {
+                onToggleExpand(true);
+            }
+            fetchComments({ postId, parentId: commentId });
+        },
+        [fetchComments, onToggleExpand, isOpen], // eslint-disable-line react-hooks/exhaustive-deps
+    );
+
+    const toggleExpandComments = () => {
+        setIsOpen(false);
+
+        // Если передана функция для переключения разделителя для корневого комментария, вызываем ее
+        if (onToggleExpand) {
+            onToggleExpand(false);
         }
-        setIsExpand(true);
-
-        if (expand) {
-            expand(true);
-        }
-
-        trigger({ postId: postId, parentId: commentId });
     };
 
     useEffect(() => {
-        setComments(rootComment.children || []);
-    }, [rootComment]);
+        setComments(parentComment.children || []);
+    }, [parentComment]);
 
     useEffect(() => {
         if (isSuccess) {
-            const newComments = resultLazy.comments.filter((comment) => !comments.find((c) => c.id === comment.id)); // Исключаем дубликаты
+            const newComments = lazyComments.comments.filter((comment) => !comments.find((c) => c.id === comment.id)); // Исключаем дубликаты
             setComments([...comments, ...newComments]);
         }
-    }, [resultLazy]); // eslint-disable-line react-hooks/exhaustive-deps
-    /**
-     *  Функция рендера комментария
-     *
-     * @returns Возвращает комментарий или кнопку для загрузки дочерних комментариев
-     */
+    }, [lazyComments]); // eslint-disable-line react-hooks/exhaustive-deps
+
     const renderComment = () => {
-        //Если родительский комментарий имеет один уже загруженный дочерний комментарий и более одного дочернего комментария в БД
-        if (rootComment.children?.length === 1 && rootComment.childCount > 1 && (!isSuccess || !isOpen)) {
-            //отображаем кнопку для загрузки остальных дочерних комментариев
+        if (parentComment.children?.length === 1 && parentComment.childCount > 1 && (!isSuccess || !isOpen)) {
             return (
                 <Fragment>
-                    <MoreCommentsLink {...rootComment.children[0]} expand={expandComments} childCount={rootComment.childCount} level={level} />
+                    <MoreCommentsLink {...parentComment.children[0]} onExpand={expandComments} childCount={parentComment.childCount} level={level} />
                 </Fragment>
             );
-        } else if (rootComment.children?.length === 1 && rootComment.childCount === 1 && !isSuccess) {
+        } else if (parentComment.children?.length === 1 && parentComment.childCount === 1 && !isSuccess) {
             return (
                 <Fragment>
-                    <Divider variant="inset" sx={{ width: '100%' }} className={`id-one-${rootComment.children[0].id}`} />
+                    <Divider variant="inset" sx={{ width: '100%' }} className={`id-one-${parentComment.children[0].id}`} />
                     <Box sx={{ display: 'flex' }}>
                         <Box sx={{ marginLeft: '12%', width: '100%' }}>
-                            <Comment comment={rootComment.children[0]} />
-                            <Divider variant="inset" sx={{ width: '100%' }} className={`id-one-${rootComment.children[0].id}`} />
+                            <Comment comment={parentComment.children[0]} />
+                            <Divider variant="inset" sx={{ width: '100%' }} className={`id-one-${parentComment.children[0].id}`} />
                         </Box>
                     </Box>
                 </Fragment>
             );
-            //Отображаем все лениво загруженные коментарии и кнопку свернуть/развернуть
-        } else if (isSuccess && isOpen) {
+        } else if (isSuccess) {
             return (
                 <Box sx={{ display: 'flex' }}>
                     <Button
@@ -87,7 +83,7 @@ export const ChildComments: FC<CommentItemProps> = memo(({ rootComment, postId, 
                             marginLeft: 1,
                         }}
                         variant="text"
-                        onClick={() => setIsOpen(!isOpen)}
+                        onClick={toggleExpandComments}
                     >
                         <ExpandLess />
                     </Button>
@@ -97,8 +93,14 @@ export const ChildComments: FC<CommentItemProps> = memo(({ rootComment, postId, 
                             <Fragment key={comment.id}>
                                 <Comment comment={comment} />
 
+                                {!isOpen && comment.childCount > 1 && (
+                                    <Divider variant="inset" sx={{ width: '100%' }} className={`id-ch-${comment.id}`} />
+                                )}
                                 {comment.children?.length === 1 && comment.childCount >= 1 && (
-                                    <ChildComments postId={postId} rootComment={comment} level={level + 1} />
+                                    <ChildComments postId={postId} parentComment={comment} level={level + 1} />
+                                )}
+                                {isOpen && comment.childCount > 1 && (
+                                    <Divider variant="inset" sx={{ width: '100%' }} className={`id-ch-${comment.id}`} />
                                 )}
                             </Fragment>
                         ))}
@@ -110,3 +112,5 @@ export const ChildComments: FC<CommentItemProps> = memo(({ rootComment, postId, 
 
     return renderComment();
 });
+
+export default ChildComments;

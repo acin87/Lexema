@@ -4,7 +4,7 @@ import { CommentType } from '../../app/reducers/comments/commntsType';
 import { useGetUserByIdQuery } from '../../app/reducers/user/userApi';
 
 type CommentProps = {
-    expand: (commentId:number | undefined) => void;
+    onExpand: (commentId:number | undefined) => void;
     level: number;
 
 } & CommentType ;
@@ -30,9 +30,9 @@ export const MoreCommentsLink: FC<CommentProps> = memo((comment) => {
                     <Link
                         variant="subtitle2"
                         sx={{ cursor: 'pointer', textDecoration: 'none' }}
-                        onClick={()=> comment.expand(comment.parentId)}
+                        onClick={()=> comment.onExpand(comment.parentId)}
                     >
-                        {comment.user?.fullName} ответил(а) и еще {comment.childCount} коментариея
+                        {comment.user?.fullName} ответил(а) и еще {comment.childCount} коментария
                     </Link>
                 </Typography>
             </Box>
