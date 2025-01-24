@@ -12,9 +12,9 @@ export const AppRoutes = createBrowserRouter([
     {
         path: '/',
         element: (
-            <RequireAuth>
+            
                 <MainLayout />
-            </RequireAuth>
+            
         ),
         children: [
             {
