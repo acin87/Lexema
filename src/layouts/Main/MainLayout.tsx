@@ -67,6 +67,9 @@ export const MainLayout: FC = () => {
             h6: {
                 fontSize: '875rem',
             },
+            subtitle1: {
+                fontSize: '0.681rem'
+            },
             subtitle2: {
                 fontSize: '0.781rem'
             }
@@ -122,6 +125,9 @@ export const MainLayout: FC = () => {
             },
             h6: {
                 fontSize: '875rem',
+            },
+            subtitle1: {
+                fontSize: '0.581rem'
             },
             subtitle2: {
                 fontSize: '0.781rem'

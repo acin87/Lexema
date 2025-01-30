@@ -2,8 +2,8 @@ import AddIcon from '@mui/icons-material/Add';
 import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
 import { Box, Button, Collapse, Divider } from '@mui/material';
 import { FC, Fragment, useEffect, useState } from 'react';
-import { useLazyGetChildCommentsQuery } from '../../../app/reducers/comments/commentsApi';
-import { CommentType } from '../../../app/reducers/comments/commntsType';
+import { useLazyGetChildCommentsQuery } from '../../app/reducers/comments/commentsApi';
+import { CommentType } from '../../app/reducers/comments/commntsType';
 import Comment from './Comment';
 
 type ChildCommentProps = {

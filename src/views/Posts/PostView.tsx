@@ -26,7 +26,7 @@ import { NavLink } from 'react-router-dom';
 
 import { PostTypes } from '../../app/reducers/posts/postTypes';
 import { useGetUserByIdQuery } from '../../app/reducers/user/userApi';
-import RootComments from '../../components/Comments/CommentsV2/RootComments';
+import RootComments from '../../components/Comments/RootComments';
 
 export const PostView = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, ref) => {
     const [commentsLimit, setCommentsLimit] = useState('parents');
@@ -119,27 +119,6 @@ export const PostView = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, 
                 <Divider />
                 <Box>
                     <RootComments postId={post.id} />
-
-                    {/* {commentData?.comments.map((comment) => {
-                        let child: JSX.Element | undefined | null = null;
-                        if (comment.children != null) {
-                            child = (
-                                <Box id="child-comments" sx={{ paddingLeft: 8 }}>
-                                    <ChildCommentLink
-                                        {...comment.children[0]}
-                                        childCount={comment.childCount}
-                                    />
-                                </Box>
-                            );
-                        }
-
-                        return (
-                            <React.Fragment key={comment.id}>
-                                <Comment {...comment} />
-                                {child}
-                            </React.Fragment>
-                        );
-                    })} */}
                 </Box>
                 {skeletonLoading ? null : (
                     <Box sx={{ p: 2 }}>
