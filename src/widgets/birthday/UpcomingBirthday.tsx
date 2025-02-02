@@ -13,10 +13,10 @@ import {
     Skeleton,
     Typography,
 } from '@mui/material';
-import { NavLink } from 'react-router-dom';
-import { useGetAllUsersQuery } from '../../app/reducers/user/userApi';
-import styles from './birthday.module.css';
 import { FC, memo } from 'react';
+import { NavLink } from 'react-router-dom';
+import { useGetAllUsersQuery } from '../../entities/user/api/userApi';
+import styles from './birthday.module.css';
 
 export const UpcomingBirthday: FC = memo(() => {
     //const usersFieldList = 'id,firstName,lastName,image,birthDate';
@@ -56,12 +56,7 @@ export const UpcomingBirthday: FC = memo(() => {
                 }
                 title={
                     isLoading ? (
-                        <Skeleton
-                            style={{ marginBottom: 6 }}
-                            animation="wave"
-                            height={15}
-                            width="100%"
-                        />
+                        <Skeleton style={{ marginBottom: 6 }} animation="wave" height={15} width="100%" />
                     ) : (
                         <Typography variant="body1">Ближайшие дни рождения</Typography>
                     )

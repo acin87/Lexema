@@ -1,21 +1,24 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { postsApi } from '../reducers/posts/postsApi ';
+
+import { commentsApi } from '../../entities/comment/api/commentApi';
+import { saveState } from '../../shared/utils/LocalStorage';
+
+import { postApi } from '../../entities/post/api/postsApi ';
+import postSlice from '../../entities/post/slices/postSlice';
+import { userApi } from '../../entities/user/api/userApi';
 import uiSlice, { UI_PERSISTENT_STATE, UiTypes } from '../reducers/uiSlice/uiSlice';
-import { userApi } from '../reducers/user/userApi';
-import { saveState } from '../util/LocalStorage';
-import { commentsApi } from '../reducers/comments/commentsApi';
 
 const rootReducer = combineReducers({
     [userApi.reducerPath]: userApi.reducer,
-    [postsApi.reducerPath]: postsApi.reducer,
+    [postApi.reducerPath]: postApi.reducer,
     [commentsApi.reducerPath]: commentsApi.reducer,
     ui: uiSlice,
+    post: postSlice,
 });
 
 export const store = configureStore({
     reducer: rootReducer,
-    middleware: (getDefaultMidleware) =>
-        getDefaultMidleware().concat(postsApi.middleware, userApi.middleware, commentsApi.middleware),
+    middleware: (getDefaultMidleware) => getDefaultMidleware().concat(postApi.middleware, userApi.middleware, commentsApi.middleware),
 });
 store.subscribe(() => {
     saveState<UiTypes>(store.getState().ui, UI_PERSISTENT_STATE);

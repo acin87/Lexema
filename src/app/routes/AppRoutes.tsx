@@ -1,25 +1,21 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { MainLayout } from '../../layouts/Main/MainLayout';
 
-import ErrorPage from '../../pages/Error/ErrorPage';
-import FriendList from '../../pages/Friends/FriendList';
-import HomePage from '../../pages/Home/HomePage';
-import UserProfile from '../../pages/User/UserProfile';
-import Authorization from '../../views/Auth/Authorization';
-import RequireAuth from '../../views/Auth/RequireAuth';
+import ErrorPage from '../../pages/ErrorPage';
+
+import HomePage from '../../pages/HomePage';
+import UserProfile from '../../features/profile/UserProfile';
+import Authorization from '../../features/auth/Authorization';
+import FeedPage from '../../pages/FeedPage';
+import FriendList from '../../features/friends/components/FriendList';
 
 export const AppRoutes = createBrowserRouter([
     {
         path: '/',
-        element: (
-            
-                <MainLayout />
-            
-        ),
+        element: <HomePage />,
         children: [
             {
                 path: '/',
-                element: <HomePage />,
+                element: <FeedPage />,
             },
             {
                 path: '/friends',
