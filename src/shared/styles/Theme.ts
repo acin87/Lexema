@@ -1,6 +1,6 @@
-import { ThemeOptions } from '@mui/material';
+import { createTheme } from '@mui/material';
 
-export const DarkTheme: ThemeOptions = {
+export const DarkTheme = createTheme({
     palette: {
         mode: 'dark',
         primary: {
@@ -42,14 +42,14 @@ export const DarkTheme: ThemeOptions = {
             fontSize: '1.05rem',
         },
         h6: {
-            fontSize: '875rem',
+            fontSize: '0.875rem',
         },
         subtitle2: {
             fontSize: '0.781rem',
         },
     },
-};
-export const LightTheme: ThemeOptions = {
+});
+export const LightTheme = createTheme({
     palette: {
         mode: 'light',
         primary: {
@@ -73,6 +73,7 @@ export const LightTheme: ThemeOptions = {
             secondary: '#777d74',
         },
     },
+
     typography: {
         fontFamily: ['Montserrat', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'].join(','),
         h1: {
@@ -83,6 +84,9 @@ export const LightTheme: ThemeOptions = {
         },
         h3: {
             fontSize: 'calc(1.29589rem + 0.55065vw)',
+            '@media (min-width: 1200px)': {
+                fontSize: '1.70888rem',
+            },
         },
         h4: {
             fontSize: '1.225rem',
@@ -91,11 +95,19 @@ export const LightTheme: ThemeOptions = {
             fontSize: '1.05rem',
         },
         h6: {
-            fontSize: '875rem',
+            fontSize: '0.875rem',
         },
         subtitle2: {
             fontSize: '0.781rem',
         },
-        
     },
-};
+    components: {
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    boxShadow: '0 0 1.25rem 0 rgba(0, 0, 0, .1);',
+                },
+            },
+        },
+    },
+});

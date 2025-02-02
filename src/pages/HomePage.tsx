@@ -1,15 +1,13 @@
-import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
+import { RootState } from '../app/store/store';
 import styles from '../shared/styles/Layout.module.css';
 import { DarkTheme, LightTheme } from '../shared/styles/Theme';
 import LeftSideBar from '../widgets/leftsidebar/LeftSideBar';
 import Navbar from '../widgets/navbar/Navbar';
 import RightSideBar from '../widgets/rightsidebar/RightSideBar';
-import { RootState } from '../app/store/store';
-import { UpcomingBirthday } from '../widgets/birthday/UpcomingBirthday';
-
 
 const HomePage: FC = () => {
     const theme = useSelector((s: RootState) => s.ui.theme);
@@ -20,7 +18,7 @@ const HomePage: FC = () => {
     }, [theme]);
 
     return (
-        <ThemeProvider theme={darkOrLight === 'dark' ? createTheme(DarkTheme) : createTheme(LightTheme)}>
+        <ThemeProvider theme={darkOrLight === 'dark' ? DarkTheme : LightTheme}>
             <CssBaseline enableColorScheme />
             <div className={styles.lsLayout}>
                 <LeftSideBar />

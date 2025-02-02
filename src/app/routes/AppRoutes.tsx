@@ -2,11 +2,11 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import ErrorPage from '../../pages/ErrorPage';
 
-import HomePage from '../../pages/HomePage';
-import UserProfile from '../../features/profile/UserProfile';
 import Authorization from '../../features/auth/Authorization';
-import FeedPage from '../../pages/FeedPage';
 import FriendList from '../../features/friends/components/FriendList';
+import FeedPage from '../../pages/FeedPage';
+import HomePage from '../../pages/HomePage';
+import ProfilePage from '../../pages/ProfilePage';
 
 export const AppRoutes = createBrowserRouter([
     {
@@ -23,7 +23,7 @@ export const AppRoutes = createBrowserRouter([
             },
             {
                 path: '/friends/user/:id',
-                element: <UserProfile />,
+                element: <ProfilePage />,
             },
         ],
     },

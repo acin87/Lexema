@@ -33,7 +33,7 @@ const Navbar: FC = memo(() => {
             <div className={styles.lsNavbarWrap}>
                 <div className={styles.navbarLogoWrap}>
                     <NavLink to="/">
-                        <img src="src/assets/icons/favicon.png" alt="Lexema" className={styles.siteIcon} />
+                        <img src="/src/assets/icons/favicon.png" alt="Lexema" className={styles.siteIcon} />
                         <span>Lexema</span>
                     </NavLink>
                     <Button className={styles.leftMenuCollapseBtn} onClick={toggleMenu}>
@@ -78,7 +78,7 @@ const Navbar: FC = memo(() => {
                         <li className={styles.navItem}>
                             <a href="#">
                                 <div className={styles.avatarWrap}>
-                                    <img src="./src/assets/icons/avatar.jpg" alt="avatar" className={styles.avatar} />
+                                    <img src="/src/assets/icons/avatar.jpg" alt="avatar" className={styles.avatar} />
                                 </div>
                             </a>
                         </li>
