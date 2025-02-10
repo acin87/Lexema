@@ -33,16 +33,16 @@ const ProfileHeader: React.FC = () => {
                     </Box>
                     <Stack className={styles.profileHeadInfo} direction="row" spacing={2} sx={{ textAlign: 'center' }}>
                         <Box>
-                            <Typography variant="body1">Постов</Typography>
-                            <Typography variant="subtitle1">556</Typography>
+                            <Typography variant="body2">Постов</Typography>
+                            <Typography variant="subtitle2">556</Typography>
                         </Box>
                         <Box>
-                            <Typography variant="body1">Друзей</Typography>
-                            <Typography variant="subtitle1">125</Typography>
+                            <Typography variant="body2">Друзей</Typography>
+                            <Typography variant="subtitle2">125</Typography>
                         </Box>
                         <Box>
-                            <Typography variant="body1">Подписок</Typography>
-                            <Typography variant="subtitle1">182</Typography>
+                            <Typography variant="body2">Подписок</Typography>
+                            <Typography variant="subtitle2">182</Typography>
                         </Box>
                     </Stack>
                 </Box>

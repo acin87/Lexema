@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import TabPanels from '../../../shared/components/TabPanels';
+import TabPanels from '../../../shared/components/tabPanels/TabPanels';
 
 const ProfileBody = () => {
     const tabs = [
