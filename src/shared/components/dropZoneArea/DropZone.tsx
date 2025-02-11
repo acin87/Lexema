@@ -21,19 +21,9 @@ const DropZoneStyles = styled((props: DropAreaMuiProps) => <Box ref={props.dropz
 }));
 
 const DropZone = () => {
-    const [isDragging, setIsDragging] = useState(false);
-    const [files, setFiles] = useState<File[]>([]);
+    
 
-    const onDragStateChange = (isDragging: boolean) => {
-        setIsDragging(isDragging);
-    };
-
-    const onFilesDrop = (files: File[]) => {
-        setFiles(files);
-    };
-
-    const ref = useDropZone({ onDragStateChange, onFilesDrop });
-
+    
     return (
         <DropZoneStyles dropzoneref={ref}>
             <FileList files={files} />

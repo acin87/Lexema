@@ -6,5 +6,6 @@ export enum API {
     REGISTRATION = '/register',
     ME = '/me',
     POSTS ='/posts',
-    COMMENTS = '/comments'
+    COMMENTS = '/comments',
+    FILES = '/files-upload'
 }

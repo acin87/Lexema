@@ -12,6 +12,8 @@ export type DropZoneAreaProps = {
 export const useDropZone = (props: DropZoneAreaProps) => {
     const { onDragStateChange, onDrag, onDragIn, onDragOut, onDrop, onFilesDrop } = props;
 
+    
+
     const [isDragging, setIsDragging] = useState(false);
     const ref = useRef<null | HTMLDivElement>(null);
 
