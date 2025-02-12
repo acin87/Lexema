@@ -2,19 +2,19 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API, BASEURL } from '../../app/api/ApiConfig';
 
 interface FileUploadResponse {
-    fileUrl: string
+    fileUrls: string[]
 }
 
 const filesLoadApi = createApi({
     reducerPath: 'filesApi',
     baseQuery: fetchBaseQuery({ baseUrl: BASEURL }),
-    tagTypes: ['files'],
+    tagTypes: ['imageFiles'],
     endpoints: (builder) => ({
         multipleImageLoad: builder.mutation<FileUploadResponse, FormData>({
-            query: (data) => ({
+            query: (files) => ({
                 url: API.FILES,
                 method: 'POST',
-                body: data,
+                body: files,
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

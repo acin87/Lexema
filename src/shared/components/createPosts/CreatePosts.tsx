@@ -1,5 +1,5 @@
 import PostAddIcon from '@mui/icons-material/PostAdd';
-import { Box, Button, Modal, Paper, Typography } from '@mui/material';
+import { Box, Button, CSSObject, Modal, Paper, Typography } from '@mui/material';
 import { FC, memo, useState } from 'react';
 import DropZone from '../dropZoneArea/DropZone';
 
@@ -7,7 +7,7 @@ interface CreatePostsProps {
     title: string;
 }
 
-const CreatePosts: FC = () => {
+const CreatePosts: FC<CreatePostsProps> = () => {
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => {
@@ -16,15 +16,14 @@ const CreatePosts: FC = () => {
     const handleClose = () => {
         setOpen(false);
     };
-    const style = {
+    const style: CSSObject = {
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 400,
+        width: 'auto',
         bgcolor: 'background.paper',
         borderRadius: 5,
-        boxShadow: 24,
         pt: 2,
         px: 4,
         pb: 3,
@@ -35,9 +34,9 @@ const CreatePosts: FC = () => {
                 Создать пост
             </Button>
             <Modal open={open} onClose={handleClose} component="div">
-                <Box sx={{ ...style, width: '40%' }}>
-                    <Typography sx={{textAlign: 'center'}} variant='body1' component='div'>Новый пост</Typography>
-                    <Box sx={{ p: 2 }}>
+                <Box sx={{ ...style }}>
+                    <Typography sx={{textAlign: 'center'}} variant='h5' component='div'>Новый пост</Typography>
+                    <Box sx={{ p: 1 }}>
                         <DropZone></DropZone>
                     </Box>
                 </Box>

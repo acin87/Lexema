@@ -1,5 +1,33 @@
 import { createTheme } from '@mui/material';
 
+const typography = {
+    fontFamily: ['Montserrat', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'].join(','),
+    h1: {
+        fontSize: 'calc(1.39205rem + 1.7046vw)',
+    },
+    h2: {
+        fontSize: 'calc(1.32625rem + 0.915vw)',
+    },
+    h3: {
+        fontSize: 'calc(1.29589rem + 0.55065vw)',
+        '@media (min-width: 1200px)': {
+            fontSize: '1.70888rem',
+        },
+    },
+    h4: {
+        fontSize: '1.225rem',
+    },
+    h5: {
+        fontSize: '1.05rem',
+    },
+    h6: {
+        fontSize: '0.875rem',
+    },
+    subtitle2: {
+        fontSize: '0.781rem',
+    },
+};
+
 export const DarkTheme = createTheme({
     palette: {
         mode: 'dark',
@@ -24,30 +52,7 @@ export const DarkTheme = createTheme({
             secondary: '#a0a0a0',
         },
     },
-    typography: {
-        fontFamily: ['Montserrat', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'].join(','),
-        h1: {
-            fontSize: 'calc(1.39205rem + 1.7046vw)',
-        },
-        h2: {
-            fontSize: 'calc(1.32625rem + 0.915vw)',
-        },
-        h3: {
-            fontSize: 'calc(1.29589rem + 0.55065vw)',
-        },
-        h4: {
-            fontSize: '1.225rem',
-        },
-        h5: {
-            fontSize: '1.05rem',
-        },
-        h6: {
-            fontSize: '0.875rem',
-        },
-        subtitle2: {
-            fontSize: '0.781rem',
-        },
-    },
+    typography: { ...typography },
 });
 export const LightTheme = createTheme({
     palette: {
@@ -74,33 +79,7 @@ export const LightTheme = createTheme({
         },
     },
 
-    typography: {
-        fontFamily: ['Montserrat', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'].join(','),
-        h1: {
-            fontSize: 'calc(1.39205rem + 1.7046vw)',
-        },
-        h2: {
-            fontSize: 'calc(1.32625rem + 0.915vw)',
-        },
-        h3: {
-            fontSize: 'calc(1.29589rem + 0.55065vw)',
-            '@media (min-width: 1200px)': {
-                fontSize: '1.70888rem',
-            },
-        },
-        h4: {
-            fontSize: '1.225rem',
-        },
-        h5: {
-            fontSize: '1.05rem',
-        },
-        h6: {
-            fontSize: '0.875rem',
-        },
-        subtitle2: {
-            fontSize: '0.781rem',
-        },
-    },
+    typography: { ...typography },
     components: {
         MuiPaper: {
             styleOverrides: {
