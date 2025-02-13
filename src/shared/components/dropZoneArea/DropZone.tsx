@@ -30,8 +30,6 @@ const dropZoneStyles: CSSObject = {
     textAlign: 'center',
     width: '100%',
     height: '100%',
-    minHeight: '400px',
-    minWidth: '500px',
     outline: '2px dashed',
     backgroundColor: 'background.paper',
     '&:hover': {
@@ -41,39 +39,45 @@ const dropZoneStyles: CSSObject = {
     borderRadius: '8px',
     transition: 'outline-color 0.2s ease ease-in-out',
 };
+const imageContainer: CSSObject ={
+    minHeight: '400px', 
+    minWidth: '500px',
+    display: 'flex', 
+    flexWrap: 'wrap',
+    '&>:nth-child(1)': {
+        flex: '0 0 50%',
+        height: '100%',
+    },
+    '&>:nth-child(1), &>:nth-child(2), &>:nth-child(3), &>:nth-child(4)': {
+        flex: '0 0 25%',
+        height: '50%',
+    },
+    '&>:nth-child(2), &>:nth-child(3)': {
+        flex: '0 0 25%',
+        height: '50%',
+    },
+    '&>:nth-child(1), &>:nth-child(2) ': {
+        flex: '0 0 50%',
+        height: '100%',
+    },
+} 
 
-const imagesStyles: CSSObject = {
+const imageWrapper: CSSObject = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
-    '&:nth-child(1)': {
-        flex: '0 0 25%',
-        height: '100%',
-    },
-    '&:nth-child(2), &:nth-child(3)': {
-        flex: '0 0 25%',
-        height: '50%',
-    },
-    '&:nth-child(1), &:nth-child(2), &:nth-child(3), &:nth-child(4)': {
-        flex: '0 0 25%',
-        height: '50%',
-    },
-    '&:nth-child(1), &:nth-child(2) ': {
-        flex: '0 0 50%',
-        height: '100%',
-    },
+    p: '5px',
+    
 };
 
 const DropZone: FC = () => {
     const {
         isDragActive,
-        isLoading,
         handleDragIn,
         handleDragOut,
         handleDrop,
         handleFileInputChange,
-        handleUpload,
         selectedFiles,
         previewUrls,
     } = useFileUpload();
@@ -118,9 +122,9 @@ const DropZone: FC = () => {
                     </label>
                 </Paper>
             ) : (
-                <Box sx={{ minHeight: '400px', minWidth: '500px', display: 'flex', flexWrap: 'wrap' }}>
+                <Box sx={{ ...imageContainer }}>
                     {previewUrls.map((url, index) => (
-                        <Box key={index} sx={{ ...imagesStyles }}>
+                        <Box key={index} sx={{ ...imageWrapper }}>
                             <img
                                 style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }}
                                 src={url}
