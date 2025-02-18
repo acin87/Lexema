@@ -21,11 +21,12 @@ const CreatePosts: FC<CreatePostsProps> = () => {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 'auto',
+        width: '650px',
+        height: '890px',
         bgcolor: 'background.paper',
         borderRadius: 5,
         pt: 2,
-        px: 4,
+        px: 2,
         pb: 3,
     };
     return (

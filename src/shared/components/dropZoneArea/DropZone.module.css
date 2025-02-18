@@ -1,0 +1,71 @@
+.imageContainer {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 10px; /* Расстояние между изображениями */
+  }
+  
+  /* Стили для одного изображения */
+  .imageContainer > div:only-child {
+    width: 100%;
+  }
+  .imageContainer > div:only-child img {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Стили для двух изображений */
+  .imageContainer > div:nth-child(1):nth-last-child(2),
+  .imageContainer > div:nth-child(2):nth-last-child(1) {
+    flex-basis: 50%; /* Каждый блок с изображением занимает 50% ширины */
+  }
+  .imageContainer > div:nth-child(1):nth-last-child(2) img,
+  .imageContainer > div:nth-child(2):nth-last-child(1) img {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Стили для трех изображений */
+  .imageContainer > div:nth-child(1):nth-last-child(3) {
+    flex-basis: 50%; /* Первый блок с изображением занимает 50% ширины */
+  }
+  .imageContainer > div:nth-child(1):nth-last-child(3) img {
+    width: 100%;
+    height: auto;
+  }
+  .imageContainer > div:nth-child(2):nth-last-child(2),
+  .imageContainer > div:nth-child(3):nth-last-child(1) {
+    flex-basis: calc(50% - 5px); /* Два других блока с изображениями занимают оставшиеся 50%, минус отступ */
+    margin-top: 10px; /* Отступ между первым и вторым блоками */
+  }
+  .imageContainer > div:nth-child(2):nth-last-child(2) img,
+  .imageContainer > div:nth-child(3):nth-last-child(1) img {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Стили для четырех изображений */
+  .imageContainer > div:nth-child(1):nth-last-child(4),
+  .imageContainer > div:nth-child(2):nth-last-child(3),
+  .imageContainer > div:nth-child(3):nth-last-child(2),
+  .imageContainer > div:nth-child(4):nth-last-child(1) {
+    flex-basis: 50%; /* Каждый блок с изображением занимает 50% ширины */
+  }
+  .imageContainer > div:nth-child(1):nth-last-child(4) img,
+  .imageContainer > div:nth-child(2):nth-last-child(3) img,
+  .imageContainer > div:nth-child(3):nth-last-child(2) img,
+  .imageContainer > div:nth-child(4):nth-last-child(1) img {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Общие стили для всех блоков с изображениями */
+  .imageContainer > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .imageContainer > div img {
+    max-width: 100%;
+    height: auto;
+  }

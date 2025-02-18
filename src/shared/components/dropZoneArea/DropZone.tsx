@@ -1,26 +1,9 @@
 import { CSSObject } from '@emotion/react';
 import DriveFolderUploadOutlinedIcon from '@mui/icons-material/DriveFolderUploadOutlined';
 import { Box, Button, Paper, Typography } from '@mui/material';
-import { FC, Fragment, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import useFileUpload from '../../hooks/useFileUpload';
-
-// const DropZoneStyles = styled((props: DropAreaMuiProps) => (
-//     <Box ref={props.dropzoneref} {...props}>
-//         {props.children}
-//     </Box>
-// ))(({ theme }) => ({
-//     width: '100%',
-//     height: '100%',
-//     minHeight: '400px',
-//     outline: '1px dashed gray',
-//     backgroundColor: theme.palette.background.paper,
-//     '&:hover': {
-//         backgroundColor: theme.palette.secondary.light,
-//     },
-//     cursor: 'pointer',
-//     borderRadius: '8px',
-//     transition: 'outline-color 0.2s ease-in-out',
-// }));
+import styles from './DropZone.module.css';
 
 const dropZoneStyles: CSSObject = {
     display: 'flex',
@@ -29,7 +12,7 @@ const dropZoneStyles: CSSObject = {
     justifyContent: 'center',
     textAlign: 'center',
     width: '100%',
-    height: '100%',
+    height: '400px',
     outline: '2px dashed',
     backgroundColor: 'background.paper',
     '&:hover': {
@@ -39,48 +22,66 @@ const dropZoneStyles: CSSObject = {
     borderRadius: '8px',
     transition: 'outline-color 0.2s ease ease-in-out',
 };
-const imageContainer: CSSObject ={
-    minHeight: '400px', 
-    minWidth: '500px',
-    display: 'flex', 
+const imageContainer: CSSObject = {
+    display: 'flex',
     flexWrap: 'wrap',
-    '&>:nth-child(1)': {
-        flex: '0 0 50%',
-        height: '100%',
+    justifyContent: 'center',
+    alignItems: 'stretch',
+    gap: '5px',
+    '&>:only-child': {
+        width: '100%',
     },
-    '&>:nth-child(1), &>:nth-child(2), &>:nth-child(3), &>:nth-child(4)': {
-        flex: '0 0 25%',
-        height: '50%',
+    '&>:only-child img': {
+        width: '100%',
+        height: 'auto',
     },
-    '&>:nth-child(2), &>:nth-child(3)': {
-        flex: '0 0 25%',
-        height: '50%',
+    '&> div:nth-child(1):nth-last-child(2), &> div:nth-child(2):nth-last-child(1)': {
+        flexBasis: '50%',
     },
-    '&>:nth-child(1), &>:nth-child(2) ': {
-        flex: '0 0 50%',
-        height: '100%',
+    '&> div:nth-child(1):nth-last-child(2) img, &> div:nth-child(2):nth-last-child(1) img': {
+        width: '100%',
+        height: 'auto',
     },
-} 
+    '&> div:nth-child(1):nth-last-child(3)': {
+        flexBasis: '50%',
+    },
+    '&> div:nth-child(1):nth-last-child(3) img': {
+        width: '100%',
+        height: 'auto',
+    },
+    '&> div:nth-child(2):nth-last-child(2), &> div:nth-child(3):nth-last-child(1)': {
+        flexBasis: 'calc(50% - 5px)',
+        marginLeft: '5px',
+    },
+    '&> div:nth-child(2):nth-last-child(2) img, &> div:nth-child(3):nth-last-child(1) img': {
+        width: '100%',
+        height: 'auto',
+    },
+    '&> div:nth-child(1):nth-last-child(4), &> div:nth-child(2):nth-last-child(3), &> div:nth-child(3):nth-last-child(2), &> div:nth-child(4):nth-last-child(1)':
+        {
+            flexBasis: '50%',
+        },
+    '&> div:nth-child(1):nth-last-child(4) img, &> div:nth-child(2):nth-last-child(3) img, &> div:nth-child(3):nth-last-child(2) img, &> div:nth-child(4):nth-last-child(1) img':
+        {
+            width: '100%',
+            height: 'auto',
+        },
+    '&> div img': {
+        maxWidth: '100%',
+        height: 'auto',
+    },
+};
 
 const imageWrapper: CSSObject = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
-    p: '5px',
-    
 };
 
 const DropZone: FC = () => {
-    const {
-        isDragActive,
-        handleDragIn,
-        handleDragOut,
-        handleDrop,
-        handleFileInputChange,
-        selectedFiles,
-        previewUrls,
-    } = useFileUpload();
+    const { isDragActive, handleDragIn, handleDragOut, handleDrop, handleFileInputChange, selectedFiles, previewUrls } =
+        useFileUpload();
 
     useEffect(() => {
         if (selectedFiles.length > 0) {
@@ -89,7 +90,7 @@ const DropZone: FC = () => {
     }, [selectedFiles]);
 
     return (
-        <Fragment>
+        <Box sx={{ width: '100%', height: '100%' }}>
             {previewUrls.length == 0 ? (
                 <Paper
                     sx={{ ...dropZoneStyles, outlineColor: isDragActive ? 'secondary.main' : 'primary.main' }}
@@ -122,19 +123,15 @@ const DropZone: FC = () => {
                     </label>
                 </Paper>
             ) : (
-                <Box sx={{ ...imageContainer }}>
+                <Box className={styles.imageContainer}>
                     {previewUrls.map((url, index) => (
                         <Box key={index} sx={{ ...imageWrapper }}>
-                            <img
-                                style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }}
-                                src={url}
-                                alt={`preview-${index}`}
-                            />
+                            <img  src={url} alt={`preview-${index}`} />
                         </Box>
                     ))}
                 </Box>
             )}
-        </Fragment>
+        </Box>
     );
 };
 
