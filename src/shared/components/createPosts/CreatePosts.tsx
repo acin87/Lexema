@@ -4,7 +4,7 @@ import { FC, memo, useState } from 'react';
 import DropZone from '../dropZoneArea/DropZone';
 
 interface CreatePostsProps {
-    title: string;
+    title?: string;
 }
 
 const CreatePosts: FC<CreatePostsProps> = () => {
