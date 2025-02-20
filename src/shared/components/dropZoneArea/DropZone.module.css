@@ -1,18 +1,9 @@
 .imageContainer {
   display: grid;
   width: 100%;
-  max-width: 424px;
-  height: auto;
+  max-width: 550px;
   grid-gap: 5px;
 }
-
-
-.imageWrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 
 .imageContainer>div:only-child {
   grid-column: span 2;
@@ -25,18 +16,21 @@
 .imageContainer>div:nth-child(2):nth-last-child(1) {
   grid-column: span 1;
   grid-row: 2;
+  height: 160px;
 }
 
 
 .imageContainer>div:nth-child(1):nth-last-child(3) {
   grid-column: 1;
   grid-row: span 2;
+  height: 220px;
 }
 
 .imageContainer>div:nth-child(2):nth-last-child(2),
 .imageContainer>div:nth-child(3):nth-last-child(1) {
   grid-column: 2;
   grid-row: span 1;
+  height: calc(110px - 2.5px);
 }
 
 

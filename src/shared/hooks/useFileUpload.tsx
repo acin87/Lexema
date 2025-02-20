@@ -68,6 +68,7 @@ const useFileUpload = () => {
         isDragActive,
         isLoading,
         selectedFiles,
+        setSelectedFiles,
         previewUrls,
         handleFileInputChange,
         handleDrop,
