@@ -15,6 +15,7 @@ const rootReducer = combineReducers({
     [commentsApi.reducerPath]: commentsApi.reducer,
     ui: uiSlice,
     post: postSlice,
+
 });
 
 export const store = configureStore({

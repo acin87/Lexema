@@ -1,10 +1,9 @@
+import { Box } from '@mui/material';
 import { FC, memo } from 'react';
 import usePosts from '../../../entities/post/hooks/usePosts';
 import style from '../../../shared/styles/Post.module.css';
+import CreatePosts from './CreatePosts';
 import Post from './Post';
-import { Box } from '@mui/material';
-import { Create } from '@mui/icons-material';
-import CreatePosts from '../../../shared/components/createPosts/CreatePosts';
 
 /**
  * Компонент списка постов

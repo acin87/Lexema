@@ -5,7 +5,7 @@ interface FileUploadResponse {
     fileUrls: string[]
 }
 
-const filesLoadApi = createApi({
+const filesApi = createApi({
     reducerPath: 'filesApi',
     baseQuery: fetchBaseQuery({ baseUrl: BASEURL }),
     tagTypes: ['imageFiles'],
@@ -23,4 +23,4 @@ const filesLoadApi = createApi({
     }),
 });
 
-export const { useMultipleImageLoadMutation } = filesLoadApi;
+export const { useMultipleImageLoadMutation } = filesApi;

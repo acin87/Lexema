@@ -1,35 +1,9 @@
+import DeleteIcon from '@mui/icons-material/Delete';
 import DriveFolderUploadOutlinedIcon from '@mui/icons-material/DriveFolderUploadOutlined';
-import { Box, Button, CssThemeVariables, IconButton, Paper, Typography } from '@mui/material';
-import { FC, useEffect } from 'react';
-import useFileUpload from '../../hooks/useFileUpload';
+import { Box, Button, CssThemeVariables, Divider, IconButton, Paper, Typography } from '@mui/material';
+import { FC, useCallback, useState } from 'react';
+import ImageCarousel from '../imageCarousel/ImageCarousel';
 import styles from './DropZone.module.css';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
-
-const dropZoneStyles: CssThemeVariables = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-    width: '100%',
-    height: '300px',
-    outline: '2px dashed',
-    backgroundColor: 'background.paper',
-    '&:hover': {
-        backgroundColor: 'secondary.light',
-    },
-    cursor: 'pointer',
-    borderRadius: '8px',
-    transition: 'outline-color 0.2s ease ease-in-out',
-};
-// const imageContainer: CSSObject = {
-//     display: 'flex',
-//     flexWrap: 'wrap',
-//     justifyContent: 'center',
-//     alignItems: 'stretch',
-//     gap: '5px',
-// };
 
 const imageWrapper: CssThemeVariables = {
     position: 'relative',
@@ -43,79 +17,150 @@ const imageWrapper: CssThemeVariables = {
         objectFit: 'cover',
     },
 };
+interface DropZoneAreaProps {
+    onFilesChange: (files: File[]) => void;
+}
 
-const DropZone: FC = () => {
-    const {
-        isDragActive,
-        handleDragIn,
-        handleDragOut,
-        handleDrop,
-        handleFileInputChange,
-        selectedFiles,
-        setSelectedFiles,
-        previewUrls,
-    } = useFileUpload();
+const DropZone: FC<DropZoneAreaProps> = ({ onFilesChange }) => {
+    const [isDragActive, setIsDragActive] = useState(false);
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
-    useEffect(() => {
-        if (selectedFiles.length > 0) {
-            console.log(selectedFiles);
+    const handleDragIn = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setIsDragActive(true);
+    }, []);
+
+    const handleDragOut = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setIsDragActive(false);
+    }, []);
+
+    const addFiles = useCallback(
+        (files: File[]) => {
+            const newFiles = [...selectedFiles, ...files];
+            setSelectedFiles(newFiles);
+            onFilesChange(newFiles);
+
+            const imageFiles = files.filter((file) => file.type.startsWith('image/'));
+            const urls = imageFiles.map((file) => URL.createObjectURL(file));
+            setPreviewUrls((prevUrls) => [...prevUrls, ...urls]);
+        },
+        [selectedFiles, onFilesChange],
+    );
+
+    const removeFile = useCallback(
+        (index: number) => {
+            const newFiles = selectedFiles.filter((_, i) => i !== index);
+            setSelectedFiles(newFiles);
+            onFilesChange(newFiles);
+
+            const newPreviewUrls = previewUrls.filter((_, i) => i !== index);
+            setPreviewUrls(newPreviewUrls);
+        },
+        [selectedFiles, previewUrls, onFilesChange],
+    );
+
+    const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        setIsDragActive(false);
+        const files = event.dataTransfer?.files;
+        if (files && files.length > 0) {
+            const filesArray = Array.from(files);
+            addFiles(filesArray);
         }
-    }, [selectedFiles]);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const deleteImage = (fileIndex: number) => {
-        setSelectedFiles([...selectedFiles.filter((_, imgIndex) => imgIndex != fileIndex)]);
+    const handleFileInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files && files.length > 0) {
+            const filesArray = Array.from(files);
+            addFiles(filesArray);
+        }
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    const hasFiles = selectedFiles.length > 0;
+    const dropZoneStyles: CssThemeVariables = {
+        display: hasFiles ? 'none' : 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        width: '100%',
+        height: 'auto',
+        minHeight: '300px',
+        boxShadow: ' 0 0 1.25rem 0 rgba(0, 0, 0, .1);',
+        backgroundColor: 'background.paper',
+        '&:hover': {
+            backgroundColor: 'secondary.light',
+        },
+        cursor: 'pointer',
+        borderRadius: '8px',
+        outline: '2px dashed',
+        outlineColor: isDragActive ? 'secondary.main' : 'primary.main',
     };
 
-    return (
-        <Box sx={{ width: '100%', height: '100%' }}>
-            {previewUrls.length == 0 ? (
-                <Paper
-                    sx={{ ...dropZoneStyles, outlineColor: isDragActive ? 'secondary.main' : 'primary.main' }}
-                    onDragOver={handleDragIn}
-                    onDragLeave={handleDragOut}
-                    onDrop={handleDrop}
-                    component="div"
+    const previewImages = previewUrls.map((url, index) => {
+        return (
+            <Box key={index} sx={{ ...imageWrapper }}>
+                <img src={url} alt={`preview-${index}`} />
+                <IconButton
+                    aria-label="Удалить"
+                    sx={{ position: 'absolute', top: 0, right: 0, color: 'secondary.light' }}
+                    size="small"
+                    onClick={() => removeFile(index)}
                 >
-                    <input
-                        type="file"
-                        id="file-input"
-                        style={{ display: 'none' }}
-                        onChange={handleFileInputChange}
-                        multiple
-                    />
-                    <label htmlFor="file-input">
-                        <DriveFolderUploadOutlinedIcon sx={{ fontSize: 60 }} />
-                        <Typography>Перетащите фото сюда...</Typography>
-                        <Box mt={2}>
-                            <Button
-                                component="label"
-                                size="small"
-                                variant="contained"
-                                tabIndex={-1}
-                                startIcon={<DriveFolderUploadOutlinedIcon />}
-                            >
-                                Загрузить файлы
-                            </Button>
-                        </Box>
-                    </label>
-                </Paper>
-            ) : (
-                <Box className={styles.imageContainer}>
-                    {previewUrls.map((url, index) => (
-                        <Box key={index} sx={{ ...imageWrapper }}>
-                            <img src={url} alt={`preview-${index}`} />
-                            <IconButton
-                                aria-label="Удалить"
-                                sx={{ position: 'absolute', top: 0, right: 0, color: 'secondary.light' }}
-                                size="small"
-                                onClick={deleteImage((fileIndex)=> index)}
-                            >
-                                <CancelOutlinedIcon />
-                            </IconButton>
-                        </Box>
-                    ))}
-                </Box>
-            )}
+                    <DeleteIcon sx={{ ':hover': { color: 'primary.main' } }} />
+                </IconButton>
+            </Box>
+        );
+    });
+
+    return (
+        <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
+            <Box
+                className={styles.imageContainer}
+                sx={{ visibility: hasFiles ? 'visible' : 'hidden' }}
+                onDragOver={handleDragIn}
+                onDragLeave={handleDragOut}
+                onDrop={handleDrop}
+            >
+                {previewUrls.length < 5 && previewImages}
+                {previewUrls.length >= 5 && <ImageCarousel images={previewUrls} onDelete={removeFile} />}
+            </Box>
+            <Paper
+                sx={{ ...dropZoneStyles }}
+                onDragOver={handleDragIn}
+                onDragLeave={handleDragOut}
+                onDrop={handleDrop}
+                component="div"
+            >
+                <input
+                    type="file"
+                    id="file-input"
+                    style={{ display: 'none' }}
+                    onChange={handleFileInputChange}
+                    multiple
+                />
+                <label htmlFor="file-input">
+                    <DriveFolderUploadOutlinedIcon sx={{ fontSize: 60 }} />
+                    <Typography>Перетащите фото сюда...</Typography>
+                    <Box mt={2}>
+                        <Button
+                            component="span"
+                            size="small"
+                            variant="contained"
+                            tabIndex={-1}
+                            startIcon={<DriveFolderUploadOutlinedIcon />}
+                        >
+                            Загрузить файлы
+                        </Button>
+                    </Box>
+                </label>
+            </Paper>
+            <Divider variant="middle" component="div" sx={{ color: 'primary.main', mt: 3 }} />
         </Box>
     );
 };

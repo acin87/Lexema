@@ -18,3 +18,6 @@ type Reaction = {
 type Tag = {
     name: string;
 };
+export type FileUploadResponse = {
+    fileUrls: string[];
+};
