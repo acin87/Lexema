@@ -1,7 +1,14 @@
-import { createTheme } from '@mui/material';
+import { createTheme, CssThemeVariables } from '@mui/material';
 
-const typography = {
-    fontFamily: ['Montserrat', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'].join(','),
+const typography: CssThemeVariables = {
+    fontFamily: [
+        'Montserrat',
+        'sans-serif',
+        'Apple Color Emoji',
+        'Segoe UI Emoji',
+        'Segoe UI Symbol',
+        'Noto Color Emoji',
+    ].join(','),
     h1: {
         fontSize: 'calc(1.39205rem + 1.7046vw)',
     },
@@ -85,6 +92,42 @@ export const LightTheme = createTheme({
             styleOverrides: {
                 root: {
                     boxShadow: '0 0 1.25rem 0 rgba(0, 0, 0, .1);',
+                },
+            },
+        },
+        MuiLink: {
+            styleOverrides: {
+                root: {
+                    color: '#50b5ff',
+                    textDecoration: 'none',
+                    '&:hover': {
+                        color: '#449ad9',
+                    },
+                },
+            },
+        },
+        MuiContainer: {
+            styleOverrides: {
+                root: {
+                    paddingLeft: '.5rem',
+                    paddingRight: '.5rem',
+                    '@media (min-width: 576px)': {
+                        paddingLeft: '.5rem',
+                        paddingRight: '.5rem',
+                        maxWidth: '540px',
+                    },
+                    '@media (min-width: 768px)': {
+                        maxWidth: '720px',
+                    },
+                    '@media (min-width: 992px)': {
+                        maxWidth: '960px',
+                    },
+                    '@media (min-width: 1200px)': {
+                        maxWidth: '1140px',
+                    },
+                    '@media (min-width: 1400px)': {
+                        maxWidth: '1320px',
+                    },
                 },
             },
         },

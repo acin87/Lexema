@@ -3,36 +3,43 @@ import { createBrowserRouter } from 'react-router-dom';
 import ErrorPage from '../../pages/ErrorPage';
 
 import Authorization from '../../features/auth/Authorization';
-import FriendList from '../../features/friends/components/FriendList';
 import FeedPage from '../../pages/FeedPage';
+import FriendsPage from '../../pages/FriendsPage';
 import HomePage from '../../pages/HomePage';
 import ProfilePage from '../../pages/ProfilePage';
+import { AppRoute, SiteAppRoutePath } from './config';
+import DialoguesPageAsync from '../../pages/dialogues/DialoguesPageAsync';
 
 export const AppRoutes = createBrowserRouter([
     {
-        path: '/',
+        
+        path: SiteAppRoutePath[AppRoute.HOME],
         element: <HomePage />,
         children: [
             {
-                path: '/',
+                path: SiteAppRoutePath[AppRoute.HOME],
                 element: <FeedPage />,
             },
             {
-                path: '/friends',
-                element: <FriendList />,
+                path: SiteAppRoutePath[AppRoute.FRIENDS],
+                element: <FriendsPage />,
             },
             {
-                path: '/friends/user/:id',
+                path: SiteAppRoutePath[AppRoute.USER],
                 element: <ProfilePage />,
+            },
+            {
+                path: SiteAppRoutePath[AppRoute.DIALOGUES],
+                element: <DialoguesPageAsync />,
             },
         ],
     },
     {
-        path: '/auth',
+        path: SiteAppRoutePath[AppRoute.AUTH],
         element: <Authorization />,
     },
     {
-        path: '*',
+        path: SiteAppRoutePath[AppRoute.NOT_FOUND],
         element: <ErrorPage />,
     },
 ]);

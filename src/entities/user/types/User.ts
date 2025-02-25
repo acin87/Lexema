@@ -23,7 +23,8 @@ export interface UserPersistentState {
 }
 
 export type UsersResponse = {
-    users: User[]
+    users: User[],
+    totalCount: number;
 }
 
 export type User = {
@@ -97,5 +98,11 @@ export type CryptoDetails = {
     wallet: string;
     network: string;
 };
+
+export type UserRequest = {
+    limit: number;
+    start: number;
+    userId: number;
+} 
 
 export const JWT_PERSISTENT_STATE = 'userData';

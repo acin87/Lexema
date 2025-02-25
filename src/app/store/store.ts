@@ -7,6 +7,7 @@ import { postApi } from '../../entities/post/api/postsApi ';
 import postSlice from '../../entities/post/slices/postSlice';
 import { userApi } from '../../entities/user/api/userApi';
 import uiSlice, { UI_PERSISTENT_STATE, UiTypes } from '../../shared/ui/uiSlice';
+import friendsSlice from '../../entities/user/slices/friendsSlice';
 
 
 const rootReducer = combineReducers({
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
     [commentsApi.reducerPath]: commentsApi.reducer,
     ui: uiSlice,
     post: postSlice,
+    friends: friendsSlice,
 
 });
 

@@ -4,13 +4,14 @@ import { loadState } from '../utils/LocalStorage';
 
  export type UiTypes  = {
     theme: string | null;
-    sidebar?: boolean;
+    sidebar: boolean;
 };
 
 export const UI_PERSISTENT_STATE = 'uiData'; //для localStorage
 
 const initialState: UiTypes = {
     theme: loadState<UiTypes>(UI_PERSISTENT_STATE)?.theme ?? null,
+    sidebar: loadState<UiTypes>(UI_PERSISTENT_STATE)?.sidebar ?? true,
 };
 
 const uiSlice = createSlice({

@@ -7,5 +7,5 @@ export enum API {
     ME = '/me',
     POSTS ='/posts',
     COMMENTS = '/comments',
-    FILES = '/files-upload'
+    FILES = '/files-upload',
 }

@@ -1,6 +1,39 @@
 import jsonServer from 'json-server';
 import path from 'path';
 
+const userImage = [
+    '01.jpg',
+    '02.jpg',
+    '03.jpg',
+    '04.jpg',
+    '05.jpg',
+    '06.jpg',
+    '07.jpg',
+    '08.jpg',
+    '09.jpg',
+    '10.jpg',
+    '11.jpg',
+    '12.jpg',
+    '13.jpg',
+    '14.jpg',
+    '15.jpg',
+    '16.jpg',
+    '17.jpg',
+    '18.jpg',
+    '19.jpg',
+    '1.jpg',
+    'user-1.jpg',
+    'user-2.jpg',
+    'user-3.jpg',
+    'user-4.jpg',
+    'user-5.jpg',
+    'user-6.jpg',
+];
+
+const getRandomImage = () => {
+    return userImage[Math.floor(Math.random() * userImage.length)];
+};
+
 const __dirname = path.resolve();
 
 const server = jsonServer.create();
@@ -28,14 +61,20 @@ server.get('/posts', (req, res) => {
 server.get('/users', (req, res) => {
     const _limit = Number(req.query._limit || 10);
     const _start = Number(req.query._start || 0);
+    const totalCount = router.db.getState().users.length;
+    //нужно заменть в users.image строку на getRandomImage()
+    router.db.getState().users.forEach((user) => {
+        user.image = `/user/${getRandomImage()}`;
+    });
+
     const users = {
         users: [...router.db.getState().users.slice(_start, _start + _limit)],
+        totalCount: totalCount,
     };
     // setTimeout(() => {
     //     res.status(200).jsonp(users);
     // }, 2000);
     res.status(200).jsonp(users);
-
 });
 
 // Маршрут для получения конкретного поста по id
@@ -52,7 +91,9 @@ server.get('/comments/post/:postId', (req, res, next) => {
     const postId = req.params.postId;
     const limit = parseInt(req.query._limit, 10);
     const page = parseInt(req.query._page, 10);
-    let comments = [...router.db.getState().comments.filter((comment) => comment.postId == postId && comment.parentId == 0)];
+    let comments = [
+        ...router.db.getState().comments.filter((comment) => comment.postId == postId && comment.parentId == 0),
+    ];
     const rootCommentCount = Object.keys(comments).length;
     if (page == 1 && limit == 2) {
         comments = comments.slice(0, 2);
@@ -60,7 +101,9 @@ server.get('/comments/post/:postId', (req, res, next) => {
         comments = comments.slice((page - 1) * limit, page * limit); //15-20
     }
     comments.forEach((comment) => {
-        const child = router.db.getState().comments.filter((childComment) => childComment.postId == postId && childComment.parentId == comment.id);
+        const child = router.db
+            .getState()
+            .comments.filter((childComment) => childComment.postId == postId && childComment.parentId == comment.id);
         if (child[0] != null) {
             comment.children = [];
             comment.children.push(child[0]);
@@ -104,12 +147,16 @@ server.get('/comments/post/:postId/child', (req, res, next) => {
     const postId = parseInt(req.params.postId, 10);
     const commentId = parseInt(req.query.commentId, 10);
     console.log(commentId, postId);
-    const filteredComments = router.db.getState().comments.filter((comment) => comment.postId == postId && comment.parentId == commentId);
+    const filteredComments = router.db
+        .getState()
+        .comments.filter((comment) => comment.postId == postId && comment.parentId == commentId);
 
     const commentsById = {};
 
     filteredComments.forEach((comment) => {
-        const children = router.db.getState().comments.filter((childComment) => childComment.postId == postId && childComment.parentId == comment.id);
+        const children = router.db
+            .getState()
+            .comments.filter((childComment) => childComment.postId == postId && childComment.parentId == comment.id);
         comment.children = [children[0]];
         comment.childCount = Object.keys(children).length;
     });

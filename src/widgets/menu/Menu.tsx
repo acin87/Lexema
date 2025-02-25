@@ -1,13 +1,17 @@
 import OtherHousesOutlinedIcon from '@mui/icons-material/OtherHousesOutlined';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
-import { List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { FC, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LeftSideBarProps } from '../leftsidebar/LeftSideBar';
 import styles from './Menu.module.css';
 
-const Menu: FC<LeftSideBarProps> = memo((hidden: LeftSideBarProps) => {
-    const isVisible = hidden.hidden;
+//интерфейс для пропсов, открытие и закрытие панели
+interface MenuProps {
+    open: boolean | undefined;
+}
+
+const Menu: FC<MenuProps> = memo((open) => {
     const navigate = useNavigate();
     const menuItems = [
         {
@@ -20,20 +24,65 @@ const Menu: FC<LeftSideBarProps> = memo((hidden: LeftSideBarProps) => {
             icon: <PeopleAltOutlinedIcon className={styles.svgIcon} />,
             text: 'Друзья',
         },
+        {
+            path: '/dialogues',
+            icon: <ChatOutlinedIcon className={styles.svgIcon} />,
+            text: 'Диалоги',
+        },
     ];
     return (
-        <div className={styles.menuList}>
-            <div className={styles.menuWrap}>
-                <List component="nav">
-                    {menuItems.map((item, index) => (
-                        <ListItemButton key={index} className={styles.menuItem} onClick={() => navigate(item.path)}>
-                            <ListItemIcon sx={{ minWidth: isVisible ? '24px' : '56px' }}>{item.icon}</ListItemIcon>
-                            <ListItemText {...hidden} primary={item.text} sx={{ whiteSpace: 'nowrap' }} />
-                        </ListItemButton>
-                    ))}
-                </List>
-            </div>
-        </div>
+        <List>
+            {menuItems.map((item, index) => (
+                <ListItem key={index} disablePadding sx={{ display: 'block' }} className={styles.ListItem}>
+                    <ListItemButton
+                        sx={[
+                            {
+                                minHeight: 48,
+                                px: 2.5,
+                            },
+                            open
+                                ? {
+                                      justifyContent: 'initial',
+                                  }
+                                : {
+                                      justifyContent: 'center',
+                                  },
+                        ]}
+                        onClick={() => navigate(item.path)}
+                    >
+                        <ListItemIcon
+                            sx={[
+                                {
+                                    minWidth: 0,
+                                    justifyContent: 'center',
+                                },
+                                open
+                                    ? {
+                                          mr: 3,
+                                      }
+                                    : {
+                                          mr: 'auto',
+                                      },
+                            ]}
+                        >
+                            {item.icon}
+                        </ListItemIcon>
+                        <ListItemText
+                            primary={item.text}
+                            sx={[
+                                open
+                                    ? {
+                                          opacity: 1,
+                                      }
+                                    : {
+                                          opacity: 0,
+                                      },
+                            ]}
+                        />
+                    </ListItemButton>
+                </ListItem>
+            ))}
+        </List>
     );
 });
 export default Menu;

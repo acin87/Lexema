@@ -15,14 +15,15 @@ import {
 } from '@mui/material';
 import { FC, memo } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useGetAllUsersQuery } from '../../entities/user/api/userApi';
+import { useGetAllFriendsQuery } from '../../entities/user/api/userApi';
 import styles from './birthday.module.css';
 
 export const UpcomingBirthday: FC = memo(() => {
     //const usersFieldList = 'id,firstName,lastName,image,birthDate';
-    const { data: data, isLoading } = useGetAllUsersQuery({
+    const { data: data, isLoading } = useGetAllFriendsQuery({
         limit: 2,
-        start: 20 /* select: usersFieldList*/,
+        start: 20,
+        userId: 1
     }); //Временно, переделать на конкретный АПИ
 
     const list = data?.users.map((key, index) => {

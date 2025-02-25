@@ -1,36 +1,75 @@
-import { Box, Paper } from '@mui/material';
-import { FC, memo, useEffect } from 'react';
+import { CssThemeVariables, styled, Theme } from '@mui/material';
+import MuiDrawer from '@mui/material/Drawer';
+import { FC } from 'react';
 import { useSelector } from 'react-redux';
-
-
-import styles from './LeftSideBar.module.css';
 import { RootState } from '../../app/store/store';
 import Menu from '../menu/Menu';
 
-/**
- * Тип для скрытия левой панели
- */
-export type LeftSideBarProps = {
-    hidden?: boolean;
-};
+const drawerWidth = 250;
+
+const openedMixin = (): CssThemeVariables => ({
+    width: drawerWidth,
+    transition: 'all 0.3s ease-in-out',
+    overflowX: 'hidden',
+});
+
+const closedMixin = (theme: Theme): CssThemeVariables => ({
+    transition: 'all 0.3s ease-in-out',
+    overflowX: 'hidden',
+    width: `calc(${theme.spacing(7)} + 1px)`,
+    [theme.breakpoints.up('sm')]: {
+        width: `calc(${theme.spacing(8)} + 1px)`,
+    },
+    '@media (max-width: 1299px)': {
+        zIndex: 99,
+        left: '-260px',
+        transition: 'all 0.3s ease-in-out',
+    },
+});
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme }) => ({
+    width: drawerWidth,
+    zIndex: 1000,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    variants: [
+        {
+            props: ({ open }) => open,
+            style: {
+                ...openedMixin(),
+                '& .MuiDrawer-paper': openedMixin(),
+            },
+        },
+        {
+            props: ({ open }) => !open,
+            style: {
+                ...closedMixin(theme),
+                '& .MuiDrawer-paper': closedMixin(theme),
+            },
+        },
+    ],
+}));
 
 const LeftSideBar: FC = () => {
-    const sidebar = useSelector((s: RootState) => s.ui.sidebar);
-    useEffect(() => {
-        if (sidebar != undefined) {
-            toggleSidebar();
-        }
-    }, [sidebar]);
-
-    const toggleSidebar = () => {
-        document.querySelector(`.${styles.lsSidebar}`)?.classList.toggle(`${styles.lsSidebarMini}`);
-    };
-
+    const open = useSelector((s: RootState) => s.ui.sidebar);
     return (
-        <Paper className={styles.lsSidebar}>
-            <Box className={styles.sidebar_header}></Box>
-            <Menu />
-        </Paper>
+        <Drawer
+            variant="permanent"
+            anchor="left"
+            open={open}
+            PaperProps={{
+                sx: {
+                    top: '4.688rem',
+                    width: 270,
+                    backgroundColor: 'background.paper',
+                    color: 'text.primary',
+                    zIndex: 1000,
+                },
+            }}
+        >
+            <Menu open={open} />
+        </Drawer>
     );
 };
-export default memo(LeftSideBar);
+
+export default LeftSideBar;

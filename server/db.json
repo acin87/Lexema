@@ -2445,5 +2445,91 @@
             "likes": 8,
             "user": { "id": 4, "username": "braydenf", "fullName": "Brayden Fleming" }
         }
+    ],
+    "dialogues" :[
+        {
+            "id": 1,
+            "user1": { "id": 1 },
+            "user2": { "id": 2 },
+            "createdAt": "2020-01-01T00:00:00.000Z",
+            "updatedAt": "2020-01-01T00:00:00.000Z",
+            "last_message_id": 1
+        },
+        {
+            "id": 2,
+            "user1": { "id": 3 },
+            "user2": { "id": 4 },
+            "createdAt": "2020-01-01T00:00:00.000Z",
+            "updatedAt": "2020-01-01T00:00:00.000Z",
+            "last_message_id": 1
+        },
+        {
+            "id": 3,
+            "user1": { "id": 5 },
+            "user2": { "id": 2 },
+            "createdAt": "2020-01-01T00:00:00.000Z",
+            "updatedAt": "2020-01-01T00:00:00.000Z",
+            "last_message_id": 1
+        },
+        {
+            "id": 4,
+            "user1": { "id": 6 },
+            "user2": { "id": 1 },
+            "createdAt": "2020-01-01T00:00:00.000Z",
+            "updatedAt": "2020-01-01T00:00:00.000Z",
+            "last_message_id": 1
+        }
+
+    ],
+    "messages": [
+        {
+            "id": 1,
+            "dialogue_id": 1,
+            "sender_id": 1,
+            "message": "Hello, how are you?",
+            "sent_at": "2020-01-01T00:00:00.000Z",
+            "is_read": true
+        },
+        {
+            "id": 2,
+            "dialogue_id": 1,
+            "sender_id": 2,
+            "message": "I'm good, how about you?",
+            "sent_at": "2020-01-01T00:00:01.000Z",
+            "is_read": true
+        },
+        {
+            "id": 3,
+            "dialogue_id": 1,
+            "sender_id": 1,
+            "message": "Not bad, thanks for asking.",
+            "sent_at": "2020-01-01T00:00:02.000Z",
+            "is_read": true
+        },
+        {
+            "id": 4,
+            "dialogue_id": 1,
+            "sender_id": 2,
+            "message": "Glad to hear it.",
+            "sent_at": "2020-01-01T00:00:03.000Z",
+            "is_read": false
+        },
+        {
+            "id": 5,
+            "dialogue_id": 1,
+            "sender_id": 1,
+            "message": "I'm good, how about you?",
+            "sent_at": "2020-01-01T00:00:04.000Z",
+            "is_read": false
+        },
+        {
+            "id": 6,
+            "dialogue_id": 1,
+            "sender_id": 2,
+            "message": "Not bad, thanks for asking.",
+            "sent_at": "2020-01-01T00:00:05.000Z",
+            "is_read": false
+        }
+
     ]
 }
