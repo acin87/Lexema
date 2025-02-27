@@ -4,17 +4,17 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Button, IconButton, InputAdornment, Paper, TextField } from '@mui/material';
 import cn from 'classnames';
 import { FC, memo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
-import { AppDispatch, RootState } from '../../app/store/store';
-import styles from './Navbar.module.css';
+import { AppDispatch } from '../../app/store/store';
 import { uiActions } from '../../shared/ui/uiSlice';
+import styles from './Navbar.module.css';
 
 //TODO: викинуть обработку инпута в модель
 const Navbar: FC = memo(() => {
     const dispatch = useDispatch<AppDispatch>();
-    const sidebar = useSelector((s: RootState) => s.ui.sidebar);
+
     //const jwt = loadState<UserPersistentState>(JWT_PERSISTENT_STATE)?.jwt ?? null;
     // const { data } = useGetMeQuery({ jwt: jwt });
 
@@ -25,7 +25,7 @@ const Navbar: FC = memo(() => {
     const toggleMenu = () => {
         document.querySelector(`.${styles.leftMenuCollapseBtn}`)?.classList.toggle('open');
         document.querySelector('body')?.classList.toggle('sidebar-main');
-        dispatch(uiActions.toggleSlidebar(sidebar ? false : true));
+        dispatch(uiActions.toggleSidebar());
     };
 
     return (

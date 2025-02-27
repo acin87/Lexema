@@ -20,6 +20,8 @@ const useRootComment = (postId: number) => {
     });
     const [trigger, resultOnLazy] = useLazyGetRootCommentsQuery();
 
+    const totalCount = resultOnLoad ? resultOnLoad.totalCount : 0;
+
     useEffect(() => {
         if (isSuccess) {
             setComments([...resultOnLoad.comments]);
@@ -36,7 +38,7 @@ const useRootComment = (postId: number) => {
         trigger({ postId: postId, page: currentPage + 1, limit: limit });
         setCurrentPage((prevPage) => prevPage + 1);
     };
-    return { comments, loadMoreComments };
+    return { comments, loadMoreComments, totalCount };
 };
 
 export default useRootComment;

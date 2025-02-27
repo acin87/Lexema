@@ -3,16 +3,16 @@ import { createBrowserRouter } from 'react-router-dom';
 import ErrorPage from '../../pages/ErrorPage';
 
 import Authorization from '../../features/auth/Authorization';
+import DialoguesPageAsync from '../../pages/dialogues/DialoguesPageAsync';
 import FeedPage from '../../pages/FeedPage';
 import FriendsPage from '../../pages/FriendsPage';
 import HomePage from '../../pages/HomePage';
 import ProfilePage from '../../pages/ProfilePage';
 import { AppRoute, SiteAppRoutePath } from './config';
-import DialoguesPageAsync from '../../pages/dialogues/DialoguesPageAsync';
+
 
 export const AppRoutes = createBrowserRouter([
     {
-        
         path: SiteAppRoutePath[AppRoute.HOME],
         element: <HomePage />,
         children: [

@@ -51,8 +51,11 @@ server.use((req, res, next) => {
 server.get('/posts', (req, res) => {
     const _limit = Number(req.query._limit || 10);
     const _start = Number(req.query._start || 0);
+
+    const totalCount = router.db.getState().posts.length;
     const posts = {
         posts: [...router.db.getState().posts.slice(_start, _start + _limit)],
+        totalCount: totalCount,
     };
     res.status(200).jsonp(posts);
 });

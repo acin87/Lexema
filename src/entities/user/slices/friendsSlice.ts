@@ -3,10 +3,13 @@ import { User } from '../types/User';
 
 interface FriendsState {
     friends: User[];
+    skipUser: number;
 }
 
 const initialState: FriendsState = {
     friends:[],
+    skipUser: 0,
+
 };
 
 const friendsSlice = createSlice({
@@ -21,8 +24,11 @@ const friendsSlice = createSlice({
         removeFriends: (state, action: PayloadAction<number>) => {
             state.friends = state.friends.filter((friend) => friend.id !== action.payload);
         },
+        setSkipUser: (state, action: PayloadAction<number>) => {
+            state.skipUser = action.payload;
+        },
     },
 });
 
-export const { addFriends, removeFriends } = friendsSlice.actions;
+export const { addFriends, removeFriends, setSkipUser } = friendsSlice.actions;
 export default friendsSlice.reducer;

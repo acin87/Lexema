@@ -1,6 +1,6 @@
 import { CssThemeVariables, styled, Theme } from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store/store';
 import Menu from '../menu/Menu';
@@ -51,12 +51,19 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 }));
 
 const LeftSideBar: FC = () => {
-    const open = useSelector((s: RootState) => s.ui.sidebar);
+    const openFromStore = useSelector((s: RootState) => s.ui.sidebar);
+
+    const [isHovered, setIsHovered] = useState(false);
+
+    const isOpen = openFromStore || isHovered;
+
     return (
         <Drawer
             variant="permanent"
             anchor="left"
-            open={open}
+            open={isOpen}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             PaperProps={{
                 sx: {
                     top: '4.688rem',
@@ -67,7 +74,7 @@ const LeftSideBar: FC = () => {
                 },
             }}
         >
-            <Menu open={open} />
+            <Menu open={isOpen} />
         </Drawer>
     );
 };

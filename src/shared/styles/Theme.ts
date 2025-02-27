@@ -91,7 +91,7 @@ export const LightTheme = createTheme({
         MuiPaper: {
             styleOverrides: {
                 root: {
-                    boxShadow: '0 0 1.25rem 0 rgba(0, 0, 0, .1);',
+                    boxShadow: '0 0.375rem 1rem rgba(0, 0, 0, 0.1);',
                 },
             },
         },

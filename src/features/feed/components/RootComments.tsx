@@ -9,10 +9,13 @@ interface CommentsProps {
     postId: number;
 }
 
-const RootComments:FC<CommentsProps> = (props) => {
-    const { comments, loadMoreComments } = useRootComment(props.postId);
+const RootComments: FC<CommentsProps> = (props) => {
+    const { comments, loadMoreComments, totalCount } = useRootComment(props.postId);
 
     const renderCommentsTree = () => {
+        if (comments.length === 0) {
+            return null;
+        }
         return comments.map((comment) => {
             const childComments = comment.children || [];
 
@@ -31,12 +34,27 @@ const RootComments:FC<CommentsProps> = (props) => {
             );
         });
     };
+
+    const renderMoreButton = () => {
+        if (totalCount && totalCount > 10 && comments.length != totalCount) {
+            return (
+                <Divider variant="middle" component="div" sx={{ pt: 2 }}>
+                    <Chip
+                        label="Показать следующие комментарии"
+                        size="small"
+                        onClick={loadMoreComments}
+                        color="primary"
+                    />
+                </Divider>
+            );
+        }
+        return null;
+    };
+
     return (
         <Fragment>
             {renderCommentsTree()}
-            <Divider variant="middle" component="div" sx={{ pt: 2 }}>
-                <Chip label="Показать следующие комментарии" size="small" onClick={loadMoreComments} color="primary" />
-            </Divider>
+            {renderMoreButton()}
         </Fragment>
     );
 };

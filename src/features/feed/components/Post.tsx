@@ -59,7 +59,7 @@ const Post = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, ref) => {
                         loading ? (
                             <Skeleton animation="wave" height={15} width="80%" style={{ marginBottom: 6 }} />
                         ) : (
-                            <NavLink style={{ textDecoration: 'none' }} to={`friends/user/${userData?.id}`}>
+                            <NavLink style={{ textDecoration: 'none' }} to={`/user/${userData?.id}`}>
                                 {userData?.firstName} {userData?.lastName}
                             </NavLink>
                         )
@@ -123,7 +123,6 @@ const Post = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, ref) => {
                 <Box>
                     <RootComments postId={post.id} />
                 </Box>
-                
                 <Box sx={{ p: 2 }}>
                     <TextField
                         placeholder="Написать коментарий"

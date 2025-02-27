@@ -6,6 +6,7 @@ import {
     Button,
     ButtonGroup,
     Card,
+    Fade,
     IconButton,
     Link,
     Menu,
@@ -111,7 +112,7 @@ const FriendView = forwardRef<HTMLDivElement, User>((user, ref) => {
                     </Button>
                 </ButtonGroup>
             </Box>
-            <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+            <Menu anchorEl={anchorEl} open={open} onClose={handleClose} TransitionComponent={Fade}>
                 <MenuItem onClick={handleClose}>Просмотреть друзей</MenuItem>
                 <MenuItem onClick={handleDelete}>Удалить из друзей</MenuItem>
             </Menu>

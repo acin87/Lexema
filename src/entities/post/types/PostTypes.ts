@@ -1,4 +1,10 @@
-export type PostResponse = { posts: PostTypes[] };
+export type PostResponse = { posts: PostTypes[]; totalCount: number };
+
+export type PostRequest = {
+    limit: number;
+    start: number;
+    userId: number;
+};
 
 export type PostTypes = {
     id: number;

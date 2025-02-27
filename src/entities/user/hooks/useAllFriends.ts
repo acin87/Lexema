@@ -3,10 +3,10 @@ import { useInView } from 'react-intersection-observer';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../app/store/store';
 import { useGetAllFriendsQuery } from '../api/userApi';
-import { addFriends } from '../slices/friendsSlice';
+import { addFriends, setSkipUser } from '../slices/friendsSlice';
 
 const useAllFriends = (userId: number) => {
-    const [skipUser, setSkipUser] = useState(0);
+    const skipUser = useSelector((state: RootState) => state.friends.skipUser);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const {
         data: response,
@@ -35,7 +35,8 @@ const useAllFriends = (userId: number) => {
         if (response) {
             if (inView && !isFetching && !isLoadingMore && response.users.length < response.totalCount) {
                 setIsLoadingMore(true);
-                setSkipUser(skipUser + 9);
+                const newSkipUser = skipUser + 9;
+                dispatch(setSkipUser(newSkipUser));
             }
         }
     }, [inView, isFetching, isLoadingMore, skipUser, response, dispatch]);
