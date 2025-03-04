@@ -1,14 +1,12 @@
 import { createBrowserRouter } from 'react-router-dom';
-
 import ErrorPage from '../../pages/ErrorPage';
-
 import Authorization from '../../features/auth/Authorization';
-import DialoguesPageAsync from '../../pages/dialogues/DialoguesPageAsync';
 import FeedPage from '../../pages/FeedPage';
 import FriendsPage from '../../pages/FriendsPage';
 import HomePage from '../../pages/HomePage';
 import ProfilePage from '../../pages/ProfilePage';
 import { AppRoute, SiteAppRoutePath } from './Config';
+import MessengerPageAsync from '../../pages/messenger/MessengerPageAsync';
 
 export const AppRoutes = createBrowserRouter([
     {
@@ -29,7 +27,7 @@ export const AppRoutes = createBrowserRouter([
             },
             {
                 path: SiteAppRoutePath[AppRoute.MESSENGER],
-                element: <DialoguesPageAsync />,
+                element: <MessengerPageAsync />,
             },
         ],
     },
