@@ -1,5 +1,5 @@
 // const ROUTE_CONFIG_USER_LOGIN = 'login';
-const ROUTE_CONFIG_DIALOGIE_ID = 'dialogieId';
+const ROUTE_CONFIG_MESSEGE_ID = 'messegeId';
 
 export enum AppRoute {
     HOME = 'home',
@@ -9,8 +9,8 @@ export enum AppRoute {
     SETTINGS = 'settings',
     SEARCH = 'search',
     ABOUT = 'about',
-    DIALOGUE = 'dialogue',
-    DIALOGUES = 'dialogues',
+    MESSEGE = 'message',
+    MESSENGER = 'messenger',
     NOT_FOUND = 'not_found',
 }
 
@@ -22,7 +22,7 @@ export const SiteAppRoutePath: Record<AppRoute, string> = {
     [AppRoute.SETTINGS]: '/settings',
     [AppRoute.SEARCH]: '/search',
     [AppRoute.ABOUT]: '/about',
-    [AppRoute.DIALOGUE]: `/dialogue/:${ROUTE_CONFIG_DIALOGIE_ID}`,
-    [AppRoute.DIALOGUES]: '/dialogues',
+    [AppRoute.MESSEGE]: `/message/:${ROUTE_CONFIG_MESSEGE_ID}`,
+    [AppRoute.MESSENGER]: '/messenger',
     [AppRoute.NOT_FOUND]: '*',
 };

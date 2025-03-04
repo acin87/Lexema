@@ -65,7 +65,7 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
     borderRadius: '5px',
 }));
 
-const DialogueList: React.FC = () => {
+const MessangerList: React.FC = () => {
     const [show, setShow] = useState(false);
 
     return (
@@ -132,4 +132,4 @@ const DialogueList: React.FC = () => {
     );
 };
 
-export default DialogueList;
+export default MessangerList;

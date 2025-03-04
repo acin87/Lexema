@@ -1,7 +1,7 @@
 import { Box, Container, Paper } from '@mui/material';
 import { FC, memo } from 'react';
-import DialoguesPanel from '../../features/dialogue/components/DialoguePanel';
-import DialogueList from '../../features/dialogue/components/DualogueList';
+import DialoguesPanel from '../../features/dialogue/components/MessangerPanel';
+import DialogueList from '../../features/dialogue/components/MessangerList';
 
 const DialouesPage: FC = () => {
     return (

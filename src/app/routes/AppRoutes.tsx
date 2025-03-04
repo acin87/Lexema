@@ -8,8 +8,7 @@ import FeedPage from '../../pages/FeedPage';
 import FriendsPage from '../../pages/FriendsPage';
 import HomePage from '../../pages/HomePage';
 import ProfilePage from '../../pages/ProfilePage';
-import { AppRoute, SiteAppRoutePath } from './config';
-
+import { AppRoute, SiteAppRoutePath } from './Config';
 
 export const AppRoutes = createBrowserRouter([
     {
@@ -29,7 +28,7 @@ export const AppRoutes = createBrowserRouter([
                 element: <ProfilePage />,
             },
             {
-                path: SiteAppRoutePath[AppRoute.DIALOGUES],
+                path: SiteAppRoutePath[AppRoute.MESSENGER],
                 element: <DialoguesPageAsync />,
             },
         ],

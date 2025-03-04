@@ -5,6 +5,7 @@ import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui
 import { FC, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Menu.module.css';
+import { AppRoute, SiteAppRoutePath } from '../../app/routes/Config';
 
 //интерфейс для пропсов, открытие и закрытие панели
 interface MenuProps {
@@ -15,19 +16,19 @@ const Menu: FC<MenuProps> = memo((open) => {
     const navigate = useNavigate();
     const menuItems = [
         {
-            path: '/',
+            path: SiteAppRoutePath[AppRoute.HOME],
             icon: <OtherHousesOutlinedIcon className={styles.svgIcon} />,
             text: 'Моя страница',
         },
         {
-            path: '/friends',
+            path: SiteAppRoutePath[AppRoute.FRIENDS],
             icon: <PeopleAltOutlinedIcon className={styles.svgIcon} />,
             text: 'Друзья',
         },
         {
-            path: '/dialogues',
+            path: SiteAppRoutePath[AppRoute.MESSENGER],
             icon: <ChatOutlinedIcon className={styles.svgIcon} />,
-            text: 'Диалоги',
+            text: 'Сообщения',
         },
     ];
     return (

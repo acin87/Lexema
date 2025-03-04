@@ -21,7 +21,7 @@ const generate = (element: ReactElement<unknown>) => {
     );
 };
 
-const DialoguesPanel: FC = () => {
+const MessangerPanel: FC = () => {
     return (
         <Box sx={{ ...dialoguePanel }}>
             <Box
@@ -89,7 +89,7 @@ const DialoguesPanel: FC = () => {
                                     backgroundColor: '#f2f2f2',
                                 },
                                 ':hover': {
-                                    overflowY: 'overlay',
+                                    overflowY: 'scroll',
                                 },
                                 
                             }}
@@ -118,4 +118,4 @@ const DialoguesPanel: FC = () => {
     );
 };
 
-export default DialoguesPanel;
+export default MessangerPanel;
