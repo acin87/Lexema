@@ -1,10 +1,10 @@
+import { Box } from '@mui/material';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 const useCustomScrollBar = () => {
     const contentRef = useRef<HTMLDivElement>(null);
     const listRef = useRef<HTMLUListElement>(null);
     const scrollbarThumbRef = useRef<HTMLDivElement>(null);
-    const [isDragging, setIsDragging] = useState(false);
     const [startY, setStartY] = useState(0);
     const [startTop, setStartTop] = useState(0);
 
@@ -12,8 +12,9 @@ const useCustomScrollBar = () => {
     const updateScrollbarThumb = useCallback(() => {
         if (contentRef.current && listRef.current && scrollbarThumbRef.current) {
             const contentHeight = contentRef.current.clientHeight;
-            console.log(contentHeight)
+
             const listHeight = listRef.current.scrollHeight;
+
             const thumbHeight = (contentHeight / listHeight) * contentHeight;
 
             scrollbarThumbRef.current.style.height = `${thumbHeight}px`;
@@ -21,41 +22,37 @@ const useCustomScrollBar = () => {
             const maxScrollTop = listHeight - contentHeight;
             const scrollPercent = contentRef.current.scrollTop / maxScrollTop;
             const thumbPosition = scrollPercent * (contentHeight - thumbHeight);
-
-            scrollbarThumbRef.current.style.top = `${thumbPosition}px`;
+            //scrollbarThumbRef.current.style.top = `${thumbPosition}px`;
+            scrollbarThumbRef.current.style.transform = `translate3d(0px, ${thumbPosition}px, 0px)`;
         }
     }, []);
 
     // Обработка прокрутки контента
     const handleScroll = useCallback(() => {
-        console.log(2)
         updateScrollbarThumb();
     }, [updateScrollbarThumb]);
 
     // Обработка начала перетаскивания ползунка
     const handleThumbMouseDown = (e: React.MouseEvent) => {
-        console.log(e)
-        setIsDragging(true);
+        e.preventDefault();
         setStartY(e.clientY);
         if (scrollbarThumbRef.current) {
             setStartTop(parseFloat(scrollbarThumbRef.current.style.top) || 0);
         }
 
         const onMouseMove = (e: MouseEvent) => {
-            if (isDragging && contentRef.current && scrollbarThumbRef.current) {
+            if (contentRef.current && scrollbarThumbRef.current) {
                 const deltaY = e.clientY - startY;
                 const newTop = startTop + deltaY;
 
                 const maxTop = contentRef.current.clientHeight - scrollbarThumbRef.current.clientHeight;
                 const scrollTop = (newTop / maxTop) * (listRef.current!.scrollHeight - contentRef.current.clientHeight);
-
                 contentRef.current.scrollTop = scrollTop;
                 updateScrollbarThumb();
             }
         };
 
         const onMouseUp = () => {
-            setIsDragging(false);
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
         };
@@ -66,96 +63,51 @@ const useCustomScrollBar = () => {
 
     // Инициализация скроллбара
     useEffect(() => {
-        const ref = contentRef.current;
-       
-        if (contentRef.current) {
-            contentRef.current.addEventListener('scroll', handleScroll);
+        const content = contentRef.current;
+
+        if (content) {
+            content.addEventListener('scroll', handleScroll);
+            updateScrollbarThumb();
         }
         return () => {
-            if (ref) {
-                ref.removeEventListener('scroll', handleScroll);
+            if (content) {
+                content.removeEventListener('scroll', handleScroll);
             }
         };
-    }, [handleScroll]);
+    }, [handleScroll, updateScrollbarThumb]);
 
-    return { contentRef, listRef, scrollbarThumbRef, handleThumbMouseDown };
+    const scrollBar = (
+        <Box
+            sx={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                width: '11px',
+            }}
+        >
+            <Box
+                ref={scrollbarThumbRef}
+                onMouseDown={handleThumbMouseDown}
+                className="scrollbar-thumb"
+                sx={{
+                    position: 'absolute',
+                    minHeight: '10px',
+                    cursor: 'pointer',
 
-    // return (
-    //     <Box
-    //         sx={{
-    //             width: 300,
-    //             height: 200,
-    //             border: '1px solid #ccc',
-    //             display: 'flex',
-    //             flexDirection: 'column',
-    //         }}
-    //     >
-    //         <Box
-    //             sx={{
-    //                 padding: '10px',
-    //                 backgroundColor: '#f0f0f0',
-    //                 borderBottom: '1px solid #ccc',
-    //             }}
-    //         >
-    //             Заголовок
-    //         </Box>
-    //         <Box
-    //             ref={contentRef}
-    //             sx={{
-    //                 flex: 1,
-    //                 overflow: 'hidden',
-    //                 position: 'relative',
-    //                 padding: '10px',
-    //             }}
-    //         >
-    //             <ul
-    //                 ref={listRef}
-    //                 style={{
-    //                     listStyle: 'none',
-    //                     margin: 0,
-    //                     padding: 0,
-    //                 }}
-    //             >
-    //                 {Array.from({ length: 10 }).map((_, index) => (
-    //                     <li
-    //                         key={index}
-    //                         style={{
-    //                             padding: '1rem',
-    //                             backgroundColor: '#f0f0f0',
-    //                             borderRadius: '5px',
-    //                             marginBottom: '10px',
-    //                         }}
-    //                     >
-    //                         Элемент списка {index + 1}
-    //                     </li>
-    //                 ))}
-    //             </ul>
-    //             <Box
-    //                 sx={{
-    //                     position: 'absolute',
-    //                     top: 0,
-    //                     right: 0,
-    //                     width: '12px',
-    //                     height: '100%',
-    //                     backgroundColor: '#e0e0e0',
-    //                     borderRadius: '6px',
-    //                 }}
-    //             >
-    //                 <Box
-    //                     ref={scrollbarThumbRef}
-    //                     onMouseDown={handleThumbMouseDown}
-    //                     sx={{
-    //                         position: 'absolute',
-    //                         width: '100%',
-    //                         backgroundColor: '#888',
-    //                         borderRadius: '6px',
-    //                         cursor: 'pointer',
-    //                     }}
-    //                 />
-    //             </Box>
-    //         </Box>
-    //     </Box>
-    // );
+                    top: '2px',
+                    bottom: '2px',
+                    left: '2px',
+                    right: '2px',
+                    borderRadius: '7px',
+                    opacity: 0,
+                    transition: 'opacity .2s linear',
+                    backgroundColor: '#d6d9da',
+                }}
+            />
+        </Box>
+    );
+
+    return { contentRef, listRef, scrollBar };
 };
 
 export default useCustomScrollBar;

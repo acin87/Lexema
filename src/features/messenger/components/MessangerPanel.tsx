@@ -1,6 +1,7 @@
-import { Box, CssThemeVariables, List, ListItem, Typography } from '@mui/material';
+import { Avatar, AvatarGroup, Box, CssThemeVariables, List, ListItem, Typography } from '@mui/material';
 import { cloneElement, FC, ReactElement } from 'react';
 import useCustomScrollBar from '../../../shared/hooks/useCustomScrollBar';
+import { useGetDialoguesQuery } from '../../../entities/messenger/api/messengerApi';
 
 const dialoguePanel: CssThemeVariables = {
     borderRight: '1px solid #eaeaea',
@@ -17,13 +18,16 @@ const dialoguePanel: CssThemeVariables = {
 };
 
 const generate = (element: ReactElement<unknown>) => {
-    return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((value, index) =>
-        cloneElement(element, { key: value }, <span> {index} </span>),
-    );
+    return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((value, index) => cloneElement(element, { key: value }, <span> {index} </span>));
 };
 
 const MessangerPanel: FC = () => {
-    const { contentRef, listRef, handleThumbMouseDown, scrollbarThumbRef } = useCustomScrollBar();
+    const { contentRef, listRef, scrollBar } = useCustomScrollBar();
+    const { data: response, isLoading } = useGetDialoguesQuery({ id: 1 });
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <Box sx={{ ...dialoguePanel }}>
@@ -41,53 +45,66 @@ const MessangerPanel: FC = () => {
                 <Typography variant="h6">Чат</Typography>
             </Box>
             <Box
+                component="main"
                 sx={{
                     position: 'relative',
                     flex: 1,
                     overflow: 'hidden',
                     p: '1.25rem',
-                    
-                    alignContent: 'flex-start',
+                    height: '100%',
+                    '&:hover > div > .scrollbar-thumb': {
+                        opacity: 0.8,
+                        transition: 'opacity 0s linear',
+                    },
                 }}
-                ref={contentRef}
             >
-                <List sx={{ margin: '0 -0.8rem', display: 'flex', flexDirection: 'column' }} ref={listRef}>
-                    {generate(
-                        <ListItem
-                            sx={{
-                                height: '50px',
-                                backgroundColor: 'red',
-                                borderRadius: '.5rem',
-                                marginBottom: '.25rem',
-                                ':hover': { backgroundColor: '#f2f2f2' },
-                                minWidth: 0,
-                            }}
-                        />,
-                    )}
-                </List>
                 <Box
                     sx={{
                         position: 'absolute',
                         top: 0,
-                        right: 0,
-                        width: '12px',
+                        left: 0,
+                        p: '17.5px',
+                        width: '100%',
                         height: '100%',
-                        backgroundColor: '#e0e0e0',
-                        borderRadius: '6px',
+                        overflow: 'hidden scroll',
+                        scrollbarWidth: 'none',
+                        '&::-webkit-scrollbar': {
+                            display: 'none',
+                        },
                     }}
+                    ref={contentRef}
                 >
-                    <Box
-                        ref={scrollbarThumbRef}
-                        onMouseDown={handleThumbMouseDown}
-                        sx={{
-                            position: 'absolute',
-                            width: '100%',
-                            backgroundColor: '#888',
-                            borderRadius: '6px',
-                            cursor: 'pointer',
-                        }}
-                    />
+                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Typography component="span" fontSize=".825rem" color="primary.main" fontWeight="500" sx={{ mb: 1 }}>
+                            Частые контакты
+                        </Typography>
+                        <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', mb: 1}}>
+                            <AvatarGroup max={5} spacing={1}>
+                                <Avatar alt="Remy Sharp" src="/public/user/1.jpg" />
+                                <Avatar alt="Travis Howard" src="/public/user/02.jpg" />
+                                <Avatar alt="Cindy Baker" src="/public/user/03.jpg" />
+                                <Avatar alt="Cindy Baker" src="/public/user/4.jpg" />
+                                <Avatar alt="Cindy Baker" src="/public/user/05.jpg" />
+                            </AvatarGroup>
+                        </Box>
+                    </Box>
+
+                    <List sx={{ display: 'flex', flexDirection: 'column', margin: '0 -0.8rem' }} ref={listRef}>
+                        {generate(
+                            <ListItem
+                                sx={{
+                                    height: '50px',
+                                    backgroundColor: 'red',
+                                    borderRadius: '.5rem',
+                                    marginBottom: '.25rem',
+                                    ':hover': { backgroundColor: '#f2f2f2' },
+                                    minWidth: 0,
+                                }}
+                            />,
+                        )}
+                    </List>
                 </Box>
+                {scrollBar}
             </Box>
         </Box>
     );

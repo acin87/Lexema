@@ -1,7 +1,7 @@
 import { memo, ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
-import { JWT_PERSISTENT_STATE } from '../../entities/user/types/User';
-import { loadState } from '../../shared/utils/LocalStorage';
+import { loadState } from '../../../shared/utils/LocalStorage';
+import { JWT_PERSISTENT_STATE } from '../../user/types/User';
 
 const RequireAuth = memo(({ children }: { children: ReactNode }) => {
     const jwt = loadState(JWT_PERSISTENT_STATE);

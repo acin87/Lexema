@@ -1,17 +1,22 @@
 import { createBrowserRouter } from 'react-router-dom';
+import RequireAuth from '../../entities/auth/component/RequireAuth';
+import AuthPage from '../../pages/auth/AuthPage';
 import ErrorPage from '../../pages/ErrorPage';
-import Authorization from '../../features/auth/Authorization';
 import FeedPage from '../../pages/FeedPage';
 import FriendsPage from '../../pages/FriendsPage';
 import HomePage from '../../pages/HomePage';
+import MessengerPageAsync from '../../pages/messenger/MessengerPageAsync';
 import ProfilePage from '../../pages/ProfilePage';
 import { AppRoute, SiteAppRoutePath } from './Config';
-import MessengerPageAsync from '../../pages/messenger/MessengerPageAsync';
 
 export const AppRoutes = createBrowserRouter([
     {
         path: SiteAppRoutePath[AppRoute.HOME],
-        element: <HomePage />,
+        element: (
+            <RequireAuth>
+                <HomePage />
+            </RequireAuth>
+        ),
         children: [
             {
                 path: SiteAppRoutePath[AppRoute.HOME],
@@ -33,7 +38,7 @@ export const AppRoutes = createBrowserRouter([
     },
     {
         path: SiteAppRoutePath[AppRoute.AUTH],
-        element: <Authorization />,
+        element: <AuthPage />,
     },
     {
         path: SiteAppRoutePath[AppRoute.NOT_FOUND],

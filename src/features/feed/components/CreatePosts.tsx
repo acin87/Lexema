@@ -3,7 +3,7 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import {
     Box,
     Button,
-    CSSObject,
+    CssThemeVariables,
     IconButton,
     Modal,
     Paper,
@@ -73,7 +73,7 @@ const CreatePosts: FC<CreatePostsProps> = () => {
         }
     };
 
-    const style: CSSObject = {
+    const style: CssThemeVariables = {
         position: 'absolute',
         display: 'flex',
         flexDirection: 'column',
@@ -96,12 +96,11 @@ const CreatePosts: FC<CreatePostsProps> = () => {
             height: 'auto',
             overflow: 'auto',
         },
-        '@media only screen and (min-width: 992px)' : {
+        '@media only screen and (min-width: 992px)': {
             width: '600px',
             height: 'auto',
             overflow: 'auto',
         },
-      
 
         bgcolor: 'background.paper',
         borderRadius: 5,
