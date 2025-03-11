@@ -1,29 +1,25 @@
-export type PostResponse = { posts: PostTypes[]; totalCount: number };
+export type PostResponse = { results: PostTypes[]; count: number; next: string; previous: string };
 
 export type PostRequest = {
     limit: number;
-    start: number;
-    userId: number;
+    offset: number;
+    author: number | null;
 };
 
 export type PostTypes = {
     id: number;
     title: string;
-    body: string;
-    tags: Tag[];
-    reactions: Reaction;
-    userId: number;
-    views: number;
-    className: string;
+    content: string;
+    images: [{ image: string }] | null;
+    video_urls: string[] | null;
+    likes_count: number;
+    dislikes_count: number;
+    created_at: string;
+    group: number | null;
+    author: number;
+    views_count: number;
 };
 
-type Reaction = {
-    likes: number;
-    dislikes: number;
-};
-type Tag = {
-    name: string;
-};
 export type FileUploadResponse = {
     fileUrls: string[];
 };

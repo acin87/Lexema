@@ -5,11 +5,11 @@ import { Outlet } from 'react-router-dom';
 import { RootState } from '../app/store/store';
 import styles from '../shared/styles/Layout.module.css';
 import { DarkTheme, LightTheme } from '../shared/styles/Theme';
+import LeftSideBar from '../widgets/leftsidebar/LeftSideBar';
 import Navbar from '../widgets/navbar/Navbar';
 import RightSideBar from '../widgets/rightsidebar/RightSideBar';
-import LeftSideBar from '../widgets/leftsidebar/LeftSideBar';
 
-const HomePage: FC = () => {
+const MainPage: FC = () => {
     const theme = useSelector((s: RootState) => s.ui.theme);
     const [darkOrLight, setDarkOrLight] = useState<string | null>('light');
 
@@ -34,4 +34,4 @@ const HomePage: FC = () => {
     );
 };
 
-export default HomePage;
+export default MainPage;

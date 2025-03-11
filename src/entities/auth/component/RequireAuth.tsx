@@ -1,13 +1,13 @@
 import { memo, ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { loadState } from '../../../shared/utils/LocalStorage';
-import { JWT_PERSISTENT_STATE } from '../../user/types/User';
+import { AUTH_PERSISTENT_STATE, AuthState } from '../slice/authSlice';
 
 const RequireAuth = memo(({ children }: { children: ReactNode }) => {
-    const jwt = loadState(JWT_PERSISTENT_STATE);
-
-    if (!jwt) {
-        return <Navigate to="/auth" replace />;
+    const jwt = loadState<AuthState>(AUTH_PERSISTENT_STATE)?.access ?? null; 
+    const navigate = useNavigate();
+    if (jwt === null) {
+        navigate('/auth');
     }
     return children;
 });

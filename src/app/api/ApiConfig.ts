@@ -1,13 +1,13 @@
-export const BASEURL = 'http://localhost:3000/'
+export const BASEURL = 'http://localhost:8000/'
 
 export enum API {
     USERS = '/users',
-    LOGIN = '/api/auth/login',
-    REGISTRATION = 'api/auth/register',
+    LOGIN = '/api/auth/login/',
+    REGISTRATION = 'api/auth/register/',
     LOGOUT = 'auth/logout',
-    REFRESH = 'auth/refresh',
+    REFRESH = 'api/auth/refresh/',
     ME = '/me',
-    POSTS ='/posts',
+    POSTS ='api/posts/',
     COMMENTS = '/comments',
     MESSENGER = '/messenger',
     FILES = '/files-upload',

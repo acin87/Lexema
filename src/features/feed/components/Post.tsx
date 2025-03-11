@@ -11,7 +11,7 @@ import {
     CardActions,
     CardContent,
     CardHeader,
-    CardMedia,
+    CssThemeVariables,
     Divider,
     IconButton,
     InputAdornment,
@@ -25,17 +25,41 @@ import React, { forwardRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { PostTypes } from '../../../entities/post/types/PostTypes';
 import { useGetUserByIdQuery } from '../../../entities/user/api/userApi';
+import styles from './Post.module.css';
 import RootComments from './RootComments';
+import ImageCarousel from '../../../shared/components/imageCarousel/ImageCarousel';
 
-
+const imageWrapper: CssThemeVariables = {
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+    '& > img': {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+    },
+};
 /**
  * Компонент поста
- * 
- * @param post - объект пост 
+ *
+ * @param post - объект пост
  * @param ref - реф ссылка на компонент
  */
 const Post = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, ref) => {
-    const { data: userData, isLoading: loading } = useGetUserByIdQuery({ id: post.userId });
+    const { data: userData, isLoading: loading } = useGetUserByIdQuery({ id: post.id });
+
+
+    const images: string[] | undefined = post.images?.map((url) => url.image);
+
+    const postImages = images?.map((url, index) => {
+        return (
+            <Box key={index} sx={{ ...imageWrapper }}>
+                <img src={url} alt={`preview-${index}`} />
+            </Box>
+        );
+    });
 
     return (
         <Box ref={ref} className="post" sx={{ width: '100%' }}>
@@ -75,14 +99,14 @@ const Post = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, ref) => {
                         </React.Fragment>
                     ) : (
                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                            {post.body}
+                            {post.content}
                         </Typography>
                     )}
                 </CardContent>
                 {loading ? (
                     <Skeleton animation="wave" variant="rectangular" height={194} />
                 ) : (
-                    <CardMedia sx={{padding: 2}} component="img" height="194" width="100%" image="../../src/assets/images/1361476761_621333142.jpg" alt="Paella dish" />
+                    <Box className={styles.imageContainer}>{images && images?.length < 5 && postImages}{images && images?.length >= 5 && <ImageCarousel images={images} />} </Box>
                 )}
                 <CardActions sx={{ justifyContent: 'space-between' }}>
                     {loading ? null : (
@@ -91,7 +115,7 @@ const Post = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, ref) => {
                                 <Box sx={{ display: 'flex' }}>
                                     <Button size="small">
                                         <FavoriteIcon />
-                                        <span style={{ marginLeft: '0.5rem' }}>{post.reactions.likes}</span>
+                                        <span style={{ marginLeft: '0.5rem' }}>{post.likes_count}</span>
                                     </Button>
                                 </Box>
                                 <Box sx={{ paddingLeft: 1, paddingRight: 1, display: 'flex' }}>
@@ -103,17 +127,17 @@ const Post = forwardRef<HTMLDivElement, PostTypes>((post: PostTypes, ref) => {
                                 <Box sx={{ display: 'flex' }}>
                                     <Button size="small">
                                         <ShareIcon />
-                                        <span style={{ marginLeft: '0.5rem' }}>{post.reactions.dislikes}</span>
+                                        <span style={{ marginLeft: '0.5rem' }}>{post.dislikes_count}</span>
                                     </Button>
                                 </Box>
                             </Box>
 
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Tooltip title={`Посмотрели ${post.views} человек`}>
+                                <Tooltip title={`Посмотрели ${post.views_count} человек`}>
                                     <RemoveRedEyeOutlinedIcon fontSize="small"></RemoveRedEyeOutlinedIcon>
                                 </Tooltip>
                                 <Typography variant="body2" component="span" sx={{ marginLeft: '0.5rem' }}>
-                                    {post.views}
+                                    {post.views_count}
                                 </Typography>
                             </Box>
                         </React.Fragment>

@@ -6,6 +6,7 @@ import {
     Button,
     CssThemeVariables,
     FormControl,
+    FormHelperText,
     IconButton,
     InputAdornment,
     InputLabel,
@@ -17,17 +18,19 @@ import {
 import CircularProgress from '@mui/material/CircularProgress';
 import { FC, Fragment, SyntheticEvent, useEffect, useState } from 'react';
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { useRegisterMutation } from '../../../entities/auth/api/AuthApi';
+import { useNavigate } from 'react-router-dom';
+import { useLoginMutation, useRegisterMutation } from '../../../entities/auth/api/AuthApi';
+import { isApiError } from '../../../shared/utils/Utils';
 
 type Props = {
     onToggleSignIn: () => void;
 };
 
 interface IFormInput {
-    userName: string;
-    userEmail: string;
-    userPassword: string;
-    confirmPassword: string;
+    username: string;
+    email: string;
+    password: string;
+    confirmpassword: string;
 }
 
 const alignItemsCenter = {
@@ -62,14 +65,32 @@ const form: CssThemeVariables = {
 const SignIn: FC<Props> = ({ onToggleSignIn }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
     const methods = useForm<IFormInput>();
     const { control, handleSubmit } = methods;
+    const navigate = useNavigate();
 
-    const [register, { isError, isLoading }] = useRegisterMutation();
+    const [register, { isError: isRegisterError, isLoading, isSuccess: isRegisterSuccess, error: registerError }] =
+        useRegisterMutation();
+    const [login, { isSuccess: isLoginSuccess }] = useLoginMutation();
 
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-        console.log(data);
-        await register({ email: data.userEmail, password: data.userPassword });
+        if (data.password !== data.confirmpassword) {
+            setSnackbarMessage('Пароли не совпадают');
+            methods.setError('confirmpassword', { type: 'manual', message: 'Пароли не совпадают' });
+            setOpenSnackbar(true);
+            return;
+        } else {
+            await register({ username: data.username, password: data.password, email: data.email }).unwrap();
+            //подумать над решением позже
+            if (isRegisterSuccess) {
+                await login({ username: data.username, password: data.password });
+
+                if (isLoginSuccess) {
+                    navigate('/', { replace: true });
+                }
+            }
+        }
     };
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -81,12 +102,19 @@ const SignIn: FC<Props> = ({ onToggleSignIn }) => {
         setOpenSnackbar(false);
     };
     useEffect(() => {
-        if (isError) {
+        if (isRegisterError && isApiError(registerError)) {
+            Object.keys(registerError.data).forEach((field) => {
+                const formField = field as keyof IFormInput;
+                methods.setError(
+                    formField,
+                    { type: 'manual', message: registerError.data[formField].join(', ') },
+                    { shouldFocus: true },
+                );
+                setSnackbarMessage(registerError.data[formField].join(', '));
+            });
             setOpenSnackbar(true);
         }
-    }, [isError]);
-
-
+    }, [isRegisterError, registerError, methods]);
 
     const action = (
         <Fragment>
@@ -101,13 +129,13 @@ const SignIn: FC<Props> = ({ onToggleSignIn }) => {
             <Box sx={{ width: '100%', maxWidth: '28rem', ...alignItemsCenter }}>
                 <Box sx={{ ...form }} className="form signUp">
                     <FormProvider {...methods}>
-                        <form onSubmit={handleSubmit(onSubmit)}>
+                        <form onSubmit={handleSubmit(onSubmit)} id="register">
                             <Box sx={{ position: 'relative', width: '100%', margin: '1rem 0' }}>
                                 <Controller
-                                    name="userName"
+                                    name="username"
                                     control={control}
                                     defaultValue=""
-                                    render={({ field }) => (
+                                    render={({ field, fieldState: { error } }) => (
                                         <TextField
                                             {...field}
                                             id="userName"
@@ -115,22 +143,26 @@ const SignIn: FC<Props> = ({ onToggleSignIn }) => {
                                             variant="outlined"
                                             fullWidth
                                             required
+                                            error={!!error}
+                                            helperText={error?.message}
                                         />
                                     )}
                                 />
                             </Box>
                             <Box sx={{ position: 'relative', width: '100%', margin: '1rem 0' }}>
                                 <Controller
-                                    name="userEmail"
+                                    name="email"
                                     control={control}
                                     defaultValue=""
-                                    render={({ field }) => (
+                                    render={({ field, fieldState: { error } }) => (
                                         <TextField
                                             {...field}
-                                            id="userEmail"
+                                            id="email"
                                             label="E-mail"
                                             variant="outlined"
                                             fullWidth
+                                            error={!!error}
+                                            helperText={error?.message}
                                             required
                                         />
                                     )}
@@ -140,7 +172,7 @@ const SignIn: FC<Props> = ({ onToggleSignIn }) => {
                                 <FormControl fullWidth variant="outlined">
                                     <InputLabel htmlFor="userPassword">Пароль</InputLabel>
                                     <Controller
-                                        name="userPassword"
+                                        name="password"
                                         control={control}
                                         defaultValue=""
                                         render={({ field }) => (
@@ -170,28 +202,32 @@ const SignIn: FC<Props> = ({ onToggleSignIn }) => {
                                 <FormControl variant="outlined" fullWidth>
                                     <InputLabel htmlFor="confirmPassword">Повторить пароль</InputLabel>
                                     <Controller
-                                        name="confirmPassword"
+                                        name="confirmpassword"
                                         control={control}
                                         defaultValue=""
-                                        render={({ field }) => (
-                                            <OutlinedInput
-                                                {...field}
-                                                id="confirmPassword"
-                                                type={showPassword ? 'text' : 'password'}
-                                                endAdornment={
-                                                    <InputAdornment position="end">
-                                                        <IconButton
-                                                            aria-label="toggle password visibility"
-                                                            onClick={handleClickShowPassword}
-                                                            edge="end"
-                                                        >
-                                                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                                                        </IconButton>
-                                                    </InputAdornment>
-                                                }
-                                                label="confirmPassword"
-                                                required
-                                            />
+                                        render={({ field, fieldState: { error } }) => (
+                                            <Fragment>
+                                                <OutlinedInput
+                                                    {...field}
+                                                    error={!!error}
+                                                    id="confirmPassword"
+                                                    type={showPassword ? 'text' : 'password'}
+                                                    endAdornment={
+                                                        <InputAdornment position="end">
+                                                            <IconButton
+                                                                aria-label="toggle password visibility"
+                                                                onClick={handleClickShowPassword}
+                                                                edge="end"
+                                                            >
+                                                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                            </IconButton>
+                                                        </InputAdornment>
+                                                    }
+                                                    label="confirmPassword"
+                                                    required
+                                                />
+                                                {error && <FormHelperText>{error.message}</FormHelperText>}
+                                            </Fragment>
                                         )}
                                     />
                                 </FormControl>
@@ -213,7 +249,7 @@ const SignIn: FC<Props> = ({ onToggleSignIn }) => {
                 <Snackbar
                     open={openSnackbar}
                     autoHideDuration={6000}
-                    message="Ошибка регистрации, сервер недоступен"
+                    message={snackbarMessage}
                     onClose={handleCloseSnackbar}
                     action={action}
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}

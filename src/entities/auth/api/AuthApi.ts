@@ -4,13 +4,13 @@ import { API, BASEURL } from '../../../app/api/ApiConfig';
 
 import { RootState } from '../../../app/store/store';
 
-import { clearCredentials, setCredentials } from '../slice/AuthSlice';
-import { AuthResponse, LoginRequest, RefreshTokenRequest, RegisterRequest } from '../types/AuthTypes';
+import { clearCredentials, setCredentials } from '../slice/authSlice';
+import { AuthResponse, LoginRequest, RefreshTokenRequest, RegisterRequest, TokenResponse } from '../types/AuthTypes';
 
 const baseQuery = fetchBaseQuery({
     baseUrl: BASEURL,
     prepareHeaders: (headers, { getState }) => {
-        const accessToken = (getState() as RootState).auth.accessToken;
+        const accessToken = (getState() as RootState).auth.access;
         if (accessToken) {
             headers.set('authorization', `Bearer ${accessToken}`);
         }
@@ -18,11 +18,11 @@ const baseQuery = fetchBaseQuery({
     },
 });
 
-const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: object) => {
+export const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: object) => {
     let result = await baseQuery(args, api, extraOptions);
 
     if (result.error?.status === 401) {
-        // Попытка обновить токен
+        console.log(401);
         const refreshToken = Cookies.get('refreshToken');
         if (refreshToken) {
             const refreshResult = await baseQuery(
@@ -31,16 +31,16 @@ const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQueryApi, 
                 extraOptions,
             );
             if (refreshResult.data) {
-                // Сохраняем новые токены
-                api.dispatch(setCredentials(refreshResult.data as AuthResponse));
-                // Повторяем оригинальный запрос с новым токеном
+                const data = refreshResult.data as TokenResponse;
+                console.log(data);
+                api.dispatch(setCredentials(data));
                 result = await baseQuery(args, api, extraOptions);
             } else {
-                // Если обновление токена не удалось, выходим из системы
+                console.log(1);
                 api.dispatch(clearCredentials());
             }
         } else {
-            // Если refreshToken отсутствует, выходим из системы
+            console.log(2);
             api.dispatch(clearCredentials());
         }
     }
@@ -58,16 +58,8 @@ export const authApi = createApi({
                 method: 'POST',
                 body: credentials,
             }),
-            async onQueryStarted(_, { dispatch, queryFulfilled }) {
-                try {
-                    const { data } = await queryFulfilled;
-                    dispatch(setCredentials(data));
-                } catch (error) {
-                    console.error('Registration failed:', error);
-                }
-            },
         }),
-        login: builder.mutation<AuthResponse, LoginRequest>({
+        login: builder.mutation<TokenResponse, LoginRequest>({
             query: (credentials) => ({
                 url: API.LOGIN,
                 method: 'POST',
@@ -82,7 +74,22 @@ export const authApi = createApi({
                 }
             },
         }),
-        refreshToken: builder.mutation<AuthResponse, RefreshTokenRequest>({
+        logout: builder.mutation<void, void>({
+            query: () => ({
+                url: API.LOGOUT,
+                method: 'POST',
+            }),
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(clearCredentials());
+                } catch (error) {
+                    console.error('Logout failed:', error);
+                }
+            },
+        }),
+
+        refreshToken: builder.mutation<TokenResponse, RefreshTokenRequest>({
             query: (refreshToken) => ({
                 url: API.REFRESH,
                 method: 'POST',

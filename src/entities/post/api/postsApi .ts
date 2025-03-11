@@ -1,37 +1,49 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API, BASEURL } from '../../../app/api/ApiConfig';
-import { PostResponse, PostTypes, FileUploadResponse, PostRequest } from '../types/PostTypes';
+import { RootState } from '../../../app/store/store';
+import { FileUploadResponse, PostRequest, PostResponse, PostTypes } from '../types/PostTypes';
 
 export const postApi = createApi({
     reducerPath: 'postsApi',
-    baseQuery: fetchBaseQuery({ baseUrl: BASEURL }),
+    baseQuery: fetchBaseQuery({
+        baseUrl: BASEURL,
+        prepareHeaders: (headers, { getState }) => {
+            const accessToken = (getState() as RootState).auth.access;
+            if (accessToken) {
+                headers.set('Authorization', `Bearer ${accessToken}`);
+            }
+            return headers;
+        },
+    }),
     tagTypes: ['Post'],
     endpoints: (builder) => ({
         getAllPosts: builder.query<PostResponse, PostRequest>({
-            query: ({ limit = 7, start = 0 }) => ({
+            query: ({ limit = 7, offset = 0, author }) => ({
                 url: API.POSTS,
+                method: 'GET',
                 params: {
-                    _limit: limit,
-                    _start: start,
+                    author: author,
+                    limit: limit,
+                    offset: offset,
                 },
             }),
             providesTags: (result) =>
-                result ? [...result.posts.map(({ id }) => ({ type: 'Post' as const, id })), 'Post'] : ['Post'],
+                result ? [...result.results.map(({ id }) => ({ type: 'Post' as const, id })), 'Post'] : ['Post'],
         }),
         getPostById: builder.query<PostTypes, number>({
             query: (id: number = 1) => ({
-                url: `${API.POSTS}/${id}`,
+                url: `${API.POSTS}/${id}/`,
+                method: 'GET',
             }),
         }),
         createPost: builder.mutation<FileUploadResponse, FormData>({
             query: (files: FormData) => ({
-                url: API.FILES,
+                url: API.POSTS,
                 method: 'POST',
                 body: files,
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+                headers: {},
             }),
+            invalidatesTags: ['Post'],
         }),
     }),
 });

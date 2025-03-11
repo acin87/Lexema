@@ -12,7 +12,10 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { FC, Fragment, memo, SyntheticEvent, useState } from 'react';
+import { FC, Fragment, memo, SyntheticEvent, useEffect, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { getUserId } from '../../../entities/auth/slice/authSlice';
 import { useCreatePostMutation } from '../../../entities/post/api/postsApi ';
 import DropZone from '../../../shared/components/dropZoneArea/DropZone';
 
@@ -25,7 +28,11 @@ const CreatePosts: FC<CreatePostsProps> = () => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [postText, setPostText] = useState<string>('');
     const [files, setFiles] = useState<File[]>([]);
-    const [uploadFiles] = useCreatePostMutation();
+    const [uploadFiles, { isSuccess }] = useCreatePostMutation();
+    const me = useSelector(getUserId);
+
+    const methods = useForm();
+    //const { control, handleSubmit } = methods;
 
     const handleOpen = () => {
         setOpen(true);
@@ -33,6 +40,12 @@ const CreatePosts: FC<CreatePostsProps> = () => {
     const handleClose = () => {
         setOpen(false);
     };
+
+    useEffect(() => {
+        if (isSuccess) {
+            setOpen(false);
+        }
+    }, [isSuccess]);
 
     const handleCloseSnackbar = (_: SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
         if (reason === 'clickaway') {
@@ -60,15 +73,15 @@ const CreatePosts: FC<CreatePostsProps> = () => {
 
         const formData = new FormData();
         files.forEach((file) => {
-            formData.append('files', file);
+            formData.append('images', file);
         });
-        formData.append('text', postText);
+        formData.append('content', postText);
+        formData.append('author', String(me));
 
         try {
-            const reason = await uploadFiles(formData).unwrap();
-            console.log(reason);
+            await uploadFiles(formData).unwrap();
         } catch (e) {
-            //console.error('Ошибка загрузки поста:', e);
+            console.error('Ошибка загрузки поста:', e);
             setOpenSnackbar(true);
         }
     };
@@ -113,42 +126,44 @@ const CreatePosts: FC<CreatePostsProps> = () => {
             <Button startIcon={<PostAddIcon />} onClick={handleOpen}>
                 Создать пост
             </Button>
-            <Modal open={open} onClose={handleClose} component="div">
-                <Box sx={{ ...style }}>
-                    <Typography sx={{ textAlign: 'center' }} variant="h5" component="div">
-                        Новый пост
-                    </Typography>
-                    <Box sx={{ p: 1 }}>
-                        <DropZone onFilesChange={handleFilesChange}></DropZone>
+            <Modal open={open} onClose={handleClose} component="div" closeAfterTransition={false}>
+                <FormProvider {...methods}>
+                    <Box sx={{ ...style }}>
+                        <Typography sx={{ textAlign: 'center' }} variant="h5" component="div">
+                            Новый пост
+                        </Typography>
+                        <Box sx={{ p: 1 }}>
+                            <DropZone onFilesChange={handleFilesChange}></DropZone>
+                        </Box>
+                        <Box>
+                            <TextField
+                                id="post-basic"
+                                placeholder="Напишите текст поста тут...."
+                                multiline
+                                variant="filled"
+                                minRows={8}
+                                onChange={(e) => setPostText(e.target.value)}
+                                value={postText}
+                                sx={{
+                                    width: '100%',
+                                    outline: 'none',
+                                    border: 'none',
+                                    '.MuiFilledInput-root': { backgroundColor: 'background.paper' },
+                                }}
+                            />
+                        </Box>
+                        <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center', mt: 2 }}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleUploadPost}
+                                disabled={postText == '' && files.length === 0}
+                            >
+                                Создать
+                            </Button>
+                        </Box>
                     </Box>
-                    <Box>
-                        <TextField
-                            id="post-basic"
-                            placeholder="Напишите текст поста тут...."
-                            multiline
-                            variant="filled"
-                            minRows={8}
-                            onChange={(e) => setPostText(e.target.value)}
-                            value={postText}
-                            sx={{
-                                width: '100%',
-                                outline: 'none',
-                                border: 'none',
-                                '.MuiFilledInput-root': { backgroundColor: 'background.paper' },
-                            }}
-                        />
-                    </Box>
-                    <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center', mt: 2 }}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleUploadPost}
-                            disabled={postText == '' && files.length === 0}
-                        >
-                            Создать
-                        </Button>
-                    </Box>
-                </Box>
+                </FormProvider>
             </Modal>
             {openSnackbar && (
                 <Snackbar

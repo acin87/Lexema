@@ -4,12 +4,16 @@ import AuthPage from '../../pages/auth/AuthPage';
 import ErrorPage from '../../pages/ErrorPage';
 import FeedPage from '../../pages/FeedPage';
 import FriendsPage from '../../pages/FriendsPage';
-import HomePage from '../../pages/HomePage';
+import HomePage from '../../pages/MainPage';
 import MessengerPageAsync from '../../pages/messenger/MessengerPageAsync';
 import ProfilePage from '../../pages/ProfilePage';
 import { AppRoute, SiteAppRoutePath } from './Config';
 
 export const AppRoutes = createBrowserRouter([
+    {
+        path: SiteAppRoutePath[AppRoute.AUTH],
+        element: <AuthPage />,
+    },
     {
         path: SiteAppRoutePath[AppRoute.HOME],
         element: (
@@ -36,10 +40,7 @@ export const AppRoutes = createBrowserRouter([
             },
         ],
     },
-    {
-        path: SiteAppRoutePath[AppRoute.AUTH],
-        element: <AuthPage />,
-    },
+
     {
         path: SiteAppRoutePath[AppRoute.NOT_FOUND],
         element: <ErrorPage />,

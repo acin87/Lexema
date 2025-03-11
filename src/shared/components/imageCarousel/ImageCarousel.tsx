@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 
 interface ImageCarouselProps {
     images: string[];
-    onDelete: (index: number) => void;
+    onDelete?: (index: number) => void;
 }
 
 const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, onDelete }) => {
@@ -38,13 +38,13 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, onDelete }) => {
     const handleImageClick = (index: number) => {
         setActiveIndex(index);
     };
-    const modalStyles: CssThemeVariables= {
+    const modalStyles: CssThemeVariables = {
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: window.innerWidth * 0.95+'px',
-        height: window.innerHeight * 0.95+'px',
+        width: window.innerWidth * 0.95 + 'px',
+        height: window.innerHeight * 0.95 + 'px',
         transition: 'all 0.3s ease-in-out',
         paddingRight: 6,
         paddingLeft: 2,
@@ -53,21 +53,53 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, onDelete }) => {
     };
 
     return (
-        <Box position="relative" width="100%" maxWidth="800px" margin="auto">
-            <Box
-                component="img"
-                src={images[activeIndex]}
-                alt={`carousel-image-${activeIndex}`}
-                width="100%"
-                maxWidth="500px"
-                height="280px"
-                borderRadius={2}
-                sx={{
-                    display: 'block',
-                    margin: '0 auto 16px',
-                }}
-                onClick={handleOpen}
-            />
+        <Box position="relative" width="100%" maxWidth="800px" margin="auto" className="image-carousel" data-carousel>
+            <Box sx={{ position: 'relative' }}>
+                <Box
+                    component="img"
+                    src={images[activeIndex]}
+                    alt={`carousel-image-${activeIndex}`}
+                    width="100%"
+                    maxWidth="500px"
+                    height="280px"
+                    borderRadius="5px"
+                    sx={{
+                        display: 'block',
+                        margin: '0 auto 16px',
+                    }}
+                    onClick={handleOpen}
+                />
+                <IconButton
+                    onClick={handlePrev}
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: 0,
+                        transform: 'translateY(-50%)',
+                        backgroundColor: 'background.paper',
+                        '&:hover': {
+                            backgroundColor: 'primary.main',
+                        },
+                    }}
+                >
+                    <KeyboardArrowLeft />
+                </IconButton>
+                <IconButton
+                    onClick={handleNext}
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        right: 0,
+                        transform: 'translateY(-50%)',
+                        backgroundColor: 'background.paper',
+                        '&:hover': {
+                            backgroundColor: 'primary.main',
+                        },
+                    }}
+                >
+                    <KeyboardArrowRight />
+                </IconButton>
+            </Box>
             <Modal open={open} onClose={handleClose} component="div" style={{ transformOrigin: '0 0 0' }}>
                 <Box sx={{ ...modalStyles }}>
                     <Box
@@ -76,14 +108,13 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, onDelete }) => {
                         alt={`carousel-image-${activeIndex}`}
                         width="100%"
                         height="100%"
-                        borderRadius={2}
-                
+                        borderRadius="5px"
                         onClick={handleClose}
                     />
                     <IconButton
                         aria-label="Закрыть"
                         sx={{ position: 'absolute', top: 0, right: 0, color: 'secondary.light' }}
-                        size='large'
+                        size="large"
                         onClick={handleClose}
                     >
                         <CancelIcon sx={{ ':hover': { color: 'primary.main' } }} />
@@ -100,55 +131,26 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, onDelete }) => {
                         alt={`carousel-image-${index}`}
                         width="30%"
                         height="auto"
-                        borderRadius={2}
+                        borderRadius="5px"
                         sx={{
                             transition: 'transform 0.3s ease, opacity 0.3s ease',
                             transform: index === activeIndex ? 'scale(1.1)' : 'scale(0.9)',
                             opacity: index === activeIndex ? 1 : 0.7,
+                            cursor: index === activeIndex ? 'default' : 'pointer',
                         }}
                         onClick={() => handleImageClick(index)}
                     />
                 ))}
             </Box>
-
-            <IconButton
-                aria-label="Удалить"
-                sx={{ position: 'absolute', top: 0, right: 0, color: 'secondary.light' }}
-                onClick={() => onDelete(activeIndex)}
-            >
-                <DeleteIcon sx={{ ':hover': { color: 'primary.main' } }} />
-            </IconButton>
-
-            <IconButton
-                onClick={handlePrev}
-                sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: 0,
-                    transform: 'translateY(-50%)',
-                    backgroundColor: 'background.paper',
-                    '&:hover': {
-                        backgroundColor: 'primary.main',
-                    },
-                }}
-            >
-                <KeyboardArrowLeft />
-            </IconButton>
-            <IconButton
-                onClick={handleNext}
-                sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    right: 0,
-                    transform: 'translateY(-50%)',
-                    backgroundColor: 'background.paper',
-                    '&:hover': {
-                        backgroundColor: 'primary.main',
-                    },
-                }}
-            >
-                <KeyboardArrowRight />
-            </IconButton>
+            {onDelete && (
+                <IconButton
+                    aria-label="Удалить"
+                    sx={{ position: 'absolute', top: 0, right: 0, color: 'secondary.light' }}
+                    onClick={() => onDelete(activeIndex)}
+                >
+                    <DeleteIcon sx={{ ':hover': { color: 'primary.main' } }} />
+                </IconButton>
+            )}
         </Box>
     );
 };
