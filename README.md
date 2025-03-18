@@ -1,23 +1,12 @@
 
-Это дипломная работа, в процессе написания. Тема диплома Социальная сеть. Стек на фронте React + TypeScript + Vite, бэк отдельным проектом на Python + Django (Django REST framework)
+Это дипломная работа, в процессе написания. Тема диплома Социальная сеть. Стек на фронте React + TypeScript + Redux Toolkit + Vite, бэк отдельным проектом на Python + Django (Django REST framework)
 
-# Временно не работает аутентификация. 
-Что бы обойти аутентификацию, нужно удалить обвязку домашней страницы в файле
-```src\app\routes\AppRoutes.tsx```
+#JSON сервер больше не работает. API перехало на Django. JSON сервер перестал удовлетварять требованиям, а писать express не вижу смысла
 
-а именно в строке:
-```javascript
-element: (
-    <RequireAuth><HomePage /></RequireAuth>
-)
-```
-удалить компонент ```RequireAuth```
+Сервер Django(DRF) находится по ссылке https://github.com/acin87/LexemaServer
 
-Далее запускаем сначало сервер командой:
-```bash
- npm run server
-```
-Потом сам проект командой:
+
+Проект запускаем командой:
 ```bash
  npm run dev
 ```
