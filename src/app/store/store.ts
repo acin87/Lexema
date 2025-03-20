@@ -5,22 +5,25 @@ import { saveState } from '../../shared/utils/LocalStorage';
 
 import { authApi } from '../../entities/auth/api/AuthApi';
 import authSlice, { AUTH_PERSISTENT_STATE, AuthState } from '../../entities/auth/slice/authSlice';
+import { friendsApi } from '../../entities/friends/api/friendsApi';
+import friendsSlice from '../../entities/friends/slices/friendsSlice';
 import { messengerApi } from '../../entities/messenger/api/messengerApi';
 import { postApi } from '../../entities/post/api/postsApi ';
 import postSlice from '../../entities/post/slices/postSlice';
-import { userApi } from '../../entities/user/api/userApi';
-import friendsSlice from '../../entities/user/slices/friendsSlice';
+import { profileApi } from '../../entities/profile/api/profileApi';
+import profileSlice from '../../entities/profile/slices/profileSlice';
 import uiSlice, { UI_PERSISTENT_STATE, UiTypes } from '../../shared/ui/uiSlice';
 
 const rootReducer = combineReducers({
-    [userApi.reducerPath]: userApi.reducer,
+    [friendsApi.reducerPath]: friendsApi.reducer,
     [postApi.reducerPath]: postApi.reducer,
     [commentsApi.reducerPath]: commentsApi.reducer,
     [messengerApi.reducerPath]: messengerApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
-
+    [profileApi.reducerPath]: profileApi.reducer,
     ui: uiSlice,
     post: postSlice,
+    profile: profileSlice,
     friends: friendsSlice,
     auth: authSlice,
 });
@@ -30,10 +33,11 @@ export const store = configureStore({
     middleware: (getDefaultMidleware) =>
         getDefaultMidleware().concat(
             postApi.middleware,
-            userApi.middleware,
+            friendsApi.middleware,
             commentsApi.middleware,
             messengerApi.middleware,
             authApi.middleware,
+            profileApi.middleware,
         ),
 });
 store.subscribe(() => {

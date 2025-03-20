@@ -31,7 +31,7 @@ export const AppRoutes = createBrowserRouter([
                 element: <FriendsPage />,
             },
             {
-                path: SiteAppRoutePath[AppRoute.USER],
+                path: SiteAppRoutePath[AppRoute.PROFILE],
                 element: <ProfilePage />,
             },
             {

@@ -22,7 +22,7 @@ export const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQue
     let result = await baseQuery(args, api, extraOptions);
 
     if (result.error?.status === 401) {
-        console.log(401);
+        console.warn('User is not authenticated. Refreshing token...');
         const refreshToken = Cookies.get('refreshToken');
         if (refreshToken) {
             const refreshResult = await baseQuery(
@@ -32,19 +32,15 @@ export const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQue
             );
             if (refreshResult.data) {
                 const data = refreshResult.data as TokenResponse;
-                console.log(data);
                 api.dispatch(setCredentials(data));
                 result = await baseQuery(args, api, extraOptions);
             } else {
-                console.log(1);
                 api.dispatch(clearCredentials());
             }
         } else {
-            console.log(2);
             api.dispatch(clearCredentials());
         }
     }
-
     return result;
 };
 
@@ -70,7 +66,7 @@ export const authApi = createApi({
                     const { data } = await queryFulfilled;
                     dispatch(setCredentials(data));
                 } catch (error) {
-                    console.error('Login failed:', error);
+                    console.warn('Login failed:', error);
                 }
             },
         }),

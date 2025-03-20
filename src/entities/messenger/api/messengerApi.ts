@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API, BASEURL } from '../../../app/api/ApiConfig';
-import { User } from '../../user/types/User';
+import { User } from '../../friends/types/User';
 import { DialoguesResponse } from '../types/MessengerTypes';
 
 export const messengerApi = createApi({

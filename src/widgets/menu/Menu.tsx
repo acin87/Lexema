@@ -1,11 +1,14 @@
-import OtherHousesOutlinedIcon from '@mui/icons-material/OtherHousesOutlined';
-import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
+import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { FC, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './Menu.module.css';
 import { AppRoute, SiteAppRoutePath } from '../../app/routes/Config';
+import styles from './Menu.module.css';
+import { useSelector } from 'react-redux';
+import { getUser } from '../../entities/auth/slice/authSlice';
 
 //интерфейс для пропсов, открытие и закрытие панели
 interface MenuProps {
@@ -14,11 +17,17 @@ interface MenuProps {
 
 const Menu: FC<MenuProps> = memo((open) => {
     const navigate = useNavigate();
+    const id = useSelector(getUser).user_id ?? 0;
     const menuItems = [
         {
+            path: SiteAppRoutePath[AppRoute.PROFILE].replace(':id', String(id)),
+            icon: <AccountBoxOutlinedIcon className={styles.svgIcon} />,
+            text: 'Профиль',
+        },
+        {
             path: SiteAppRoutePath[AppRoute.HOME],
-            icon: <OtherHousesOutlinedIcon className={styles.svgIcon} />,
-            text: 'Моя страница',
+            icon: <DynamicFeedIcon className={styles.svgIcon} />,
+            text: 'Стена',
         },
         {
             path: SiteAppRoutePath[AppRoute.FRIENDS],

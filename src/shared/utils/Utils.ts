@@ -1,6 +1,8 @@
+import { BASEURL } from '../../app/api/ApiConfig';
+
 interface ApiError {
     data: {
-        [key: string]: string[];
+        [key: string]: string[] | string;
     };
     status: number;
 }
@@ -83,5 +85,27 @@ export const formatTimeAgo = (dateString: string): string => {
 };
 
 export const isApiError = (error: unknown): error is ApiError => {
-    return typeof error === 'object' && error !== null && 'data' in error;
+    if (typeof error !== 'object' || error === null) {
+        return false;
+    }
+
+    // Проверка на структуру { data: { [key: string]: string[] }, status: number }
+    if (
+        'data' in error &&
+        typeof error.data === 'object' &&
+        error.data !== null &&
+        Object.values(error.data).every((value) =>  typeof value === 'string' || Array.isArray(value) && value.every((item) => typeof item === 'string')) &&
+        'status' in error &&
+        typeof error.status === 'number'
+    ) {
+        return true;
+    }
+
+    return false;
+};
+export const checkUrl = (url: string) => {
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        return `${BASEURL}${url}`;
+    }
+    return url;
 };

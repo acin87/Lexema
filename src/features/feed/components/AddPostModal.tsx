@@ -1,51 +1,46 @@
 import CloseIcon from '@mui/icons-material/Close';
-import PostAddIcon from '@mui/icons-material/PostAdd';
 import {
     Box,
     Button,
     CssThemeVariables,
     IconButton,
     Modal,
-    Paper,
     Snackbar,
     SnackbarCloseReason,
     TextField,
     Typography,
 } from '@mui/material';
 import { FC, Fragment, memo, SyntheticEvent, useEffect, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
-import { getUserId } from '../../../entities/auth/slice/authSlice';
-import { useCreatePostMutation } from '../../../entities/post/api/postsApi ';
+import { useAddPostMutation, useUpdatePostMutation } from '../../../entities/post/api/postsApi ';
+import { PostTypes } from '../../../entities/post/types/PostTypes';
 import DropZone from '../../../shared/components/dropZoneArea/DropZone';
 
-interface CreatePostsProps {
+interface ModalProps {
     title?: string;
+    onClose: () => void;
+    open: boolean;
+    editMode: boolean;
+    post?: PostTypes;
 }
 
-const CreatePosts: FC<CreatePostsProps> = () => {
-    const [open, setOpen] = useState(false);
+const AddPostModal: FC<ModalProps> = ({ onClose, open, title, editMode, post }) => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [postText, setPostText] = useState<string>('');
     const [files, setFiles] = useState<File[]>([]);
-    const [uploadFiles, { isSuccess }] = useCreatePostMutation();
-    const me = useSelector(getUserId);
-
-    const methods = useForm();
-    //const { control, handleSubmit } = methods;
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const [createPost, { isSuccess: isSuccessCreatePost }] = useAddPostMutation();
+    const [updatePost, { isSuccess: isSuccessUpdatePost }] = useUpdatePostMutation();
 
     useEffect(() => {
-        if (isSuccess) {
-            setOpen(false);
+        if (isSuccessCreatePost || isSuccessUpdatePost) {
+            onClose();
         }
-    }, [isSuccess]);
+    }, [isSuccessCreatePost, isSuccessUpdatePost, onClose]);
+
+    useEffect(() => {
+        if (editMode && post) {
+            setPostText(post.content);
+        }
+    }, [editMode, post]);
 
     const handleCloseSnackbar = (_: SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
         if (reason === 'clickaway') {
@@ -76,10 +71,13 @@ const CreatePosts: FC<CreatePostsProps> = () => {
             formData.append('images', file);
         });
         formData.append('content', postText);
-        formData.append('author', String(me));
 
         try {
-            await uploadFiles(formData).unwrap();
+            if (editMode && post) {
+                await updatePost({ formData: formData, post_id: post.id }).unwrap();
+            } else {
+                await createPost(formData).unwrap();
+            }
         } catch (e) {
             console.error('Ошибка загрузки поста:', e);
             setOpenSnackbar(true);
@@ -122,48 +120,43 @@ const CreatePosts: FC<CreatePostsProps> = () => {
         pb: 3,
     };
     return (
-        <Paper sx={{ display: 'flex', width: '100%', p: 2, mb: 2, justifyContent: 'center' }}>
-            <Button startIcon={<PostAddIcon />} onClick={handleOpen}>
-                Создать пост
-            </Button>
-            <Modal open={open} onClose={handleClose} component="div" closeAfterTransition={false}>
-                <FormProvider {...methods}>
-                    <Box sx={{ ...style }}>
-                        <Typography sx={{ textAlign: 'center' }} variant="h5" component="div">
-                            Новый пост
-                        </Typography>
-                        <Box sx={{ p: 1 }}>
-                            <DropZone onFilesChange={handleFilesChange}></DropZone>
-                        </Box>
-                        <Box>
-                            <TextField
-                                id="post-basic"
-                                placeholder="Напишите текст поста тут...."
-                                multiline
-                                variant="filled"
-                                minRows={8}
-                                onChange={(e) => setPostText(e.target.value)}
-                                value={postText}
-                                sx={{
-                                    width: '100%',
-                                    outline: 'none',
-                                    border: 'none',
-                                    '.MuiFilledInput-root': { backgroundColor: 'background.paper' },
-                                }}
-                            />
-                        </Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center', mt: 2 }}>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={handleUploadPost}
-                                disabled={postText == '' && files.length === 0}
-                            >
-                                Создать
-                            </Button>
-                        </Box>
+        <Fragment>
+            <Modal open={open} onClose={onClose} component="div" closeAfterTransition={false}>
+                <Box sx={{ ...style }}>
+                    <Typography sx={{ textAlign: 'center' }} variant="h5" component="div">
+                        {title}
+                    </Typography>
+                    <Box sx={{ p: 1 }}>
+                        <DropZone onFilesChange={handleFilesChange}></DropZone>
                     </Box>
-                </FormProvider>
+                    <Box>
+                        <TextField
+                            id="post-basic"
+                            placeholder="Напишите текст поста тут...."
+                            multiline
+                            variant="filled"
+                            minRows={8}
+                            onChange={(e) => setPostText(e.target.value)}
+                            value={postText}
+                            sx={{
+                                width: '100%',
+                                outline: 'none',
+                                border: 'none',
+                                '.MuiFilledInput-root': { backgroundColor: 'background.paper' },
+                            }}
+                        />
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center', mt: 2 }}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleUploadPost}
+                            disabled={postText == '' && files.length === 0}
+                        >
+                            {editMode ? 'Сохранить' : 'Создать'}
+                        </Button>
+                    </Box>
+                </Box>
             </Modal>
             {openSnackbar && (
                 <Snackbar
@@ -176,8 +169,8 @@ const CreatePosts: FC<CreatePostsProps> = () => {
                     key={1}
                 />
             )}
-        </Paper>
+        </Fragment>
     );
 };
 
-export default memo(CreatePosts);
+export default memo(AddPostModal);

@@ -8,32 +8,24 @@ import {
     Card,
     Fade,
     IconButton,
-    Link,
     Menu,
     MenuItem,
     Typography,
 } from '@mui/material';
 import { forwardRef, memo, useEffect, useState } from 'react';
-import { User } from '../../../entities/user/types/User';
 import { useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import { BASEURL } from '../../../app/api/ApiConfig';
+import { AppRoute } from '../../../app/routes/Config';
 import { AppDispatch } from '../../../app/store/store';
-import { removeFriends } from '../../../entities/user/slices/friendsSlice';
+import { removeFriends } from '../../../entities/friends/slices/friendsSlice';
+import { Friend, User } from '../../../entities/friends/types/FriendTypes';
+import { Tooltip } from '@mui/material';
 
-const bgImage = [
-    'profile-bg1.jpg',
-    'profile-bg2.jpg',
-    'profile-bg3.jpg',
-    'profile-bg4.jpg',
-    'profile-bg5.jpg',
-    'profile-bg6.jpg',
-    'profile-bg7.jpg',
-    'profile-bg8.jpg',
-    'profile-bg9.jpg',
-];
-
-const FriendView = forwardRef<HTMLDivElement, User>((user, ref) => {
+const FriendView = forwardRef<HTMLDivElement, Friend>((friend, ref) => {
     const dispatch = useDispatch<AppDispatch>();
-    const [image, setImage] = useState(' ');
+    const [avatarImage, setAvatarImage] = useState(' ');
+    const [profileImage, setProfileImage] = useState(' ');
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -44,20 +36,33 @@ const FriendView = forwardRef<HTMLDivElement, User>((user, ref) => {
     };
 
     const handleDelete = () => {
-        dispatch(removeFriends(user.id));
+        dispatch(removeFriends(friend.friend));
         handleClose();
     };
 
-    //временное решение
     useEffect(() => {
-        const randomBgImage = bgImage[Math.floor(Math.random() * bgImage.length)];
-        setImage(`./src/assets/images/${randomBgImage}`);
-    }, []);
+        if (friend.profile && friend.profile.images) {
+            if (friend.profile.images.length === 0) {
+                setProfileImage(`${BASEURL}/media/users/images/profile-bg.jpg`);
+            } else {
+                friend.profile.images.forEach((image) => {
+                    if (image.avatar_image !== null) {
+                        setAvatarImage(`${BASEURL}${image.avatar_image}`);
+                    }
+                    if (image.main_page_image !== null) {
+                        setProfileImage(`${BASEURL}${image.main_page_image}`);
+                    }
+                });
+            }
+        } else {
+            setProfileImage(`${BASEURL}/media/users/images/profile-bg.jpg`);
+        }
+    }, [friend]);
 
     return (
         <Card sx={{ width: '100%', display: 'flex', flexDirection: 'column', position: 'relative', p: 0 }} ref={ref}>
             <Box sx={{ position: 'relative' }}>
-                <Box sx={{ width: '100%', maxWidth: '100%', height: 'auto' }} component="img" src={image} />
+                <Box sx={{ width: '100%', maxWidth: '100%', height: 'auto' }} component="img" src={profileImage} />
                 <IconButton sx={{ position: 'absolute', top: 0, right: 0 }} onClick={handleClick}>
                     <MoreVertIcon />
                 </IconButton>
@@ -72,11 +77,13 @@ const FriendView = forwardRef<HTMLDivElement, User>((user, ref) => {
                     flex: '1 1 auto',
                 }}
             >
-                <Avatar sx={{ mt: '-4.75rem', width: '120px', height: '120px' }} variant="circular" src={user.image} />
+                <Avatar sx={{ mt: '-4.75rem', width: '120px', height: '120px' }} variant="circular" src={avatarImage} />
                 <Box sx={{ pb: 2, pt: 2 }}>
-                    <Link component="a" href={`/user/${user.id}`}>
-                        {user.firstName} {user.lastName}{' '}
-                    </Link>
+                    <NavLink to={`/${AppRoute.PROFILE}/${friend.friend}`}>
+                        {friend.profile
+                            ? `${friend.profile.user.first_name}  ${friend.profile.user.last_name}`
+                            : 'Профиль не заполнен'}
+                    </NavLink>
                 </Box>
                 <Box
                     sx={{
@@ -89,19 +96,27 @@ const FriendView = forwardRef<HTMLDivElement, User>((user, ref) => {
                 >
                     <Box>
                         <Typography variant="body2">Постов</Typography>
-                        <Typography variant="subtitle2">556</Typography>
+                        <Typography variant="subtitle2">{friend.posts_count}</Typography>
                     </Box>
                     <Box>
                         <Typography variant="body2">Друзей</Typography>
-                        <Typography variant="subtitle2">125</Typography>
+                        <Typography variant="subtitle2">{friend.friends_count}</Typography>
                     </Box>
                     <Box>
                         <Typography variant="body2">Подписок</Typography>
-                        <Typography variant="subtitle2">182 - {user.id} </Typography>
+                        <Typography variant="subtitle2">
+                            {friend.groups_count} - {friend.friend}
+                        </Typography>
                     </Box>
                 </Box>
-                <AvatarGroup sx={{ pt: 2, pb: 2 }} max={5}>
-                    <Avatar sx={{ width: 32, height: 32 }} src={user.image} />
+                <AvatarGroup sx={{ pt: 2, pb: 2, minHeight: '70px' }} max={5}>
+                    {friend.friends_avatars.map((user: User, index: number) => (
+                        <NavLink key={index} to={`/${AppRoute.PROFILE}/${user.id}`}>
+                            <Tooltip title={`${user.first_name} ${user.last_name}`}>
+                                <Avatar src={BASEURL + user.avatar_image} />
+                            </Tooltip>
+                        </NavLink>
+                    ))}
                 </AvatarGroup>
                 <ButtonGroup variant="text" size="small">
                     <Button color="primary" aria-label="Написать сообщение">

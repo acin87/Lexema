@@ -44,6 +44,6 @@ export const { setCredentials, clearCredentials } = authSlice.actions;
 export default authSlice.reducer;
 
 export const selectAccessToken = (state: { auth: AuthState }) => state.auth.access;
-export const getUserId = (state: { auth: AuthState }) => state.auth.user_id;
+export const getUser = (state: { auth: AuthState }) => state.auth;
 export const isStuff = (state: { auth: AuthState }) => state.auth.is_stuff;
 export const isSuperuser = (state: { auth: AuthState }) => state.auth.is_superuser;

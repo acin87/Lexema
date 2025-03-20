@@ -1,4 +1,4 @@
-import { User } from '../../user/types/User';
+import { User } from '../../friends/types/User';
 
 export type MessagesResponse = {
     totalCount: number;
@@ -24,4 +24,4 @@ export type Message = {
     message: string;
     is_read: boolean;
     sent_at: string;
-}
+};

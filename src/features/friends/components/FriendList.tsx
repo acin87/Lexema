@@ -1,7 +1,7 @@
 import { Box, CircularProgress, CssThemeVariables } from '@mui/material';
 import { FC, Fragment, memo } from 'react';
 
-import useAllFriends from '../../../entities/user/hooks/useAllFriends';
+import useAllFriends from '../../../entities/friends/hooks/useAllFriends';
 import FriendView from './FriendView';
 import FriendViewSkeleton from './FriendViewSkeleton';
 
@@ -11,6 +11,9 @@ const containerStyles: CssThemeVariables = {
     gap: 2,
     '@media (max-width: 768px)': {
         gap: '.5rem',
+    },
+    '@media (max-width: 992px)': {
+        gridTemplateColumns: 'repeat(auto-fit, minmax(21rem, 1fr))',
     },
 };
 const circularProgressStyles: CssThemeVariables = {
@@ -24,8 +27,7 @@ const circularProgressStyles: CssThemeVariables = {
     },
 };
 const FriendList: FC = () => {
-    const { friends, ref, isSuccess, totalCount, isLoading } = useAllFriends(1); //времнный ИД, потом грузить со стора
-
+    const { friends, ref, isSuccess, totalCount, isLoading } = useAllFriends();
     if (isLoading) {
         const skeletons = [];
         for (let i = 0; i < 12; i++) {
@@ -39,7 +41,7 @@ const FriendList: FC = () => {
             {friends.map((user, index) => {
                 if (index + 1 === friends?.length) {
                     return (
-                        <Fragment key={user.id}>
+                        <Fragment key={index}>
                             <FriendView {...user} />
                             {isSuccess && index + 1 != totalCount && (
                                 <Box sx={{ ...circularProgressStyles }} ref={ref}>
@@ -54,7 +56,7 @@ const FriendList: FC = () => {
                         </Fragment>
                     );
                 }
-                return <FriendView key={user.id} {...user} />;
+                return <FriendView key={index} {...user} />;
             })}
         </Box>
     );

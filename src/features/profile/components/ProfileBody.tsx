@@ -1,11 +1,16 @@
 import { memo } from 'react';
 import TabPanels from '../../../shared/components/tabPanels/TabPanels';
+import ProfileWall from './ProfileWall';
 
-const ProfileBody = () => {
+interface ProfileBodyProps {
+    id: number;
+}
+
+const ProfileBody = ({ id }: ProfileBodyProps) => {
     const tabs = [
         {
             label: 'Стена',
-            children: <div>Tab 1</div>,
+            children: <ProfileWall id={id} />,
         },
         {
             label: 'Друзья',

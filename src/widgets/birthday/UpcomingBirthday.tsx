@@ -15,31 +15,35 @@ import {
 } from '@mui/material';
 import { FC, memo } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useGetAllFriendsQuery } from '../../entities/user/api/userApi';
+import { useGetUpcomingBirthdaysQuery } from '../../entities/friends/api/friendsApi';
+import { checkUrl } from '../../shared/utils/Utils';
 import styles from './birthday.module.css';
+const UpcomingBirthday: FC = memo(() => {
+    const { data: response, isLoading } = useGetUpcomingBirthdaysQuery();
 
-export const UpcomingBirthday: FC = memo(() => {
-    //const usersFieldList = 'id,firstName,lastName,image,birthDate';
-    const { data: data, isLoading } = useGetAllFriendsQuery({
-        limit: 2,
-        start: 20,
-        userId: 1
-    }); //Временно, переделать на конкретный АПИ
+    const dataResponse = response?.map((friend, index) => {
 
-    const list = data?.users.map((key, index) => {
+        const birthDate = new Date(friend.profile.birth_date);
+        const avatarImage = () => {
+            if (friend.profile.images[0].avatar_image) {
+                return checkUrl(friend.profile.images[0].avatar_image);
+            }
+            return undefined;
+        };
+
         return (
             <ListItem key={index}>
                 <ListItemAvatar>
-                    <Avatar src={key.image} sx={{ height: '3.75rem', width: '3.75rem' }} />
+                    <Avatar src={avatarImage()} sx={{ height: '3.75rem', width: '3.75rem' }} />
                 </ListItemAvatar>
                 <ListItemText
                     sx={{ paddingLeft: 3 }}
                     primary={
-                        <NavLink to={`friends/user/${key.id}`}>
-                            {key.firstName} {key.lastName}
+                        <NavLink to={`profile/${friend.profile.user.id}`}>
+                            {friend.profile.user.first_name} {friend.profile.user.last_name}
                         </NavLink>
                     }
-                    secondary={key.birthDate}
+                    secondary={birthDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}
                 />
             </ListItem>
         );
@@ -65,8 +69,10 @@ export const UpcomingBirthday: FC = memo(() => {
             ></CardHeader>
             <Divider />
             <CardContent>
-                <List sx={{ width: '100%', maxWidth: 300 }}>{isLoading ? <Skeleton /> : list}</List>
+                <List sx={{ width: '100%', maxWidth: 300 }}>{isLoading ? <Skeleton /> : dataResponse}</List>
             </CardContent>
         </Card>
     );
-});
+    });
+    
+export default UpcomingBirthday;

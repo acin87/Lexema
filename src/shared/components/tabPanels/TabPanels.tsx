@@ -1,4 +1,4 @@
-import { AppBar, Box, BoxProps, Container, styled, Tab, TabProps, Tabs } from '@mui/material';
+import { AppBar, Box, BoxProps, styled, Tab, TabProps, Tabs } from '@mui/material';
 import classNames from 'classnames';
 import { ReactNode, SyntheticEvent, useState } from 'react';
 import styles from './TabPanels.module.css';
@@ -33,11 +33,7 @@ const Panel = (props: PanelProps) => {
             className={classNames(value == index ? styles.show : '', styles.fade)}
             {...other}
         >
-            {value === index && (
-                <Container sx={{ p: 3 }}>
-                    <Box>{children}</Box>
-                </Container>
-            )}
+            {value === index && <Box>{children}</Box>}
         </Box>
     );
 };
@@ -88,7 +84,10 @@ const TabPanels = (props: TabPanelProps) => {
 
     return (
         <Box sx={{ width: '100%', borderRadius: '5px' }}>
-            <AppBar position="static" sx={{ backgroundColor: 'background.paper', backgroundImage: 'none', borderRadius: '5px' }}>
+            <AppBar
+                position="static"
+                sx={{ backgroundColor: 'background.paper', backgroundImage: 'none', borderRadius: '5px' }}
+            >
                 <AntTabs
                     value={value}
                     onChange={handleChange}
@@ -107,7 +106,7 @@ const TabPanels = (props: TabPanelProps) => {
             </AppBar>
             <Box sx={{ mt: 2 }} className={styles.tabContent}>
                 {props.tabs.map((tab, index) => (
-                    <Panel key={index} value={value} index={index} sx={{ bgcolor: 'background.paper' }}>
+                    <Panel key={index} value={value} index={index}>
                         {tab.children}
                     </Panel>
                 ))}

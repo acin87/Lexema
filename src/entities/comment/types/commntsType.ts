@@ -1,4 +1,4 @@
-import { User } from '../../user/types/User';
+import { User } from '../../friends/types/User';
 
 export type CommentResponse = { comments: CommentType[]; totalCount: number | undefined };
 

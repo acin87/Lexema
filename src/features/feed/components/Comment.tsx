@@ -1,8 +1,18 @@
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
-import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Divider, IconButton, Typography } from '@mui/material';
+import {
+    Avatar,
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    CardHeader,
+    Divider,
+    IconButton,
+    Typography,
+} from '@mui/material';
 import { FC, Fragment } from 'react';
 import { CommentType } from '../../../entities/comment/types/commntsType';
-import { useGetUserByIdQuery } from '../../../entities/user/api/userApi';
+import { useGetUserByIdQuery } from '../../../entities/friends/api/friendsApi';
 import { formatTimeAgo } from '../../../shared/utils/Utils';
 
 interface CommentProps {
@@ -10,7 +20,7 @@ interface CommentProps {
 }
 /**
  * Компонент комментария
- * 
+ *
  * @param comment - комментарий
  */
 const Comment: FC<CommentProps> = ({ comment }) => {

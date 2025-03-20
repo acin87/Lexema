@@ -3,7 +3,6 @@ export type PostResponse = { results: PostTypes[]; count: number; next: string; 
 export type PostRequest = {
     limit: number;
     offset: number;
-    author: number | null;
 };
 
 export type PostTypes = {
@@ -16,8 +15,8 @@ export type PostTypes = {
     dislikes_count: number;
     created_at: string;
     group: number | null;
-    author: number;
-    views_count: number;
+    author: { id: number; first_name: string, last_name: string, avatar: string };
+    views: number;
 };
 
 export type FileUploadResponse = {

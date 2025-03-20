@@ -84,6 +84,7 @@ export const LightTheme = createTheme({
             primary: '#3f414d',
             secondary: '#777d74',
         },
+
     },
 
     typography: { ...typography },

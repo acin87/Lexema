@@ -1,8 +1,18 @@
 import { Box, CircularProgress, CssThemeVariables } from '@mui/material';
 import { FC, Fragment, memo } from 'react';
-import usePosts from '../../../entities/post/hooks/usePosts';
-import CreatePosts from './CreatePosts';
+import { PostTypes } from '../../../entities/post/types/PostTypes';
+import AddPostButton from './AddPostButton';
 import Post from './Post';
+
+type PostListProps = {
+    posts: PostTypes[];
+    isLoading: boolean;
+    isFetching: boolean;
+    isSuccess: boolean;
+    isError: boolean;
+    totalCount: number;
+    ref: (node?: Element | null) => void;
+};
 
 const postListStyles: CssThemeVariables = {
     '@media (max-width: 992px)': {
@@ -20,6 +30,7 @@ const postListStyles: CssThemeVariables = {
         padding: 0,
     },
 };
+
 const circularProgressStyles: CssThemeVariables = {
     display: 'flex',
     alignItems: 'center',
@@ -29,42 +40,42 @@ const circularProgressStyles: CssThemeVariables = {
     margin: 0,
     padding: 0,
 };
-/**
- * Компонент списка постов
- *
- * @returns
- */
-const PostList: FC = () => {
-    const { isError, posts, ref, isSuccess, totalCount } = usePosts();
 
+// Мемоизированный компонент для отдельного поста
+const MemoizedPost = memo(({ post, loading }: { post: PostTypes; loading: boolean }) => (
+    <Post post={post} loading={loading} />
+));
+
+const PostList: FC<PostListProps> = ({ posts, isLoading, isSuccess, totalCount, ref, isError }) => {
     if (isError) {
         return <div>Error</div>;
     }
 
     return (
-        <Box sx={{ ...postListStyles }}>
-            <CreatePosts />
+        <Box sx={{ ...postListStyles }} className="post-list">
+            <AddPostButton />
             {posts.map((post, index) => {
-                if (index + 1 === posts.length) {
-                    return (
-                        <Fragment key={post.id}>
-                            <Post {...post} />
-                            {isSuccess && index + 1 != totalCount && (
-                                <Box sx={{ ...circularProgressStyles }} ref={ref}>
-                                    <CircularProgress />
-                                </Box>
-                            )}
-                            {isSuccess && index + 1 == totalCount && (
-                                <Box sx={{ ...circularProgressStyles }}>
-                                    <Box component="h2">Поздравляем, Вы просмотрели все посты</Box>
-                                </Box>
-                            )}
-                        </Fragment>
-                    );
-                }
-                return <Post key={post.id} {...post}></Post>;
+                const isLastPost = index + 1 === posts.length;
+                const isNewPost = index >= posts.length - 5; // Предполагаем, что загружаем по 5 постов
+
+                return (
+                    <Fragment key={post.id}>
+                        <MemoizedPost post={post} loading={isNewPost ? isLoading : false} />
+                        {isLastPost && isSuccess && index + 1 !== totalCount && (
+                            <Box sx={{ ...circularProgressStyles }} ref={ref}>
+                                <CircularProgress />
+                            </Box>
+                        )}
+                        {isLastPost && isSuccess && index + 1 === totalCount && (
+                            <Box sx={{ ...circularProgressStyles }}>
+                                <Box component="h2">Поздравляем, Вы просмотрели все посты</Box>
+                            </Box>
+                        )}
+                    </Fragment>
+                );
             })}
         </Box>
     );
 };
+
 export default memo(PostList);
