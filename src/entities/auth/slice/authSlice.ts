@@ -29,7 +29,6 @@ const authSlice = createSlice({
             state.user_id = user_id;
             state.is_stuff = is_stuff;
             state.is_superuser = is_superuser;
-            console.log(action.payload.user_id);
             Cookies.set('refreshToken', refresh, { expires: 7 });
         },
         clearCredentials: (state) => {

@@ -60,6 +60,40 @@ export const DarkTheme = createTheme({
         },
     },
     typography: { ...typography },
+    components: {
+        MuiContainer: {
+            styleOverrides: {
+                root: {
+                    paddingLeft: '.5rem',
+                    paddingRight: '.5rem',
+                    '@media (min-width: 576px)': {
+                        paddingLeft: '.5rem',
+                        paddingRight: '.5rem',
+                        maxWidth: '540px',
+                    },
+                    '@media (min-width: 768px)': {
+                        maxWidth: '720px',
+                    },
+                    '@media (min-width: 992px)': {
+                        maxWidth: '960px',
+                    },
+                    '@media (min-width: 1200px)': {
+                        maxWidth: '1140px',
+                    },
+                    '@media (min-width: 1400px)': {
+                        maxWidth: '1320px',
+                    },
+                },
+            },
+        },
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    boxShadow: '0 0.375rem 1rem rgba(0, 0, 0, 0.1);',
+                },
+            },
+        },
+    },
 });
 export const LightTheme = createTheme({
     palette: {
@@ -84,7 +118,6 @@ export const LightTheme = createTheme({
             primary: '#3f414d',
             secondary: '#777d74',
         },
-
     },
 
     typography: { ...typography },

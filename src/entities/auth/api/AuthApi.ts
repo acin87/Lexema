@@ -1,12 +1,15 @@
 import { BaseQueryApi, createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import Cookies from 'js-cookie';
 import { API, BASEURL } from '../../../app/api/ApiConfig';
-
 import { RootState } from '../../../app/store/store';
-
 import { clearCredentials, setCredentials } from '../slice/authSlice';
 import { AuthResponse, LoginRequest, RefreshTokenRequest, RegisterRequest, TokenResponse } from '../types/AuthTypes';
 
+/**
+ * Базовый запрос
+ * @param headers - заголовки запроса
+ * @param getState - функция для получения состояния
+ */
 const baseQuery = fetchBaseQuery({
     baseUrl: BASEURL,
     prepareHeaders: (headers, { getState }) => {
@@ -18,10 +21,15 @@ const baseQuery = fetchBaseQuery({
     },
 });
 
+/**
+ * Базовый запрос с перезапросом токена
+ * @param args - аргументы запроса
+ * @param api - API
+ * @param extraOptions - дополнительные опции
+ */
 export const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: object) => {
     let result = await baseQuery(args, api, extraOptions);
-
-    if (result.error?.status === 401) {
+    if (result.error?.status === 401 && typeof args !== 'string' && args.url !== API.LOGIN) {
         console.warn('User is not authenticated. Refreshing token...');
         const refreshToken = Cookies.get('refreshToken');
         if (refreshToken) {
@@ -44,10 +52,18 @@ export const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQue
     return result;
 };
 
+/**
+ * API для авторизации пользователя
+ */
 export const authApi = createApi({
     reducerPath: 'authApi',
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
+        /**
+         * Регистрация пользователя
+         * @param credentials - данные для регистрации
+         * @returns данные пользователя
+         */
         register: builder.mutation<AuthResponse, RegisterRequest>({
             query: (credentials) => ({
                 url: API.REGISTRATION,
@@ -55,6 +71,12 @@ export const authApi = createApi({
                 body: credentials,
             }),
         }),
+
+        /**
+         * Вход в систему
+         * @param credentials - данные для входа
+         * @returns токены
+         */
         login: builder.mutation<TokenResponse, LoginRequest>({
             query: (credentials) => ({
                 url: API.LOGIN,
@@ -70,6 +92,11 @@ export const authApi = createApi({
                 }
             },
         }),
+
+        /**
+         * Выход из системы
+         * @returns void
+         */
         logout: builder.mutation<void, void>({
             query: () => ({
                 url: API.LOGOUT,
@@ -85,6 +112,11 @@ export const authApi = createApi({
             },
         }),
 
+        /**
+         * Обновление токена
+         * @param refreshToken - токен для обновления
+         * @returns токены
+         */
         refreshToken: builder.mutation<TokenResponse, RefreshTokenRequest>({
             query: (refreshToken) => ({
                 url: API.REFRESH,
