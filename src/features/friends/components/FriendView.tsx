@@ -10,9 +10,10 @@ import {
     IconButton,
     Menu,
     MenuItem,
+    Tooltip,
     Typography,
 } from '@mui/material';
-import { forwardRef, memo, useEffect, useState } from 'react';
+import { forwardRef, memo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { BASEURL } from '../../../app/api/ApiConfig';
@@ -20,12 +21,17 @@ import { AppRoute } from '../../../app/routes/Config';
 import { AppDispatch } from '../../../app/store/store';
 import { removeFriends } from '../../../entities/friends/slices/friendsSlice';
 import { Friend, User } from '../../../entities/friends/types/FriendTypes';
-import { Tooltip } from '@mui/material';
+import useCheckImages from '../../../shared/hooks/useCheckImages';
 
+/**
+ * Компонент для отображения друзей
+ * @param friend - Друг
+ * @param ref - Ссылка на элемент
+ * @returns Компонент для отображения друзей
+ */
 const FriendView = forwardRef<HTMLDivElement, Friend>((friend, ref) => {
     const dispatch = useDispatch<AppDispatch>();
-    const [avatarImage, setAvatarImage] = useState(' ');
-    const [profileImage, setProfileImage] = useState(' ');
+    const { avatarImage, mainImage } = useCheckImages(friend.profile?.images || []);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -40,29 +46,10 @@ const FriendView = forwardRef<HTMLDivElement, Friend>((friend, ref) => {
         handleClose();
     };
 
-    useEffect(() => {
-        if (friend.profile && friend.profile.images) {
-            if (friend.profile.images.length === 0) {
-                setProfileImage(`${BASEURL}/media/users/images/profile-bg.jpg`);
-            } else {
-                friend.profile.images.forEach((image) => {
-                    if (image.avatar_image !== null) {
-                        setAvatarImage(`${BASEURL}${image.avatar_image}`);
-                    }
-                    if (image.main_page_image !== null) {
-                        setProfileImage(`${BASEURL}${image.main_page_image}`);
-                    }
-                });
-            }
-        } else {
-            setProfileImage(`${BASEURL}/media/users/images/profile-bg.jpg`);
-        }
-    }, [friend]);
-
     return (
         <Card sx={{ width: '100%', display: 'flex', flexDirection: 'column', position: 'relative', p: 0 }} ref={ref}>
             <Box sx={{ position: 'relative' }}>
-                <Box sx={{ width: '100%', maxWidth: '100%', height: 'auto' }} component="img" src={profileImage} />
+                <Box sx={{ width: '100%', maxWidth: '100%', height: 'auto' }} component="img" src={mainImage} />
                 <IconButton sx={{ position: 'absolute', top: 0, right: 0 }} onClick={handleClick}>
                     <MoreVertIcon />
                 </IconButton>

@@ -3,9 +3,6 @@ export type AuthResponse = {
 };
 
 export type TokenResponse = {
-    user_id: number;
-    is_stuff: boolean;
-    is_superuser: boolean;
     access: string;
     refresh: string;
 };

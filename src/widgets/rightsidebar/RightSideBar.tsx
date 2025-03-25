@@ -1,25 +1,11 @@
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import { Box, Button, Paper, useTheme } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import { FC, memo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './RightSideBar.module.css';
-import { AppDispatch, RootState } from '../../app/store/store';
-import { uiActions } from '../../shared/ui/uiSlice';
 
 const RightSideBar: FC = memo(() => {
-    const dispatch = useDispatch<AppDispatch>();
-    const themeState = useSelector((s: RootState) => s.ui.theme);
-    const theme = useTheme();
-    const toggleTheme = () => {
-        let darkOrLight = 'light';
-        if (themeState === 'light') {
-            darkOrLight = 'dark';
-        }
-        dispatch(uiActions.setTheme(darkOrLight));
-    };
-
     const toggleSidebar = () => {
         document.querySelector('body')?.classList.toggle('right-sidebar-close');
         document.querySelector(`.${styles.rightSidebarMini}`)?.classList.toggle(`${styles.rightSidebar}`);
@@ -30,23 +16,16 @@ const RightSideBar: FC = memo(() => {
             <div className={styles.rightSidebarPanel}>
                 <div className="card shadow-none">
                     <div className="card-body p-0">
-                        <div className={styles.mediaHeight}>
-                            <Button variant="contained" onClick={toggleTheme}>
-                                Toggle
-                            </Button>
-                        </div>
+                        <div className={styles.mediaHeight}></div>
                         <Box
                             className={styles.rightSidebarToggle}
-                            sx={{ backgroundColor: theme.palette.primary.main }}
+                            sx={{ backgroundColor: 'primary.main' }}
                             onClick={toggleSidebar}
                         >
-                            <KeyboardArrowLeftIcon
-                                className={styles.sideLeftIcon}
-                                sx={{ color: theme.palette.secondary.light }}
-                            />
+                            <KeyboardArrowLeftIcon className={styles.sideLeftIcon} sx={{ color: 'secondary.light' }} />
                             <KeyboardArrowRightIcon
                                 className={styles.sideRightIcon}
-                                sx={{ color: theme.palette.secondary.light }}
+                                sx={{ color: 'secondary.light' }}
                             />
                         </Box>
                     </div>

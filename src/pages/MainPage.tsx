@@ -11,14 +11,14 @@ import RightSideBar from '../widgets/rightsidebar/RightSideBar';
 
 const MainPage: FC = () => {
     const theme = useSelector((s: RootState) => s.ui.theme);
-    const [darkOrLight, setDarkOrLight] = useState<string | null>('light');
+    const [darkOrLight, setDarkOrLight] = useState<string | null>(theme);
 
     useEffect(() => {
         setDarkOrLight(theme);
     }, [theme]);
 
     return (
-        <ThemeProvider theme={darkOrLight === 'dark' ? DarkTheme : LightTheme}>
+        <ThemeProvider theme={darkOrLight === 'Темная' ? DarkTheme : LightTheme}>
             <CssBaseline enableColorScheme />
             <div className={styles.lsLayout}>
                 <LeftSideBar />

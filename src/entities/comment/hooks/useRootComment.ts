@@ -10,35 +10,37 @@ import { CommentType } from '../types/commntsType';
  * @returns объект с комментариями и функция для загрузки новых комментариев
  */
 const useRootComment = (postId: number) => {
-    const [currentPage, setCurrentPage] = useState(0);
+    const [offset, setOffset] = useState(0);
     const limit = 10;
     const [comments, setComments] = useState<CommentType[]>([]);
     const { data: resultOnLoad, isSuccess } = useGetRootCommentsQuery({
         postId: postId,
-        page: 1,
-        limit: 2,
+        offset: offset,
+        limit: limit,
     });
-    const [trigger, resultOnLazy] = useLazyGetRootCommentsQuery();
+    const [lazyLoadComments, resultOnLazy] = useLazyGetRootCommentsQuery();
 
-    const totalCount = resultOnLoad ? resultOnLoad.totalCount : 0;
+    const count = resultOnLoad ? resultOnLoad.count : 0;
 
     useEffect(() => {
         if (isSuccess) {
-            setComments([...resultOnLoad.comments]);
+            setComments([...resultOnLoad.results]);
         }
-    }, [isSuccess]); //eslint-disable-line react-hooks/exhaustive-deps
+    }, [isSuccess, resultOnLoad]); 
+
+
     useEffect(() => {
         if (resultOnLazy.isSuccess) {
-            const newComments = resultOnLazy.data.comments.filter((comment) => !comments.find((c) => c.id === comment.id)); // Исключаем дубликаты
+            const newComments = resultOnLazy.data.results.filter((comment) => !comments.find((c) => c.id === comment.id)); // Исключаем дубликаты
             setComments([...comments, ...newComments]);
         }
-    }, [resultOnLazy]); //eslint-disable-line react-hooks/exhaustive-deps
+    }, [resultOnLazy, comments]); 
 
     const loadMoreComments = () => {
-        trigger({ postId: postId, page: currentPage + 1, limit: limit });
-        setCurrentPage((prevPage) => prevPage + 1);
+        lazyLoadComments({ postId: postId, offset: offset + limit, limit: limit });
+        setOffset((prevOffset) => prevOffset + limit);
     };
-    return { comments, loadMoreComments, totalCount };
+    return { comments, loadMoreComments, count };
 };
 
 export default useRootComment;

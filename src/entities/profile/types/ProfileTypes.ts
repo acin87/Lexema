@@ -1,5 +1,6 @@
 import { User } from '../../friends/types/FriendTypes';
 
+
 export type Profile = {
     id: number;
     user: User;
@@ -16,7 +17,7 @@ export type Profile = {
     groups_count: number;
 };
 
-type ProfileImages = {
+export type ProfileImages = {
     avatar_image?: string;
     main_page_image?: string;
 };
@@ -44,7 +45,7 @@ export type FriendsListResponse = {
     previous: string | null;
 };
 
-export type WallPostRequest = {
+export type ProfilePostRequest = {
     id: number;
     limit: number;
     offset: number;

@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../app/store/store';
-import { useGetWallPostsQuery } from '../api/profileApi';
+import { useGetProfilePostsQuery } from '../../../shared/api/postsApi';
 import { addPosts, setPosts, setSkipPost } from '../slices/profileSlice';
 
-interface UseWallPostsProps {
+interface UseProfilePostsProps {
     id: number;
 }
 
-const useWallPosts = ({ id }: UseWallPostsProps) => {
+const useProfilePosts = ({ id }: UseProfilePostsProps) => {
     const dispatch = useDispatch<AppDispatch>();
 
     const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -22,7 +22,7 @@ const useWallPosts = ({ id }: UseWallPostsProps) => {
         isSuccess,
         isFetching,
         isLoading,
-    } = useGetWallPostsQuery({ id: id, limit: 5, offset: skipPost });
+    } = useGetProfilePostsQuery({ id: id, limit: 5, offset: skipPost });
 
     const { ref, inView } = useInView({ threshold: 0.8, rootMargin: '0px 0px 200px 0px' }); //react-intersection-observer
 
@@ -57,4 +57,4 @@ const useWallPosts = ({ id }: UseWallPostsProps) => {
 
     return { posts, isError, ref, isSuccess, totalCount, isFetching, isLoading };
 };
-export default useWallPosts;
+export default useProfilePosts;

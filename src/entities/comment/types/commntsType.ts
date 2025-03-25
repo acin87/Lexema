@@ -1,17 +1,22 @@
-import { User } from '../../friends/types/User';
+import { User } from '../../../entities/user/types/UserTypes';
 
-export type CommentResponse = { comments: CommentType[]; totalCount: number | undefined };
+export type CommentResponse = { 
+    results: CommentType[]; 
+    count: number;
+    next: string | null;
+    previous: string | null;
+};
 
 export type CommentType = {
     id: number;
-    body: string;
-    data: string;
-    postId: number;
-    parentId: number;
-    children?: CommentType[];
-    childCount: number;
+    content: string;
+    post_id: number;
+    parent_id: number;
+    replies?: CommentType[];
+    child_count: number;
     likes: number;
-    createdAt: string;
-    upatedAt?: string;
+    created_at: string;
+    updated_at?: string;
+    images: string[];
     user: User;
 };

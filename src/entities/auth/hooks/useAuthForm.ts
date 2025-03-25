@@ -80,3 +80,5 @@ export const useAuthForm = (isSignUp: boolean) => {
 
     return { methods, onSubmit, isLoading, message, isError, handleClearError };
 };
+
+

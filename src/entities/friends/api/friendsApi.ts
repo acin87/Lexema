@@ -1,7 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API, BASEURL } from '../../../app/api/ApiConfig';
 import { RootState } from '../../../app/store/store';
-import { FriendsResponse, MeResponse, User, UserRequest, UpcomingBirthdaysResponse } from '../types/FriendTypes';
+import { FriendsResponse, MeResponse, UserRequest, UpcomingBirthdaysResponse } from '../types/FriendTypes';
+import { User } from '../../user/types/UserTypes';
 
 export const friendsApi = createApi({
     reducerPath: 'friendsApi',
@@ -34,9 +35,9 @@ export const friendsApi = createApi({
                     ? [...result.results.map(({ id }: { id: number }) => ({ type: 'Friend' as const, id })), 'Friend']
                     : ['Friend'],
         }),
-        getUserById: builder.query<User, { id: number | undefined }>({
+        getUserById: builder.query<Omit<User, 'username' | 'is_superuser' | 'is_staff'>, { id: number }>({
             query: ({ id }) => ({
-                url: `${API.FRIENDS}${id}`,
+                url: `${API.USERS}${id}`,
                 method: 'GET',
             }),
         }),

@@ -1,5 +1,5 @@
 import { Chip, Divider } from '@mui/material';
-import { FC, Fragment, memo } from 'react';
+import { FC, Fragment, memo, useMemo } from 'react';
 
 import useRootComment from '../../../entities/comment/hooks/useRootComment';
 import ChildComment from './ChildComment';
@@ -10,33 +10,34 @@ interface CommentsProps {
 }
 
 const RootComments: FC<CommentsProps> = (props) => {
-    const { comments, loadMoreComments, totalCount } = useRootComment(props.postId);
+    const { comments, loadMoreComments, count } = useRootComment(props.postId);
 
-    const renderCommentsTree = () => {
-        if (comments.length === 0) {
-            return null;
-        }
+    const renderCommentsTree = useMemo(() => {
+        
         return comments.map((comment) => {
-            const childComments = comment.children || [];
+            const childComments = comment.replies || [];
+            if (comments.length === 0) {
+                return null;
+            }
 
             if (childComments.length === 0) {
                 return (
                     <Fragment key={comment.id}>
-                        <Comment comment={comment} />
+                        <Comment comment={comment} user={comment.user} />
                     </Fragment>
                 );
             }
             return (
                 <Fragment key={comment.id}>
-                    <Comment comment={comment} />
+                    <Comment comment={comment} user={comment.user} />
                     <ChildComment parentComment={comment} level={1} />
                 </Fragment>
             );
         });
-    };
+    }, [comments]);
 
     const renderMoreButton = () => {
-        if (totalCount && totalCount > 10 && comments.length != totalCount) {
+        if (count && count > 10 && comments.length != count) {
             return (
                 <Divider variant="middle" component="div" sx={{ pt: 2 }}>
                     <Chip
@@ -53,7 +54,7 @@ const RootComments: FC<CommentsProps> = (props) => {
 
     return (
         <Fragment>
-            {renderCommentsTree()}
+            {renderCommentsTree}
             {renderMoreButton()}
         </Fragment>
     );

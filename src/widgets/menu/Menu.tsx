@@ -8,16 +8,24 @@ import { useNavigate } from 'react-router-dom';
 import { AppRoute, SiteAppRoutePath } from '../../app/routes/Config';
 import styles from './Menu.module.css';
 import { useSelector } from 'react-redux';
-import { getUser } from '../../entities/auth/slice/authSlice';
+import { selectUser } from '../../entities/user/slice/userSlice';
 
-//интерфейс для пропсов, открытие и закрытие панели
+/**
+ * Интерфейс для пропсов, открытие и закрытие панели
+ */
 interface MenuProps {
     open: boolean | undefined;
 }
 
+/**
+ * Меню для навигации по приложению
+ * @param open - открытие и закрытие панели
+ * @returns Меню для навигации по приложению
+ */
 const Menu: FC<MenuProps> = memo((open) => {
     const navigate = useNavigate();
-    const id = useSelector(getUser).user_id ?? 0;
+    const id = useSelector(selectUser).id;
+
     const menuItems = [
         {
             path: SiteAppRoutePath[AppRoute.PROFILE].replace(':id', String(id)),

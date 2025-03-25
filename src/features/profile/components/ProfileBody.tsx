@@ -1,19 +1,23 @@
 import { memo } from 'react';
+import { useLocation } from 'react-router-dom';
 import TabPanels from '../../../shared/components/tabPanels/TabPanels';
 import ProfileWall from './ProfileWall';
-
 interface ProfileBodyProps {
     id: number;
 }
 
 const ProfileBody = ({ id }: ProfileBodyProps) => {
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const tab = searchParams.get('tab');
+
     const tabs = [
         {
             label: 'Стена',
             children: <ProfileWall id={id} />,
         },
         {
-            label: 'Друзья',
+            label: 'Профиль',
             children: <div>Tab 2</div>,
         },
         {
@@ -26,6 +30,6 @@ const ProfileBody = ({ id }: ProfileBodyProps) => {
         },
     ];
 
-    return <TabPanels tabs={tabs} indicatorColor="primary"></TabPanels>;
+    return <TabPanels tabs={tabs} indicatorColor="primary" activeTab={Number(tab)}></TabPanels>;
 };
 export default memo(ProfileBody);

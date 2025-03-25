@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../app/store/store';
-import { useGetFeedPostsQuery } from '../api/postsApi ';
-import { addPosts, setPosts, setSkipPost } from '../slices/postSlice';
+import { useGetFeedPostsQuery } from '../api/mainFeedApi ';
+import { addPosts, setPosts, setSkipPost } from '../slices/mainFeedSlice';
 
 const useFeedPosts = () => {
     const dispatch = useDispatch<AppDispatch>();
 
     const [isLoadingMore, setIsLoadingMore] = useState(false);
-    const posts = useSelector((state: RootState) => state.post.posts);
-    const skipPost = useSelector((state: RootState) => state.post.skipPost);
+    const posts = useSelector((state: RootState) => state.mainFeed.posts);
+    const skipPost = useSelector((state: RootState) => state.mainFeed.skipPost);
 
     const {
         data: response,

@@ -1,6 +1,7 @@
 import { Avatar, Box, CardMedia, Stack, Typography } from '@mui/material';
 import React, { memo } from 'react';
 import useProfile from '../../../entities/profile/hooks/useProfile';
+import useCheckImages from '../../../shared/hooks/useCheckImages';
 import styles from './Profile.module.css';
 
 interface ProfileHeaderProps {
@@ -9,6 +10,7 @@ interface ProfileHeaderProps {
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({ id }) => {
     const { response } = useProfile(Number(id));
+    const { avatarImage, mainImage } = useCheckImages(response?.images);
 
     return (
         <Box className={styles.profileHeader}>
@@ -19,7 +21,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ id }) => {
                             component="img"
                             alt=""
                             height="140"
-                            src={response?.images && response?.images[0].main_page_image}
+                            src={mainImage}
                             sx={{ maxHeight: '100%' }}
                         />
                     </Box>
@@ -27,7 +29,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ id }) => {
                         <Box className={styles.profileHeadImg}>
                             <Avatar
                                 sx={{ width: 130, height: 130 }}
-                                src={response?.images && response?.images[0].avatar_image}
+                                src={avatarImage}
                                 aria-label="avatar"
                             ></Avatar>
                         </Box>

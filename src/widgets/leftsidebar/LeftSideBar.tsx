@@ -1,4 +1,4 @@
-import { CssThemeVariables, styled, Theme } from '@mui/material';
+import { styled, SxProps, Theme } from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import { FC, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -7,13 +7,13 @@ import Menu from '../menu/Menu';
 
 const drawerWidth = 250;
 
-const openedMixin = (): CssThemeVariables => ({
+const openedMixin = (): SxProps => ({
     width: drawerWidth,
     transition: 'all 0.3s ease-in-out',
     overflowX: 'hidden',
 });
 
-const closedMixin = (theme: Theme): CssThemeVariables => ({
+const closedMixin = (theme: Theme): SxProps => ({
     transition: 'all 0.3s ease-in-out',
     overflowX: 'hidden',
     width: `calc(${theme.spacing(7)} + 1px)`,
@@ -26,7 +26,14 @@ const closedMixin = (theme: Theme): CssThemeVariables => ({
         transition: 'all 0.3s ease-in-out',
     },
 });
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme }) => ({
+
+/**
+ * Левая боковая панель
+ * @returns {React.ReactElement}
+ */
+const Drawer = styled(MuiDrawer, {
+    shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme }) => ({
     width: drawerWidth,
     zIndex: 1000,
     flexShrink: 0,
@@ -50,12 +57,17 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     ],
 }));
 
+/**
+ * Левая боковая панель
+ * @returns {React.ReactElement}
+ */
 const LeftSideBar: FC = () => {
     const openFromStore = useSelector((s: RootState) => s.ui.sidebar);
 
     const [isHovered, setIsHovered] = useState(false);
 
     const isOpen = openFromStore || isHovered;
+
 
     return (
         <Drawer

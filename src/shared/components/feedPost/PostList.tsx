@@ -1,0 +1,125 @@
+import { Box, CircularProgress, SxProps } from '@mui/material';
+import { FC, Fragment, memo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { PostTypes } from '../../../entities/mainFeed/types/PostTypes';
+import AddPostButton from '../addPostButton/AddPostButton';
+import Post from './Post';
+/**
+ * Пропсы для компонента PostList
+ * @param {PostTypes[]} posts - Массив постов
+ * @param {boolean} isLoading - Флаг загрузки
+ * @param {boolean} isFetching - Флаг загрузки
+ * @param {boolean} isSuccess - Флаг успешности
+ * @param {boolean} isError - Флаг ошибки
+ * @param {number} totalCount - Количество постов
+ * @param {function} ref - Ссылка на элемент
+ * @param {string} context - Контекст
+ * @param {number} group_id - ID группы
+ */
+type PostListProps = {
+    posts: PostTypes[];
+    isLoading: boolean;
+    isFetching: boolean;
+    isSuccess: boolean;
+    isError: boolean;
+    totalCount: number;
+    ref: (node?: Element | null) => void;
+    context: 'profile' | 'group';
+    group_id?: number;
+};
+
+const postListStyles: SxProps = {
+    '@media (max-width: 992px)': {
+        flexShrink: 0,
+        width: '100%',
+        maxWidth: '100%',
+    },
+    '@media (min-width: 992px)': {
+        display: 'flex',
+        flex: '0 0 auto',
+        width: '66.66667%',
+        flexWrap: 'wrap',
+        maxWidth: '100%',
+        margin: 0,
+        padding: 0,
+    },
+};
+
+const circularProgressStyles: SxProps = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100px',
+    width: '100%',
+    margin: 0,
+    padding: 0,
+};
+
+/**
+ * Мемоизированный компонент для отдельного поста
+ * @param {PostTypes} post - Пост
+ * @param {boolean} loading - Флаг загрузки
+ * @param {string} context - Контекст
+ * @param {number} group_id - ID группы
+ */
+const MemoizedPost = memo(
+    ({
+        post,
+        loading,
+        context,
+        group_id,
+    }: {
+        post: PostTypes;
+        loading: boolean;
+        context: 'profile' | 'group';
+        group_id?: number;
+    }) => <Post post={post} loading={loading} context={context} group_id={group_id} />,
+);
+
+/**
+ * Компонент для отображения списка постов
+ * @param {PostListProps} props - Пропсы для компонента PostList
+ * @returns {JSX.Element} - Элемент JSX
+ */
+const PostList: FC<PostListProps> = ({ posts, isLoading, isSuccess, totalCount, ref, isError, context, group_id }) => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isError) {
+            navigate('/error', { replace: true });
+        }
+    }, [isError, navigate]);
+
+    return (
+        <Box sx={{ ...postListStyles }} className="post-list">
+            <AddPostButton context={context} group_id={group_id} />
+            {posts.map((post, index) => {
+                const isLastPost = index + 1 === posts.length;
+                const isNewPost = index >= posts.length - 5; // Предполагаем, что загружаем по 5 постов
+
+                return (
+                    <Fragment key={post.id}>
+                        <MemoizedPost
+                            post={post}
+                            loading={isNewPost ? isLoading : false}
+                            context={context}
+                            group_id={group_id}
+                        />
+                        {isLastPost && isSuccess && index + 1 !== totalCount && (
+                            <Box sx={{ ...circularProgressStyles }} ref={ref}>
+                                <CircularProgress />
+                            </Box>
+                        )}
+                        {isLastPost && isSuccess && index + 1 === totalCount && (
+                            <Box sx={{ ...circularProgressStyles }}>
+                                <Box component="h2">Поздравляем, Вы просмотрели все посты</Box>
+                            </Box>
+                        )}
+                    </Fragment>
+                );
+            })}
+        </Box>
+    );
+};
+
+export default memo(PostList);

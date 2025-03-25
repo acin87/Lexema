@@ -25,6 +25,9 @@ const uiSlice = createSlice({
         toggleSidebar: (state) => {
             state.sidebar = !state.sidebar;
         },
+        setSidebar: (state, action: PayloadAction<boolean>) => {
+            state.sidebar = action.payload;
+        },
         setScrollPosition: (state, action: PayloadAction<{ page: string; position: number }>) => {
             const { page, position } = action.payload;
             state.scrollPositions[page] = position;

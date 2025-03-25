@@ -1,36 +1,67 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../app/store/store';
 import { useLazyGetChildCommentsQuery } from '../api/commentApi';
+import { getCommentsByParentId, getExpandedById, setExpanded, updateComments } from '../slice/comment.Slice';
 import { CommentType } from '../types/commntsType';
-
 /**
  * Хук для получения дочерних комментариев
- * 
+ *
  * @param parentComment - родительский комментарий
  * @returns объект с комментариями и функция для загрузки новых комментариев
  * */
 const useChildComment = (parentComment: CommentType) => {
-    const [comments, setComments] = useState<CommentType[]>([]);
-    const [expanded, setExpanded] = useState(false);
+    const comments = useSelector((state: RootState) => getCommentsByParentId(state, parentComment.id.toString())) || [];
+    const expanded = useSelector((state: RootState) => getExpandedById(state, parentComment.id.toString()));
+    const dispatch = useDispatch();
     const [fetchComments, { data: lazyComments, isSuccess }] = useLazyGetChildCommentsQuery();
-
     const loadMoreComments = () => {
-        setExpanded(true);
-        fetchComments({ parentId: parentComment.id, postId: parentComment.postId });
-    };
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
-    useEffect(() => {
-        setComments(parentComment.children || []);
-    }, [parentComment]);
-
-    useEffect(() => {
-        if (isSuccess) {
-            const newComments = lazyComments.comments.filter((comment) => !comments.find((c) => c.id === comment.id)); // Исключаем дубликаты
-            setComments([...comments, ...newComments]);
+        if (!expanded ) {
+            fetchComments({ parentId: parentComment.id, postId: parentComment.post_id });
         }
-    }, [lazyComments]); // eslint-disable-line react-hooks/exhaustive-deps
+        dispatch(setExpanded({ commentId: parentComment.id.toString(), expanded: true }));
+    };
 
-    return { comments, isSuccess, expanded, loadMoreComments, handleExpandClick };
+
+
+    //Функция для скрытия ветки
+    const handleCollapseClick = useCallback(() => {
+        dispatch(
+            setExpanded({
+                commentId: parentComment.id.toString(),
+                expanded: !expanded,
+            }),
+        );
+    }, [dispatch, expanded, parentComment.id]);
+
+    //При первом раскрытии или если комментарии еще не загружены
+    useEffect(() => {
+       
+        if (expanded ) {
+            fetchComments({ parentId: parentComment.id, postId: parentComment.post_id });
+        }
+    }, [expanded, fetchComments, parentComment.id, parentComment.post_id]);
+
+    // Обновляем комментарии только если lazyComments есть и это не инвалидация
+    useEffect(() => {
+        console.log('lazyComments', lazyComments);
+        if (lazyComments) {
+            dispatch(
+                updateComments({
+                    parentId: parentComment.id.toString(),
+                    comments: lazyComments,
+                }),
+            );
+        }
+    }, [lazyComments, dispatch, parentComment.id]);
+
+    return {
+        comments,
+        isSuccess,
+        expanded,
+        loadMoreComments,
+        handleCollapseClick,
+    };
 };
+
 export default useChildComment;

@@ -5,18 +5,12 @@ import { TokenResponse } from '../types/AuthTypes';
 
 export interface AuthState {
     access: string | null;
-    user_id: number | null;
-    is_stuff: boolean | null;
-    is_superuser: boolean | null;
 }
 
 export const AUTH_PERSISTENT_STATE = 'auth';
 
 const initialState: AuthState = loadState<AuthState>(AUTH_PERSISTENT_STATE) || {
     access: null,
-    user_id: null,
-    is_stuff: null,
-    is_superuser: null,
 };
 
 const authSlice = createSlice({
@@ -24,11 +18,8 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setCredentials: (state, action: PayloadAction<TokenResponse>) => {
-            const { user_id, is_stuff, is_superuser, access, refresh } = action.payload;
+            const { access, refresh } = action.payload;
             state.access = access;
-            state.user_id = user_id;
-            state.is_stuff = is_stuff;
-            state.is_superuser = is_superuser;
             Cookies.set('refreshToken', refresh, { expires: 7 });
         },
         clearCredentials: (state) => {
@@ -43,6 +34,3 @@ export const { setCredentials, clearCredentials } = authSlice.actions;
 export default authSlice.reducer;
 
 export const selectAccessToken = (state: { auth: AuthState }) => state.auth.access;
-export const getUser = (state: { auth: AuthState }) => state.auth;
-export const isStuff = (state: { auth: AuthState }) => state.auth.is_stuff;
-export const isSuperuser = (state: { auth: AuthState }) => state.auth.is_superuser;

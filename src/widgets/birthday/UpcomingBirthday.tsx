@@ -13,16 +13,24 @@ import {
     Skeleton,
     Typography,
 } from '@mui/material';
-import { FC, memo } from 'react';
+import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useGetUpcomingBirthdaysQuery } from '../../entities/friends/api/friendsApi';
 import { checkUrl } from '../../shared/utils/Utils';
 import styles from './birthday.module.css';
-const UpcomingBirthday: FC = memo(() => {
+/**
+ * Компонент для отображения ближайших дней рождения
+ * @returns Компонент для отображения ближайших дней рождения
+ */
+const UpcomingBirthday: FC = () => {
     const { data: response, isLoading } = useGetUpcomingBirthdaysQuery();
 
-    const dataResponse = response?.map((friend, index) => {
+    // Если нет ближайших дней рождения, то не отображаем компонент
+    if (response?.length === 0) {
+        return null;
+    }
 
+    const dataResponse = response?.map((friend, index) => {
         const birthDate = new Date(friend.profile.birth_date);
         const avatarImage = () => {
             if (friend.profile.images[0].avatar_image) {
@@ -34,7 +42,7 @@ const UpcomingBirthday: FC = memo(() => {
         return (
             <ListItem key={index}>
                 <ListItemAvatar>
-                    <Avatar src={avatarImage()} sx={{ height: '3.75rem', width: '3.75rem' }} />
+                    {isLoading ? <Skeleton animation="wave" variant="circular" sx={{ height: '3.75rem', width: '3.75rem' }} /> : <Avatar src={avatarImage()} sx={{ height: '3.75rem', width: '3.75rem' }} />}
                 </ListItemAvatar>
                 <ListItemText
                     sx={{ paddingLeft: 3 }}
@@ -43,7 +51,11 @@ const UpcomingBirthday: FC = memo(() => {
                             {friend.profile.user.first_name} {friend.profile.user.last_name}
                         </NavLink>
                     }
-                    secondary={birthDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    secondary={birthDate.toLocaleDateString('ru-RU', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                    })}
                 />
             </ListItem>
         );
@@ -73,6 +85,6 @@ const UpcomingBirthday: FC = memo(() => {
             </CardContent>
         </Card>
     );
-    });
-    
+};
+
 export default UpcomingBirthday;

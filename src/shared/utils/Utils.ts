@@ -46,7 +46,6 @@ export const getRelativeTime = (serverDateString: string | undefined): string =>
 export const formatTimeAgo = (dateString: string): string => {
     // Преобразуем строку в объект Date
     const date = new Date(dateString);
-
     // Получаем текущее время
     const now = new Date();
     // Вычисляем разницу между текущим временем и переданной датой
@@ -60,8 +59,9 @@ export const formatTimeAgo = (dateString: string): string => {
     }
 
     if (seconds < 60) {
-        const sec = Intl.PluralRules('ru-RU').select(seconds);
-        return `${seconds} секунд назад`;
+        const sec = new Intl.PluralRules('ru-RU').select(seconds);
+        console.log('sec', sec);
+        return `${seconds} секунд${sec === 'one' ? '' : 'ы'} назад`;
     }
 
     // Переводим секунды в минуты
@@ -94,7 +94,10 @@ export const isApiError = (error: unknown): error is ApiError => {
         'data' in error &&
         typeof error.data === 'object' &&
         error.data !== null &&
-        Object.values(error.data).every((value) =>  typeof value === 'string' || Array.isArray(value) && value.every((item) => typeof item === 'string')) &&
+        Object.values(error.data).every(
+            (value) =>
+                typeof value === 'string' || (Array.isArray(value) && value.every((item) => typeof item === 'string')),
+        ) &&
         'status' in error &&
         typeof error.status === 'number'
     ) {

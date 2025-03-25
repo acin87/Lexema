@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PostTypes } from '../../post/types/PostTypes';
+import { PostTypes } from '../../mainFeed/types/PostTypes';
 import { Profile } from '../types/ProfileTypes';
-
 interface ProfileState {
     profile: Profile | null;
     scrollPosition: number;
@@ -26,7 +25,7 @@ const profileSlice = createSlice({
         addPosts: (state, action: PayloadAction<PostTypes[]>) => {
             //на всякий случай добавляем только новые посты
             const newPosts = action.payload.filter((post) => !state.posts.some((p) => p.id === post.id));
-            state.posts.push(...newPosts)
+            state.posts.push(...newPosts);
         },
         removePost: (state, action) => {
             state.posts = state.posts.filter((post) => post.id !== action.payload.id);
@@ -34,14 +33,11 @@ const profileSlice = createSlice({
         setSkipPost: (state, action: PayloadAction<number>) => {
             state.skipPost = action.payload;
         },
-        setProfile: (state, action: PayloadAction<Profile>) => {
-            state.profile = action.payload;
-        },
         setScrollPosition: (state, action: PayloadAction<number>) => {
             state.scrollPosition = action.payload;
         },
     },
 });
 
-export const { setProfile, setScrollPosition, setPosts, addPosts, removePost, setSkipPost } = profileSlice.actions;
+export const { setScrollPosition, setPosts, addPosts, removePost, setSkipPost } = profileSlice.actions;
 export default profileSlice.reducer;

@@ -1,10 +1,11 @@
 import { AppBar, Box, BoxProps, styled, Tab, TabProps, Tabs } from '@mui/material';
 import classNames from 'classnames';
-import { ReactNode, SyntheticEvent, useState } from 'react';
+import { ReactNode, SyntheticEvent, useEffect, useState } from 'react';
 import styles from './TabPanels.module.css';
 
 export type TabPanelProps = {
     indicatorColor?: 'primary' | 'secondary';
+    activeTab?: number;
     tabs: {
         label: string;
         children: ReactNode;
@@ -40,6 +41,11 @@ const Panel = (props: PanelProps) => {
 
 const TabPanels = (props: TabPanelProps) => {
     const [value, setValue] = useState(0);
+
+    useEffect(() => {
+        setValue(props.activeTab || 0);
+    }, [props.activeTab]);
+
 
     const handleChange = (event: SyntheticEvent, newValue: number) => {
         event.preventDefault();

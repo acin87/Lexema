@@ -1,19 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PostTypes } from '../types/PostTypes';
 
-interface PostState {
+interface MainFeedState {
     posts: PostTypes[];
     skipPost: number;
     scrollPosition: number;
 }
-const initialState: PostState = {
+const initialState: MainFeedState = {
     posts: [],
     skipPost: 0,
     scrollPosition: 0,
 };
 
-const postSlice = createSlice({
-    name: 'post',
+const mainFeedSlice = createSlice({
+    name: 'mainFeed',
     initialState: initialState,
     reducers: {
         setPosts: (state, action: PayloadAction<PostTypes[]>) => {
@@ -38,5 +38,5 @@ const postSlice = createSlice({
     },
 });
 
-export const { setPosts, removePost, setSkipPost, setScrollPosition, addPosts } = postSlice.actions;
-export default postSlice.reducer;
+export const { setPosts, removePost, setSkipPost, setScrollPosition, addPosts } = mainFeedSlice.actions;
+export default mainFeedSlice.reducer;

@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { FC, memo } from 'react';
-import Wall from '../../../entities/profile/components/Wall';
 import UpcomingBirthday from '../../../widgets/birthday/UpcomingBirthday';
+import Wall from './ProfilePosts';
 interface ProfileWallProps {
     id: number;
 }
@@ -18,7 +18,9 @@ const ProfileWall: FC<ProfileWallProps> = ({ id }) => {
             }}
         >
             <Box sx={{ gridColumn: '1 / 2' }}>
-                <Box><UpcomingBirthday /></Box>
+                <Box>
+                    <UpcomingBirthday />
+                </Box>
             </Box>
             <Box sx={{ gridColumn: '2 / 3', '& .post-list': { width: '100%' } }}>
                 <Wall id={id} />

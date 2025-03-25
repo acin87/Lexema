@@ -6,11 +6,12 @@ interface SnackBarProps {
     severity: 'error' | 'warning' | 'info' | 'success';
     open: boolean;
     onClose: (event: SyntheticEvent | Event, reason?: SnackbarCloseReason) => void;
+    autoHideDuration?: number;
 }
 
-const SnackBar: FC<SnackBarProps> = ({ message, severity, open, onClose }) => {
+const SnackBar: FC<SnackBarProps> = ({ message, severity, open, onClose, autoHideDuration = 4500 }) => {
     return (
-        <Snackbar open={open} autoHideDuration={4500} onClose={onClose}>
+        <Snackbar open={open} autoHideDuration={autoHideDuration} onClose={onClose}>
             <Alert sx={{ display: 'flex', alignItems: 'center' }} severity={severity} onClose={onClose}>
                 {message}
             </Alert>
