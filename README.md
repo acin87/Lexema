@@ -3,7 +3,7 @@
 
 #JSON сервер больше не работает. API перехало на Django. JSON сервер перестал удовлетварять требованиям, а писать express не вижу смысла
 
-Сервер Django(DRF) находится по ссылке https://github.com/acin87/LexemaServer
+Сервер Django(DRF) находится по ссылке https://github.com/acin87/LexemaDRF
 
 
 Проект запускаем командой:

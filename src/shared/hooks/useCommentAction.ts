@@ -24,7 +24,7 @@ const useCommentAction = () => {
             formData.append('content', content);
         }
         if (files) {
-            files.forEach((file) => formData.append('images', file));
+            files.forEach((file) => formData.append('new_images', file));
         }
         if (parent_id) {
             formData.append('parent_id', parent_id.toString());

@@ -6,6 +6,7 @@ import { saveState } from '../../shared/utils/LocalStorage';
 import { authApi } from '../../entities/auth/api/AuthApi';
 import authSlice, { AUTH_PERSISTENT_STATE, AuthState } from '../../entities/auth/slice/authSlice';
 import { TokenResponse } from '../../entities/auth/types/AuthTypes';
+import commentSlice from '../../entities/comment/slice/commentSlice';
 import { friendsApi } from '../../entities/friends/api/friendsApi';
 import friendsSlice from '../../entities/friends/slices/friendsSlice';
 import { mainFeedApi } from '../../entities/mainFeed/api/mainFeedApi ';
@@ -16,9 +17,8 @@ import profileSlice from '../../entities/profile/slices/profileSlice';
 import { userApi } from '../../entities/user/api/userApi';
 import userSlice, { setUser } from '../../entities/user/slice/userSlice';
 import { USER_PERSISTENT_STATE, UserState } from '../../entities/user/types/UserTypes';
-import uiSlice, { UI_PERSISTENT_STATE, UiTypes } from '../../shared/ui/uiSlice';
 import { postsApi } from '../../shared/api/postsApi';
-import commentSlice from '../../entities/comment/slice/comment.Slice';
+import uiSlice, { UI_PERSISTENT_STATE, UiTypes } from '../../shared/ui/uiSlice';
 const listenerMiddleware = createListenerMiddleware();
 
 listenerMiddleware.startListening({

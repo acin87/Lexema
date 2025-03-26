@@ -1,25 +1,7 @@
-import { createApi, fetchBaseQuery, TagDescription } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API, BASEURL } from '../../../app/api/ApiConfig';
 import { RootState } from '../../../app/store/store';
 import { CommentResponse, CommentType } from '../types/commntsType';
-import { getParentId } from '../hooks/useChildComment';
-
-
-
-
-/**
- * Функция для получения родительского ID комментария
- * 
- * @param id - ID комментария
- * @param comments - массив комментариев
- * @returns родительский ID комментария или undefined, если комментарий не найден
- */
-
-export const getParentId = (id: string, comments: CommentType[]) => {
-    const parentId = comments.find((comment) => comment.id === Number(id));
-    return parentId?.parent_id;
-};
-
 
 export const commentsApi = createApi({
     reducerPath: 'commentsApi',
@@ -33,7 +15,7 @@ export const commentsApi = createApi({
             return headers;
         },
     }),
-    tagTypes: ['Post', 'Comment'],
+    tagTypes: ['Post', 'Comment', 'CommentList'],
     endpoints: (builder) => ({
         getRootComments: builder.query<CommentResponse, { postId: number; offset: number; limit: number }>({
             query: ({ postId, offset, limit }) => ({
@@ -60,14 +42,14 @@ export const commentsApi = createApi({
             query: ({ parentId, postId }) => ({
                 url: `${API.CHILD_COMMENTS}${postId}/${parentId}`,
                 method: 'GET',
-                providesTags: (result: CommentType[]) =>
-                    result
-                      ? [
+            }),
+            providesTags: (result, _error, { postId }) =>
+                result
+                    ? [
                           ...result.map(({ id }: { id: number }) => ({ type: 'Comment' as const, id })),
                           { type: 'Post' as const, id: postId },
-                        ]
-                      : [{ type: 'Post' as const, id: postId }],
-            }),
+                      ]
+                    : [{ type: 'Post' as const, id: postId }],
         }),
         addComment: builder.mutation<CommentResponse, { fromData: FormData }>({
             //{fromData: {parent_id?: 1, post_id: 1, content: 'test'}}
@@ -78,29 +60,22 @@ export const commentsApi = createApi({
             }),
             invalidatesTags: (_, __, { fromData }) => {
                 const postId = Number(fromData.get('post_id')); // Преобразуем строку в число
-                let parentId = fromData.get('parent_id'); // Может быть строкой или null/undefined
+                const parentId = fromData.get('parent_id'); // Может быть строкой или null/undefined
 
-
-                const tagsToInvalidate = [];
-        
-                if (parentId) {
-                  // Рекурсивно идём вверх по дереву комментариев, чтобы инвалидировать все предки
-                  tagsToInvalidate.push({ type: 'Comment' as const, id: Number(parentId) });
-                  while (parentId !== null && typeof parentId === 'string') {
-                    const currentParentId:string = parentId;
-                    parentId = getParentId(currentParentId); // Предполагаем, что такая функция существует
-                    if (parentId !== null) {
-                      tagsToInvalidate.push({ type: 'Comment' as const, id: Number(parentId) });
-                    }
-                  }
+                if (!parentId) {
+                    // Добавляем комментарий к корневому уровню
+                    return [
+                        { type: 'Post' as const, id: postId },
+                        { type: 'Comment' as const, id: 'ROOT' },
+                    ];
+                } else {
+                    // Добавляем комментарий к дочернему уровню
+                    return [
+                        { type: 'Post' as const, id: postId },
+                        { type: 'Comment' as const, id: Number(parentId) }, // Преобразуем строку в число
+                    ];
                 }
-        
-                // Всегда инвалируем пост и корень комментариев
-                tagsToInvalidate.push({ type: 'Post' as const, id: postId });
-                tagsToInvalidate.push({ type: 'Comment' as const, id: 'ROOT' });
-        
-                return tagsToInvalidate;
-              },
+            },
         }),
         updateComment: builder.mutation<CommentResponse, { fromData: FormData; commentId: number }>({
             query: ({ fromData, commentId }) => ({

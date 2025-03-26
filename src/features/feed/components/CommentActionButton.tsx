@@ -1,5 +1,4 @@
-import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
-import { IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import { FC, Fragment, useState } from 'react';
 import UploadModal from '../../../shared/components/uploadModal/uploadModal';
 import useCommentAction from '../../../shared/hooks/useCommentAction';
@@ -9,66 +8,73 @@ import useCommentAction from '../../../shared/hooks/useCommentAction';
 interface CommentActionButtonProps {
     commentId: number;
     content?: string;
+    onUpdateStart?: () => void;
+    onUpdateEnd?: () => void;
+    onDeleteStart?: () => void;
+    onDeleteEnd?: () => void;
 }
 /**
  * Компонент кнопки действий для комментария
  */
-const CommentActionButton: FC<CommentActionButtonProps> = ({ commentId, content }) => {
+const CommentActionButton: FC<CommentActionButtonProps> = ({
+    commentId,
+    content,
+    onUpdateStart,
+    onUpdateEnd,
+    onDeleteStart,
+    onDeleteEnd,
+}) => {
     const { handleUpdateComment, handleDeleteComment } = useCommentAction();
     const [commentText, setCommentText] = useState(content);
     const [openModal, setOpenModal] = useState(false);
     const [files, setFiles] = useState<File[]>([]);
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
+
+    const handleClick = () => {
+        setOpenModal(true);
     };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+
 
     const handleCloseModal = () => {
         setOpenModal(false);
     };
 
-    const handleUpdate = () => {
-        handleUpdateComment(commentId, commentText, files);
+
+    const handleUpdate = async () => {
+        onUpdateStart?.();
+        await handleUpdateComment(commentId, commentText, files);
         setOpenModal(false);
+        setTimeout(() => {
+            onUpdateEnd?.();
+        }, 500);
     };
 
-    const handleDelete = () => {
-        handleDeleteComment(commentId);
+    const handleDelete = async () => {
+        onDeleteStart?.();
+        await handleDeleteComment(commentId);
+        setTimeout(() => {
+            onDeleteEnd?.();
+        }, 500);
     };
 
     return (
         <Fragment>
-            <IconButton aria-label="settings" onClick={handleClick}>
-                <MoreVertOutlinedIcon />
-            </IconButton>
-            <Menu
-                open={open}
-                onClose={handleClose}
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
+            <Button
+                aria-label="Редактировать"
+                onClick={handleClick}
+                sx={{ textTransform: 'lowercase', ml: '16px' }}
+                size="small"
             >
-                <MenuItem onClick={() => setOpenModal(true)}>
-                    <Typography variant="body2" component="span">
-                        Редактировать
-                    </Typography>
-                </MenuItem>
-                <MenuItem onClick={handleDelete}>
-                    <Typography variant="body2" component="span">
-                        Удалить
-                    </Typography>
-                </MenuItem>
-            </Menu>
+                Редактировать
+            </Button>
+            <Button
+                aria-label="Удалить"
+                onClick={handleDelete}
+                sx={{ textTransform: 'lowercase', ml: '16px' }}
+                size="small"
+            >
+                Удалить
+            </Button>
+
             <UploadModal
                 open={openModal}
                 onClose={handleCloseModal}

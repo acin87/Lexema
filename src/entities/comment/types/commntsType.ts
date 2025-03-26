@@ -17,6 +17,6 @@ export type CommentType = {
     likes: number;
     created_at: string;
     updated_at?: string;
-    images: string[];
+    images: [{ image: string }] | null;
     user: User;
 };

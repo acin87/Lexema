@@ -3,7 +3,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, CssThemeVariables, IconButton, Modal } from '@mui/material';
 import React, { useState } from 'react';
-
+import { checkUrl } from '../../utils/Utils';
 interface ImageCarouselProps {
     images: string[];
     onDelete?: (index: number) => void;
@@ -57,7 +57,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, onDelete }) => {
             <Box sx={{ position: 'relative' }}>
                 <Box
                     component="img"
-                    src={images[activeIndex]}
+                    src={checkUrl(images[activeIndex])}
                     alt={`carousel-image-${activeIndex}`}
                     width="100%"
                     maxWidth="500px"
@@ -76,9 +76,9 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, onDelete }) => {
                         top: '50%',
                         left: 0,
                         transform: 'translateY(-50%)',
-                        backgroundColor: 'background.paper',
+                        backgroundColor: 'primary.main',
                         '&:hover': {
-                            backgroundColor: 'primary.main',
+                            backgroundColor: 'primary.dark',
                         },
                     }}
                 >
@@ -91,9 +91,9 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, onDelete }) => {
                         top: '50%',
                         right: 0,
                         transform: 'translateY(-50%)',
-                        backgroundColor: 'background.paper',
+                        backgroundColor: 'primary.main',
                         '&:hover': {
-                            backgroundColor: 'primary.main',
+                            backgroundColor: 'primary.dark',
                         },
                     }}
                 >
@@ -104,7 +104,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, onDelete }) => {
                 <Box sx={{ ...modalStyles }}>
                     <Box
                         component="img"
-                        src={images[activeIndex]}
+                        src={checkUrl(images[activeIndex])}
                         alt={`carousel-image-${activeIndex}`}
                         width="100%"
                         height="100%"
@@ -127,7 +127,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, onDelete }) => {
                     <Box
                         key={index}
                         component="img"
-                        src={images[index]}
+                        src={checkUrl(images[index])}
                         alt={`carousel-image-${index}`}
                         width="30%"
                         height="auto"
