@@ -4,6 +4,8 @@ import {
     useAddProfilePostMutation,
     useUpdateGroupPostMutation,
     useUpdateProfilePostMutation,
+    useDeleteGroupPostMutation,
+    useDeleteProfilePostMutation,
 } from '../api/postsApi';
 
 
@@ -27,18 +29,25 @@ export const usePostButtonAction = ({ context, group_id }: UsePostActionsProps) 
     const [addGroupPost] = useAddGroupPostMutation();
     const [updateProfilePost] = useUpdateProfilePostMutation();
     const [updateGroupPost] = useUpdateGroupPostMutation();
+    const [deleteGroupPost] = useDeleteGroupPostMutation();
+    const [deleteProfilePost] = useDeleteProfilePostMutation();
 
 
     const handleCreatePost = useCallback(
-        async (content: string, files: File[], user_id: number) => {
+        async (user_id: number, content?: string, files?: File[], original_post_id?: number) => {
             const data = new FormData();
-            data.append('content', content);
-            files.forEach((file) => data.append('images', file));
-
+            if (content) {
+                data.append('content', content);
+            }
+            if (files) {
+                files.forEach((file) => data.append('images', file));
+            }
+            if (original_post_id) {
+                data.append('original_post', original_post_id.toString());
+            }
             if (context === 'profile') {
                 return addProfilePost({ author_id: user_id, data: data });
             } else if (context === 'group' && group_id) {
-                console.log('group_id', group_id);
                 return addGroupPost({ author_id: user_id, data: data });
             }
             console.error('Не указан group_id для поста в группе');
@@ -62,5 +71,13 @@ export const usePostButtonAction = ({ context, group_id }: UsePostActionsProps) 
         [context, group_id, updateProfilePost, updateGroupPost],
     );
 
-    return { handleCreatePost, handleUpdatePost };
+    const handleDeletePost = useCallback(async (postId: number, authorId: number) => {
+        if (context === 'profile') {
+            return deleteProfilePost({ postId, user_id: authorId });
+        } else if (context === 'group' && group_id) {
+            return deleteGroupPost({ postId: postId, group_id: group_id! });
+        }
+    }, [deleteProfilePost, deleteGroupPost, context, group_id]);
+
+    return { handleCreatePost, handleUpdatePost, handleDeletePost };
 };

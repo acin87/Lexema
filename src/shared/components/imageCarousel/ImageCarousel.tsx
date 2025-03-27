@@ -1,7 +1,7 @@
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, CssThemeVariables, IconButton, Modal } from '@mui/material';
+import { Box, IconButton, Modal, SxProps } from '@mui/material';
 import React, { useState } from 'react';
 import { checkUrl } from '../../utils/Utils';
 interface ImageCarouselProps {
@@ -38,7 +38,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, onDelete }) => {
     const handleImageClick = (index: number) => {
         setActiveIndex(index);
     };
-    const modalStyles: CssThemeVariables = {
+    const modalStyles: SxProps = {
         position: 'absolute',
         top: '50%',
         left: '50%',

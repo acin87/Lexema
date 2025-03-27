@@ -7,7 +7,7 @@ interface ProfilePostsProps {
 }
 
 const ProfilePosts: FC<ProfilePostsProps> = ({ id }) => {
-    const { posts, isError, ref, isSuccess, totalCount, isFetching, isLoading } = useProfilePosts({ id });
+    const { posts, isError, ref, isSuccess, totalCount } = useProfilePosts({ id });
     return (
         <PostList
             posts={posts}
@@ -15,9 +15,8 @@ const ProfilePosts: FC<ProfilePostsProps> = ({ id }) => {
             ref={ref}
             isSuccess={isSuccess}
             totalCount={totalCount}
-            isFetching={isFetching}
-            isLoading={isLoading}
             context="profile"
+            isProfile={true}
         />
     );
 };

@@ -1,8 +1,8 @@
 import { Box } from '@mui/material';
-import ProfileHeader from '../features/profile/components/ProfileHeader';
 import { FC } from 'react';
-import ProfileBody from '../features/profile/components/ProfileBody';
 import { useParams } from 'react-router-dom';
+import ProfileBody from '../features/profile/components/ProfileBody';
+import ProfileHeader from '../features/profile/components/ProfileHeader';
 const ProfilePage: FC = () => {
     const { id } = useParams();
     return (

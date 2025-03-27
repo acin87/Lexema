@@ -9,7 +9,8 @@ import { AppRoute, SiteAppRoutePath } from '../../app/routes/Config';
 import styles from './Menu.module.css';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../entities/user/slice/userSlice';
-
+import { uiActions } from '../../shared/ui/uiSlice';
+import { useDispatch } from 'react-redux';
 /**
  * Интерфейс для пропсов, открытие и закрытие панели
  */
@@ -25,6 +26,12 @@ interface MenuProps {
 const Menu: FC<MenuProps> = memo((open) => {
     const navigate = useNavigate();
     const id = useSelector(selectUser).id;
+    const dispatch = useDispatch();
+
+    const handleNavigate = (path: string) => {
+        dispatch(uiActions.toggleSidebar());
+        navigate(path);
+    };
 
     const menuItems = [
         {
@@ -66,7 +73,7 @@ const Menu: FC<MenuProps> = memo((open) => {
                                       justifyContent: 'center',
                                   },
                         ]}
-                        onClick={() => navigate(item.path)}
+                        onClick={() => handleNavigate(item.path)}
                     >
                         <ListItemIcon
                             sx={[

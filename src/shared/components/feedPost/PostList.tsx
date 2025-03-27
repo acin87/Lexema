@@ -4,11 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { PostTypes } from '../../../entities/mainFeed/types/PostTypes';
 import AddPostButton from '../addPostButton/AddPostButton';
 import Post from './Post';
+import { WelcomeBanner } from '../welcomeBanner/WelcomeBanner';
 /**
  * Пропсы для компонента PostList
  * @param {PostTypes[]} posts - Массив постов
- * @param {boolean} isLoading - Флаг загрузки
- * @param {boolean} isFetching - Флаг загрузки
  * @param {boolean} isSuccess - Флаг успешности
  * @param {boolean} isError - Флаг ошибки
  * @param {number} totalCount - Количество постов
@@ -18,13 +17,12 @@ import Post from './Post';
  */
 type PostListProps = {
     posts: PostTypes[];
-    isLoading: boolean;
-    isFetching: boolean;
     isSuccess: boolean;
     isError: boolean;
     totalCount: number;
     ref: (node?: Element | null) => void;
     context: 'profile' | 'group';
+    isProfile?: boolean;
     group_id?: number;
 };
 
@@ -65,23 +63,21 @@ const circularProgressStyles: SxProps = {
 const MemoizedPost = memo(
     ({
         post,
-        loading,
         context,
         group_id,
     }: {
         post: PostTypes;
-        loading: boolean;
         context: 'profile' | 'group';
         group_id?: number;
-    }) => <Post post={post} loading={loading} context={context} group_id={group_id} />,
+    }) => <Post post={post}  context={context} group_id={group_id} />,
 );
 
 /**
  * Компонент для отображения списка постов
- * @param {PostListProps} props - Пропсы для компонента PostList
- * @returns {JSX.Element} - Элемент JSX
+ * @param PostListProps props - Пропсы для компонента PostList
+ * @returns JSX.Element - Элемент JSX
  */
-const PostList: FC<PostListProps> = ({ posts, isLoading, isSuccess, totalCount, ref, isError, context, group_id }) => {
+const PostList: FC<PostListProps> = ({ posts, isSuccess, totalCount, ref, isError, context, group_id, isProfile }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -90,18 +86,20 @@ const PostList: FC<PostListProps> = ({ posts, isLoading, isSuccess, totalCount, 
         }
     }, [isError, navigate]);
 
+    if (posts.length === 0 && !isProfile) {
+        return <WelcomeBanner />;
+    }
+
     return (
         <Box sx={{ ...postListStyles }} className="post-list">
-            <AddPostButton context={context} group_id={group_id} />
+        <AddPostButton context={context} group_id={group_id} />
             {posts.map((post, index) => {
                 const isLastPost = index + 1 === posts.length;
-                const isNewPost = index >= posts.length - 5; // Предполагаем, что загружаем по 5 постов
 
                 return (
                     <Fragment key={post.id}>
                         <MemoizedPost
                             post={post}
-                            loading={isNewPost ? isLoading : false}
                             context={context}
                             group_id={group_id}
                         />

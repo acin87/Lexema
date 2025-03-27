@@ -1,11 +1,10 @@
-import AddIcon from '@mui/icons-material/Add';
-import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
 import { Box, Button, Collapse, Divider } from '@mui/material';
 import { FC, Fragment, memo } from 'react';
 import useChildComment from '../../../entities/comment/hooks/useChildComment';
 import { CommentType } from '../../../entities/comment/types/commntsType';
 import Comment from './Comment';
-
+import ExpandCommentsButton from './ExpandCommentsButton';
+import AddIcon from '@mui/icons-material/Add';
 /**
  * Пропсы компонента дочернего комментария
  */
@@ -73,7 +72,11 @@ const ChildComment: FC<ChildCommentProps> = ({ parentComment, level }) => {
                         <Divider orientation="vertical" />
                     </Box>
                     <Box sx={{ width: 'calc(100% - 40px)' }}>
-                        <Comment comment={parentComment.replies[0]} user={parentComment.replies[0].user} level={level} />
+                        <Comment
+                            comment={parentComment.replies[0]}
+                            user={parentComment.replies[0].user}
+                            level={level}
+                        />
                     </Box>
                 </Box>
             );
@@ -81,42 +84,12 @@ const ChildComment: FC<ChildCommentProps> = ({ parentComment, level }) => {
             //Если комментарии лениво загружены, то показываем ветку
             return (
                 <Box sx={{ display: 'flex', flexDirection: `${expanded ? 'row' : 'column'}` }}>
-                    {expanded ? (
-                        //Если ветка раскрыта, то показываем кнопку для скрытия ветки
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                width: '40px',
-                                paddingBottom: 4,
-                                lineHeight: '22px',
-                                paddingLeft: '15px',
-                            }}
-                        >
-                            <Button
-                                sx={{ textTransform: 'lowercase', '& .MuiButton-startIcon': { marginRight: '0px' } }}
-                                size="small"
-                                onClick={handleCollapseClick}
-                                startIcon={<IndeterminateCheckBoxOutlinedIcon sx={{ marginRight: 0 }} />}
-                            ></Button>
-                            <Divider orientation="vertical" />
-                        </Box>
-                    ) : (
-                        //Если ветка скрыта, то показываем кнопку для раскрытия ветки
-
-                        <Box sx={{ display: 'flex' }}>
-                            <Button
-                                sx={{ textTransform: 'lowercase', ml: '16px', lineHeight: '22px' }}
-                                size="small"
-                                startIcon={<AddIcon />}
-                                onClick={loadMoreComments}
-                            >
-                                раскрыть ветку ({parentComment.child_count})
-                            </Button>
-                        </Box>
-                    )}
-
+                    <ExpandCommentsButton
+                        expanded={expanded}
+                        handleCollapseClick={handleCollapseClick}
+                        child_count={parentComment.child_count}
+                        loadMoreComments={loadMoreComments}
+                    />
                     <Collapse
                         in={expanded}
                         sx={{ marginLeft: `${!expanded ? '40px' : '0'}`, width: 'calc(100% - 40px)' }}

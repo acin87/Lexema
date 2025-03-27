@@ -12,8 +12,7 @@ interface CommentsProps {
 const RootComments: FC<CommentsProps> = (props) => {
     const { comments, loadMoreComments, count } = useRootComment(props.postId);
 
-    const renderCommentsTree = useMemo(() => {
-        
+    const renderCommentsTree = useMemo(() => {        
         return comments.map((comment) => {
             const childComments = comment.replies || [];
             if (comments.length === 0) {
@@ -23,13 +22,13 @@ const RootComments: FC<CommentsProps> = (props) => {
             if (childComments.length === 0) {
                 return (
                     <Fragment key={comment.id}>
-                        <Comment comment={comment} user={comment.user} />
+                        <Comment comment={comment} user={comment.user} level={0} />
                     </Fragment>
                 );
             }
             return (
                 <Fragment key={comment.id}>
-                    <Comment comment={comment} user={comment.user} />
+                    <Comment comment={comment} user={comment.user} level={0} />
                     <ChildComment parentComment={comment} level={1} />
                 </Fragment>
             );

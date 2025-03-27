@@ -14,7 +14,7 @@ interface PostsProps {
  * @returns Список постов
  */
 const MainFeedPosts: FC<PostsProps> = ({ context }) => {
-    const { posts, isError, ref, isSuccess, totalCount, isFetching, isLoading } = useFeedPosts();
+    const { posts, isError, ref, isSuccess, totalCount } = useFeedPosts();
     return (
         <PostList
             posts={posts}
@@ -22,8 +22,6 @@ const MainFeedPosts: FC<PostsProps> = ({ context }) => {
             ref={ref}
             isSuccess={isSuccess}
             totalCount={totalCount}
-            isFetching={isFetching}
-            isLoading={isLoading}
             context={context}
         />
     );

@@ -7,20 +7,29 @@ export type PostRequest = {
 
 export type PostTypes = {
     id: number;
+    original_post: number | null;
     title: string;
     content: string;
-    images: [{ image: string }] | null;
-    video_urls: string[] | null;
+    images?: [{ image: string }];
+    video_urls?: string[];
     likes: number;
     dislikes: number;
     created_at: string;
-    group: number | null;
-    author: { id: number; first_name: string, last_name: string, avatar: string };
+    group?: number;
+    author: PostAuthor;
     views: number;
     comments_count: number;
     reposts: number;
+    signature: string;
 };
 
 export type FileUploadResponse = {
     fileUrls: string[];
+};
+
+export type PostAuthor = {
+    id: number;
+    first_name: string;
+    last_name: string;
+    avatar: string;
 };

@@ -4,6 +4,7 @@ export enum API {
     FRIENDS = 'api/friends/',
     FEED = 'api/feed/',
     PROFILE = 'api/profile/',
+    REPOST = 'api/repost/',
     GROUP = 'api/group/',
     LOGIN = 'api/auth/login/',
     REGISTRATION = 'api/auth/register/',
@@ -18,4 +19,5 @@ export enum API {
     FILES = '/files-upload',
     UPCOMING_BIRTHDAYS = 'api/upcoming-birth-day/',
     USERS = 'api/users/',
+    AUTOCOMPLETE = 'api/users/autocomplete/',
 }

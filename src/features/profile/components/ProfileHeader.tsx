@@ -3,7 +3,7 @@ import React, { memo } from 'react';
 import useProfile from '../../../entities/profile/hooks/useProfile';
 import useCheckImages from '../../../shared/hooks/useCheckImages';
 import styles from './Profile.module.css';
-
+import useDocumentTitle from '../../../shared/hooks/useDocumentTitle';
 interface ProfileHeaderProps {
     id: number;
 }
@@ -11,6 +11,10 @@ interface ProfileHeaderProps {
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({ id }) => {
     const { response } = useProfile(Number(id));
     const { avatarImage, mainImage } = useCheckImages(response?.images);
+
+    const user_first_name = response?.user.first_name || '...';
+    const user_last_name = response?.user.last_name || '...';
+    useDocumentTitle(`Lexema | Профиль - ${user_first_name} ${user_last_name}`);
 
     return (
         <Box className={styles.profileHeader}>
@@ -35,7 +39,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ id }) => {
                         </Box>
                         <Box className={styles.profileHeadUserName}>
                             <Typography variant="h3">
-                                {response?.user.first_name} {response?.user.last_name}
+                                {user_first_name} {user_last_name}
                             </Typography>
                         </Box>
                     </Box>

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../app/store/store';
 import { useLazyGetChildCommentsQuery } from '../api/commentApi';
-import { getCommentsByParentId, getExpandedById, setExpanded, updateComments } from '../slice/commentSlice';
+import { getCommentsByParentId, getExpandedById, setExpanded, updateComments } from '../slice/comment.Slice';
 import { CommentType } from '../types/commntsType';
 /**
  * Хук для получения дочерних комментариев

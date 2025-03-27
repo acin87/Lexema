@@ -11,6 +11,7 @@ const initialState: UserState = loadState<UserState>(USER_PERSISTENT_STATE) || {
         avatar: '',
         is_staff: false,
         is_superuser: false,
+        full_name: '',
     },
 };
 
@@ -26,6 +27,9 @@ export const userSlice = createSlice({
 
 export const { setUser } = userSlice.actions;
 export const selectUser = (state: RootState) => state.user.data;
+export const selectUserId = (state: RootState) => state.user.data.id;
+export const isAuthorizedUser = (state: RootState) => state.user.data.is_staff || state.user.data.is_superuser;
+export const isAdminUser = (state: RootState) => state.user.data.is_superuser;
 export default userSlice.reducer;
 
 

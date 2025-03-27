@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
 import { loadState } from '../../../shared/utils/LocalStorage';
 import { TokenResponse } from '../types/AuthTypes';
+import { USER_PERSISTENT_STATE } from '../../user/types/UserTypes';
 
 export interface AuthState {
     access: string | null;
@@ -26,10 +27,16 @@ const authSlice = createSlice({
             state.access = null;
             Cookies.remove('refreshToken');
         },
+        logout: (state) => {
+            state.access = null;
+            localStorage.removeItem(AUTH_PERSISTENT_STATE);
+            localStorage.removeItem(USER_PERSISTENT_STATE);
+            Cookies.remove('refreshToken');
+        },
     },
 });
 
-export const { setCredentials, clearCredentials } = authSlice.actions;
+export const { setCredentials, clearCredentials, logout } = authSlice.actions;
 
 export default authSlice.reducer;
 

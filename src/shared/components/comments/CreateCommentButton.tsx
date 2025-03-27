@@ -6,21 +6,12 @@ import useCommentAction from '../../../shared/hooks/useCommentAction';
 interface CreateCommentButtonProps {
     postId: number;
     content?: string;
-    id?: number;
     parent_id: number;
-    editMode?: boolean;
     title?: string;
 }
 
-const CreateCommentButton: FC<CreateCommentButtonProps> = ({
-    postId,
-    content,
-    id,
-    parent_id,
-    editMode = false,
-    title = 'Ответить',
-}) => {
-    const { handleAddComment, handleUpdateComment } = useCommentAction();
+const CreateCommentButton: FC<CreateCommentButtonProps> = ({ postId, content, parent_id, title = 'Ответить' }) => {
+    const { handleAddComment } = useCommentAction();
     const [openModal, setOpenModal] = useState(false);
     const [commentText, setCommentText] = useState<string>(content || '');
     const [files, setFiles] = useState<File[]>([]);
@@ -37,12 +28,7 @@ const CreateCommentButton: FC<CreateCommentButtonProps> = ({
             console.error('Ошибка загрузки файлов:', 'Комментарий не может быть пустым');
             return;
         }
-
-        if (editMode && id) {
-            await handleUpdateComment(id, commentText, files, parent_id);
-        } else {
-            await handleAddComment(postId, commentText, parent_id, files);
-        }
+        await handleAddComment(postId, commentText, parent_id, files);
         setOpenModal(false);
         setCommentText('');
         setFiles([]);

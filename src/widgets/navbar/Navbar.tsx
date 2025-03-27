@@ -1,10 +1,8 @@
-import { Box, InputAdornment, styled, TextField } from '@mui/material';
+import { Box, styled } from '@mui/material';
 import { FC, memo } from 'react';
-
-import SearchIcon from '@mui/icons-material/Search';
+import SearchAutocomplete from '../../shared/components/searchAutocomlite/SearchAutocomplete';
 import Logo from './Logo';
 import UserSettings from './UserSettings';
-
 /**
  * Компонент для отображения навигации
  * @returns Компонент для отображения навигации
@@ -38,31 +36,7 @@ const Navbar: FC = memo(() => {
                 }}
             >
                 <Logo />
-                <Box
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        width: '30rem',
-                        flexGrow: 2,
-                        '@media (max-width: 600px)': { display: 'none' },
-                        '@media (max-width: 900px)': { display: 'none' },
-                    }}
-                >
-                    <TextField
-                        size="small"
-                        variant="outlined"
-                        sx={{ width: '30rem', backgroundColor: 'rgba(80, 181, 255, .2)' }}
-                        slotProps={{
-                            input: {
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <SearchIcon />
-                                    </InputAdornment>
-                                ),
-                            },
-                        }}
-                    ></TextField>
-                </Box>
+                <SearchAutocomplete />
                 <UserSettings />
             </Box>
         </DrawerHeader>

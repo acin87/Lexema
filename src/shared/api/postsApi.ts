@@ -78,6 +78,23 @@ export const postsApi = createApi({
             }),
             invalidatesTags: ['GroupPost'],
         }),
+        updateProfilePostLike: builder.mutation<PostTypes, { postId: number; user_id: number; likes: number }>({
+            query: ({ postId, user_id, likes }) => ({
+                url: `${API.PROFILE}${user_id}/posts/${postId}/`,
+                method: 'PATCH',
+                body: { likes: JSON.stringify(likes) },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }),
+        }),
+        getOriginalPost: builder.query<PostTypes, { id: number }>({
+            query: ({ id }) => ({
+                url: `${API.REPOST}${id}/`,
+                method: 'GET',
+                
+            }),
+        }),
     }),
 });
 export const {
@@ -87,5 +104,8 @@ export const {
     useAddGroupPostMutation,
     useDeleteGroupPostMutation,
     useUpdateGroupPostMutation,
+    useUpdateProfilePostLikeMutation,
     useGetProfilePostsQuery,
+    useLazyGetOriginalPostQuery,
+    useGetOriginalPostQuery,
 } = postsApi;

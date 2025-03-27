@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute, SiteAppRoutePath } from '../../app/routes/Config';
 import { AppDispatch, RootState } from '../../app/store/store';
-import { clearCredentials } from '../../entities/auth/slice/authSlice';
+import { logout } from '../../entities/auth/slice/authSlice';
 import { selectUser } from '../../entities/user/slice/userSlice';
 import Avatar from '../../shared/components/avatar/Avatar';
 import ThemeSwitcher from '../../shared/components/themeSwitcher/ThemeSwitcher';
@@ -45,7 +45,7 @@ const UserSettings: FC = () => {
 
     const handleLogout = () => {
         navigate(SiteAppRoutePath[AppRoute.AUTH]);
-        dispatch(clearCredentials());
+        dispatch(logout());
     };
 
     const handleThemeChange = () => {

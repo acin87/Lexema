@@ -18,7 +18,7 @@ interface ModalProps {
     title?: string;
     onClose: () => void;
     open: boolean;
-    editMode: boolean;
+    editMode?: boolean;
     post?: PostTypes;
     context: 'profile' | 'group';
     group_id?: number;
@@ -66,7 +66,7 @@ const AddPostModal: FC<ModalProps> = ({ onClose, open, title, post, context, gro
             if (editMode && post) {
                 await handleUpdatePost(post.id, postText, files, user_id);
             } else {
-                await handleCreatePost(postText, files, user_id);
+                await handleCreatePost(user_id, postText, files);
             }
             onClose();
         } catch (e) {

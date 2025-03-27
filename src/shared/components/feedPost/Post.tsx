@@ -5,54 +5,72 @@ import {
     CardActions,
     CardContent,
     CardHeader,
+    CardMedia,
     Divider,
     InputAdornment,
     TextField,
     Typography,
 } from '@mui/material';
-import { FC, useEffect, useState } from 'react';
+import { FC, memo, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { PostTypes } from '../../../entities/mainFeed/types/PostTypes';
-import { selectUser } from '../../../entities/user/slice/userSlice';
-import { usePostActions } from '../../hooks/usePostActions';
+import { isAuthorizedUser, selectUser } from '../../../entities/user/slice/userSlice';
+import { useGetOriginalPostQuery } from '../../api/postsApi';
+import { usePostButtonAction } from '../../hooks/usePostButtonAction';
+import { usePostViewsActions } from '../../hooks/usePostViewsActions';
 import AddPostModal from '../addPostButton/AddPostModal';
 import Avatar from '../avatar/Avatar';
 import SnackBar from '../snackbar/SnackBar';
 import LikeActions from './LikeActions';
 import PostImages from './PostImages';
 import PostMenu from './PostMenu';
-import RootComments from '../../../features/feed/components/RootComments';
+import PostSkeleton from './PostSkeleton';
+import RepostButton from './RepostButton';
+import RepostContent from './RepostContent';
+import RootComments from '../comments/RootComments';
+
 interface PostProps {
     post: PostTypes;
-    loading: boolean;
     context: 'profile' | 'group';
     group_id?: number;
 }
 
-const Post: FC<PostProps> = ({ post, loading, context, group_id }) => {
+const Post: FC<PostProps> = ({ post, context, group_id }) => {
     const [openModal, setOpenModal] = useState(false);
-    const { id: user_id, is_staff, is_superuser } = useSelector(selectUser);
-    const isOwner = user_id === post.author.id;
-    const isEditor = is_staff || is_superuser;
-    const isAuthorized = isOwner || isEditor;
-
+    const user_id = useSelector(selectUser).id;
+    const isAuthorized = useSelector(isAuthorizedUser);
+    const { data: originalPostData } = useGetOriginalPostQuery({ id: post.original_post! }, { skip: !post.original_post });
     const { ref, inView } = useInView({ triggerOnce: true });
-    const { handleUpdateViews, handleDeletePost } = usePostActions({
+    const { handleUpdateViews } = usePostViewsActions({
         postId: post.id,
         authorId: post.author.id,
-        isOwner,
+        isOwner: user_id === post.author.id,
+    });
+    const { handleDeletePost } = usePostButtonAction({
         context,
         group_id,
     });
 
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
-        if (inView) {
+        // Показываем скелетон перед показом поста
+        const timeout = setTimeout(() => {
+            setIsLoading(false);
+        }, 500);
+        return () => clearTimeout(timeout);
+    }, []);
+
+    const isOwner = user_id === post.author.id;
+ 
+
+    useEffect(() => {
+        if (inView && !isLoading && !isAuthorized) {
             handleUpdateViews();
         }
-    }, [inView, handleUpdateViews]);
-
+    }, [inView, handleUpdateViews, isLoading, isAuthorized]);
 
     const handleOpenModal = () => {
         setOpenModal(true);
@@ -62,30 +80,54 @@ const Post: FC<PostProps> = ({ post, loading, context, group_id }) => {
         setOpenModal(false);
     };
 
+    if (isLoading) {
+        return <PostSkeleton />;
+    }
+
     return (
         <Box ref={ref} sx={{ width: '100%' }}>
             <Card sx={{ width: '100%', height: 'calc(100% - 1rem)', marginBottom: '1rem' }}>
                 <CardHeader
-                    avatar={<Avatar src={post.author.avatar} loading={loading} />}
-                    action={<PostMenu isAuthorized={isAuthorized} onEdit={handleOpenModal} onDelete={handleDeletePost} />}
+                    avatar={<Avatar src={post.author.avatar} />}
+                    action={
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            {!isOwner && <RepostButton original_post_id={post.id} />}
+                            <PostMenu
+                                isAuthorized={isAuthorized}
+                                onEdit={handleOpenModal}
+                                onDelete={() => handleDeletePost(post.id, post.author.id)}
+                            />
+                        </Box>
+                    }
                     title={
                         <NavLink style={{ textDecoration: 'none' }} to={`/profile/${post.author.id}`}>
                             {post.author.first_name} {post.author.last_name}
                         </NavLink>
                     }
-                    subheader={`post ID - ${post.id}`}
+                    subheader={
+                        <Typography variant="caption" component="div" sx={{ height: post.signature ? 'auto' : '20px' }}>
+                            {post.signature}
+                        </Typography>
+                    }
                 />
-                <CardContent>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        {post.content}
-                    </Typography>
-                </CardContent>
-                <PostImages images={post.images?.map((img) => img.image) || []} loading={loading} />
-                <CardActions sx={{ justifyContent: 'space-between' ,pr: '15px' }}>
-                    <LikeActions post={post} isLoading={loading} />
+                {originalPostData && <RepostContent originalPost={originalPostData} />}
+                {post.content && (
+                    <CardContent>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                            {post.content}
+                        </Typography>
+                    </CardContent>
+                )}
+                {post.images && post.images.length > 0 && (
+                    <CardMedia className="post-images">
+                        <PostImages images={post.images?.map((img) => img.image) || []} />
+                    </CardMedia>
+                )}
+                <CardActions sx={{ justifyContent: 'space-between', pr: '15px' }}>
+                    <LikeActions post={post} />
                 </CardActions>
                 <Divider />
-                <Box><RootComments postId={post.id} /> </Box>
+                <Box>{post.comments_count > 0 && <RootComments postId={post.id} />}</Box>
                 <Box sx={{ p: 2 }}>
                     <TextField
                         placeholder="Написать коментарий"
@@ -104,6 +146,7 @@ const Post: FC<PostProps> = ({ post, loading, context, group_id }) => {
                     />
                 </Box>
             </Card>
+
             <AddPostModal
                 open={openModal}
                 onClose={handleCloseModal}
@@ -118,4 +161,4 @@ const Post: FC<PostProps> = ({ post, loading, context, group_id }) => {
     );
 };
 
-export default Post;
+export default memo(Post);

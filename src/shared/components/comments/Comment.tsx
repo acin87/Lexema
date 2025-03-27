@@ -9,7 +9,7 @@ import {
     Divider,
     Typography,
 } from '@mui/material';
-import { FC, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CommentType } from '../../../entities/comment/types/commntsType';
 import { selectUser } from '../../../entities/user/slice/userSlice';
@@ -38,6 +38,44 @@ const Comment: FC<CommentProps> = ({ comment, user, level }) => {
     const currentUser = useSelector(selectUser);
     const [isLoading, setIsLoading] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+
+    const isEdited = useMemo(() => {
+        if (comment?.updated_at && comment?.created_at !== comment?.updated_at) {
+            return (
+                <Box sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Typography variant="subtitle2" component="div">
+                        {formatTimeAgo(comment?.created_at)}
+                    </Typography>
+                    <Typography
+                        variant="subtitle2"
+                        component="div"
+                        sx={{ display: 'flex', alignItems: 'center', gap: 0.5, fontSize: '10px' }}
+                    >
+                        <Typography
+                            component="span"
+                            sx={{
+                                p: 0,
+                                fontSize: '10px',
+                                backgroundColor: 'primary.main',
+                                color: 'background.paper',
+                                padding: '1px 2px',
+                                borderRadius: '5px',
+                            }}
+                        >
+                            отредактировано
+                        </Typography>
+                        {formatTimeAgo(comment?.updated_at)}
+                    </Typography>
+                </Box>
+            );
+        }
+        return (
+            <Typography variant="subtitle2" component="div">
+                {formatTimeAgo(comment?.created_at)}
+            </Typography>
+        );
+    }, [comment?.created_at, comment?.updated_at]);
+
     const isOwner = currentUser.id === user.id;
 
     const isEditor = currentUser.is_staff;
@@ -45,6 +83,14 @@ const Comment: FC<CommentProps> = ({ comment, user, level }) => {
     const isAdmin = currentUser.is_superuser;
 
     const isAuthorized = isOwner || isEditor || isAdmin;
+
+    useEffect(() => {
+        setIsLoading(true);
+        const timeout = setTimeout(() => {
+            setIsLoading(false);
+        }, 500);
+        return () => clearTimeout(timeout);
+    }, []);
 
     if (isLoading) {
         return <CommentSkeleton />;
@@ -71,19 +117,19 @@ const Comment: FC<CommentProps> = ({ comment, user, level }) => {
                             </Typography>
                         }
                         subheader={
-                            <Typography variant="body2" component="div">
-                                {formatTimeAgo(comment?.created_at)}
+                            <Typography variant="subtitle2" component="div">
+                                {isEdited}
                             </Typography>
                         }
                     />
                     <CardContent sx={{ p: '16px 20px 5px 20px', '&:last-child': { pb: 0 } }}>
-                        <Typography variant="body2" component="span" sx={{ wordBreak: 'break-word' }}>
+                        <Typography variant="body2" component="p" sx={{ wordBreak: 'break-word' }}>
                             {comment.content}
                         </Typography>
                     </CardContent>
                     <CardMedia>
                         {comment.images && comment.images?.length > 0 && (
-                            <PostImages images={comment.images?.map((img) => img.image) || []} loading={isLoading} />
+                            <PostImages images={comment.images?.map((img) => img.image) || []} />
                         )}
                     </CardMedia>
                     <CardActions
@@ -95,7 +141,11 @@ const Comment: FC<CommentProps> = ({ comment, user, level }) => {
                             },
                         }}
                     >
-                        <CreateCommentButton postId={comment.post_id} parent_id={comment.id} title="Ответить" />
+                        <CreateCommentButton
+                            postId={comment.post_id}
+                            parent_id={comment.id}
+                            title="Ответить"
+                        />
                         {isAuthorized && (
                             <CommentActionButton
                                 commentId={comment.id}
