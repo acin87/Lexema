@@ -12,14 +12,16 @@ export type PostTypes = {
     content: string;
     images?: [{ image: string }];
     video_urls?: string[];
-    likes: number;
-    dislikes: number;
+    is_liked: boolean;
+    likes_count: number;
+    dislikes_count: number;
+    user_reaction: string | null;
     created_at: string;
     group?: number;
     author: PostAuthor;
     views: number;
     comments_count: number;
-    reposts: number;
+    reposts_count: number;
     signature: string;
 };
 

@@ -3,8 +3,8 @@ import { FC, Fragment, memo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PostTypes } from '../../../entities/mainFeed/types/PostTypes';
 import AddPostButton from '../addPostButton/AddPostButton';
-import Post from './Post';
 import { WelcomeBanner } from '../welcomeBanner/WelcomeBanner';
+import Post from './Post';
 /**
  * Пропсы для компонента PostList
  * @param {PostTypes[]} posts - Массив постов
@@ -24,6 +24,7 @@ type PostListProps = {
     context: 'profile' | 'group';
     isProfile?: boolean;
     group_id?: number;
+    isLoading: boolean;
 };
 
 const postListStyles: SxProps = {
@@ -61,15 +62,9 @@ const circularProgressStyles: SxProps = {
  * @param {number} group_id - ID группы
  */
 const MemoizedPost = memo(
-    ({
-        post,
-        context,
-        group_id,
-    }: {
-        post: PostTypes;
-        context: 'profile' | 'group';
-        group_id?: number;
-    }) => <Post post={post}  context={context} group_id={group_id} />,
+    ({ post, context, group_id }: { post: PostTypes; context: 'profile' | 'group'; group_id?: number }) => (
+        <Post post={post} context={context} group_id={group_id} />
+    ),
 );
 
 /**
@@ -77,7 +72,17 @@ const MemoizedPost = memo(
  * @param PostListProps props - Пропсы для компонента PostList
  * @returns JSX.Element - Элемент JSX
  */
-const PostList: FC<PostListProps> = ({ posts, isSuccess, totalCount, ref, isError, context, group_id, isProfile }) => {
+const PostList: FC<PostListProps> = ({
+    posts,
+    isSuccess,
+    totalCount,
+    ref,
+    isError,
+    context,
+    group_id,
+    isProfile,
+    isLoading,
+}) => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -86,29 +91,25 @@ const PostList: FC<PostListProps> = ({ posts, isSuccess, totalCount, ref, isErro
         }
     }, [isError, navigate]);
 
-    if (posts.length === 0 && !isProfile) {
+    if (posts.length === 0 && !isProfile && !isLoading) {
         return <WelcomeBanner />;
     }
 
     return (
         <Box sx={{ ...postListStyles }} className="post-list">
-        <AddPostButton context={context} group_id={group_id} />
+            <AddPostButton context={context} group_id={group_id} />
             {posts.map((post, index) => {
                 const isLastPost = index + 1 === posts.length;
 
                 return (
                     <Fragment key={post.id}>
-                        <MemoizedPost
-                            post={post}
-                            context={context}
-                            group_id={group_id}
-                        />
+                        <MemoizedPost post={post} context={context} group_id={group_id} />
                         {isLastPost && isSuccess && index + 1 !== totalCount && (
                             <Box sx={{ ...circularProgressStyles }} ref={ref}>
                                 <CircularProgress />
                             </Box>
                         )}
-                        {isLastPost && isSuccess && index + 1 === totalCount && (
+                        {isLastPost && isSuccess && index + 1 === totalCount &&  totalCount > 1 && (
                             <Box sx={{ ...circularProgressStyles }}>
                                 <Box component="h2">Поздравляем, Вы просмотрели все посты</Box>
                             </Box>

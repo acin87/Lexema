@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useGetRootCommentsQuery, useLazyGetRootCommentsQuery } from '../api/commentApi';
 import { CommentType } from '../types/commntsType';
 
-
 /**
  * Хук для получения корневых комментариев
- * 
+ *
  * @param postId - id поста
  * @returns объект с комментариями и функция для загрузки новых комментариев
  */
@@ -13,34 +12,54 @@ const useRootComment = (postId: number) => {
     const [offset, setOffset] = useState(0);
     const limit = 10;
     const [comments, setComments] = useState<CommentType[]>([]);
+
+    // Основной запрос
     const { data: resultOnLoad, isSuccess } = useGetRootCommentsQuery({
-        postId: postId,
-        offset: offset,
-        limit: limit,
+        postId,
+        offset: 0, // Всегда начинаем с 0 для первоначальной загрузки
+        limit,
     });
-    const [lazyLoadComments, resultOnLazy] = useLazyGetRootCommentsQuery();
 
-    const count = resultOnLoad ? resultOnLoad.count : 0;
+    // Ленивая загрузка
+    const [lazyLoadComments, { data: lazyData, isSuccess: isLazySuccess, isLoading: isLazyLoading }] =
+        useLazyGetRootCommentsQuery();
 
+    // Мемоизированное значение count
+    const count = useMemo(() => resultOnLoad?.count || 0, [resultOnLoad]);
+
+    // Обработка первоначальной загрузки
     useEffect(() => {
-        if (isSuccess) {
-            setComments([...resultOnLoad.results]);
+        if (isSuccess && resultOnLoad) {
+            setComments(resultOnLoad.results);
+            setOffset(limit); // Устанавливаем offset для следующей загрузки
         }
-    }, [isSuccess, resultOnLoad]); 
+    }, [isSuccess, resultOnLoad, limit]);
 
-
+    // Обработка ленивой загрузки
     useEffect(() => {
-        if (resultOnLazy.isSuccess) {
-            const newComments = resultOnLazy.data.results.filter((comment) => !comments.find((c) => c.id === comment.id)); // Исключаем дубликаты
-            setComments([...comments, ...newComments]);
+        if (isLazySuccess && lazyData) {
+            setComments((prev) => {
+                // Фильтрация дубликатов через Set
+                const existingIds = new Set(prev.map((c) => c.id));
+                const newComments = lazyData.results.filter((comment) => !existingIds.has(comment.id));
+                return [...prev, ...newComments];
+            });
+            setOffset((prev) => prev + limit);
         }
-    }, [resultOnLazy, comments]); 
+    }, [isLazySuccess, lazyData, limit]);
 
-    const loadMoreComments = () => {
-        lazyLoadComments({ postId: postId, offset: offset + limit, limit: limit });
-        setOffset((prevOffset) => prevOffset + limit);
+    // Оптимизированная загрузка дополнительных комментариев
+    const loadMoreComments = useCallback(() => {
+        if (comments.length < count) {
+            lazyLoadComments({ postId, offset, limit });
+        }
+    }, [postId, offset, limit, count, comments.length, lazyLoadComments]);
+
+    return {
+        data: { comments },
+        actions: { loadMoreComments },
+        meta: { count, hasMore: count, isLoading: isLazyLoading },
     };
-    return { comments, loadMoreComments, count };
 };
 
 export default useRootComment;

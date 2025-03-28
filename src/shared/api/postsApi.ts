@@ -39,7 +39,7 @@ export const postsApi = createApi({
             }),
             invalidatesTags: ['ProfilePost'],
         }),
-        deleteProfilePost: builder.mutation<void, { postId: number, user_id: number }>({
+        deleteProfilePost: builder.mutation<void, { postId: number; user_id: number }>({
             query: ({ postId, user_id }) => ({
                 url: `${API.PROFILE}${user_id}/posts/${postId}/`,
                 method: 'DELETE',
@@ -78,21 +78,29 @@ export const postsApi = createApi({
             }),
             invalidatesTags: ['GroupPost'],
         }),
-        updateProfilePostLike: builder.mutation<PostTypes, { postId: number; user_id: number; likes: number }>({
-            query: ({ postId, user_id, likes }) => ({
+        updatePostLike: builder.mutation<
+            {
+                likes_count: number;
+                dislikes_count: number;
+                user_reaction: string | null;
+            },
+            { postId: number; user_id: number; reaction_type: 'like' | 'dislike' | null }
+        >({
+            query: ({ postId, reaction_type, user_id }) => ({
                 url: `${API.PROFILE}${user_id}/posts/${postId}/`,
                 method: 'PATCH',
-                body: { likes: JSON.stringify(likes) },
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                body: { like_action: reaction_type },
             }),
+            transformResponse: (response: {
+                likes_count: number;
+                dislikes_count: number;
+                user_reaction: string | null;
+            }) => response,
         }),
         getOriginalPost: builder.query<PostTypes, { id: number }>({
             query: ({ id }) => ({
                 url: `${API.REPOST}${id}/`,
                 method: 'GET',
-                
             }),
         }),
     }),
@@ -104,7 +112,7 @@ export const {
     useAddGroupPostMutation,
     useDeleteGroupPostMutation,
     useUpdateGroupPostMutation,
-    useUpdateProfilePostLikeMutation,
+    useUpdatePostLikeMutation,
     useGetProfilePostsQuery,
     useLazyGetOriginalPostQuery,
     useGetOriginalPostQuery,

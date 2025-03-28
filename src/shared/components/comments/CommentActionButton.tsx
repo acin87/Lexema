@@ -11,7 +11,6 @@ interface CommentActionButtonProps {
     onUpdateStart?: () => void;
     onUpdateEnd?: () => void;
     onDeleteStart?: () => void;
-    onDeleteEnd?: () => void;
 }
 /**
  * Компонент кнопки действий для комментария
@@ -22,7 +21,6 @@ const CommentActionButton: FC<CommentActionButtonProps> = ({
     onUpdateStart,
     onUpdateEnd,
     onDeleteStart,
-    onDeleteEnd,
 }) => {
     const { handleUpdateComment, handleDeleteComment } = useCommentAction();
     const [commentText, setCommentText] = useState(content);
@@ -33,11 +31,9 @@ const CommentActionButton: FC<CommentActionButtonProps> = ({
         setOpenModal(true);
     };
 
-
     const handleCloseModal = () => {
         setOpenModal(false);
     };
-
 
     const handleUpdate = async () => {
         onUpdateStart?.();
@@ -48,12 +44,11 @@ const CommentActionButton: FC<CommentActionButtonProps> = ({
         }, 500);
     };
 
-    const handleDelete = async () => {
+    const handleDelete = () => {
         onDeleteStart?.();
-        await handleDeleteComment(commentId);
-        setTimeout(() => {
-            onDeleteEnd?.();
-        }, 500);
+        setTimeout(async () => {
+            await handleDeleteComment(commentId);
+        }, 850);
     };
 
     return (

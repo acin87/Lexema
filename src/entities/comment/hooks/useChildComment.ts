@@ -1,29 +1,51 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../app/store/store';
 import { useLazyGetChildCommentsQuery } from '../api/commentApi';
 import { getCommentsByParentId, getExpandedById, setExpanded, updateComments } from '../slice/comment.Slice';
 import { CommentType } from '../types/commntsType';
+
 /**
  * Хук для получения дочерних комментариев
  *
  * @param parentComment - родительский комментарий
  * @returns объект с комментариями и функция для загрузки новых комментариев
  * */
-const useChildComment = (parentComment: CommentType) => {
-    const comments = useSelector((state: RootState) => getCommentsByParentId(state, parentComment.id.toString())) || [];
-    const expanded = useSelector((state: RootState) => getExpandedById(state, parentComment.id.toString()));
-    const [hasLoaded, setHasLoaded] = useState(false);
+const useChildComment = (parentComment: Pick<CommentType, 'id' | 'post_id' | 'child_count'>) => {
     const dispatch = useDispatch();
-    const [fetchComments, { data: lazyComments, isSuccess }] = useLazyGetChildCommentsQuery();
-    const loadMoreComments = () => {
-        if (!expanded) {
-            fetchComments({ parentId: parentComment.id, postId: parentComment.post_id });
-        }
-        dispatch(setExpanded({ commentId: parentComment.id.toString(), expanded: true }));
-    };
 
-    //Функция для скрытия ветки
+    const rawComments = useSelector((state: RootState) => getCommentsByParentId(state, parentComment.id.toString()));
+
+    const rawExpanded = useSelector((state: RootState) => getExpandedById(state, parentComment.id.toString()));
+
+    const comments = useMemo(() => rawComments || [], [rawComments]);
+    const expanded = useMemo(() => rawExpanded, [rawExpanded]);
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [hasLoaded, setHasLoaded] = useState(false);
+
+    const [fetchComments, { data: lazyComments, isSuccess }] = useLazyGetChildCommentsQuery();
+
+    const loadMoreComments = useCallback(() => {
+      
+        if (isLoading || expanded) return;
+
+        setIsLoading(true);
+        setError(null);
+        fetchComments({
+            parentId: parentComment.id,
+            postId: parentComment.post_id,
+        })
+            .unwrap()
+            .catch(() => setError('Ошибка загрузки'))
+            .finally(() => {
+                setIsLoading(false);
+                dispatch(setExpanded({ commentId: parentComment.id.toString(), expanded: true }));
+            });
+    }, [isLoading, expanded, fetchComments, parentComment, dispatch]);
+
+  
     const handleCollapseClick = useCallback(() => {
         dispatch(
             setExpanded({
@@ -33,16 +55,16 @@ const useChildComment = (parentComment: CommentType) => {
         );
     }, [dispatch, expanded, parentComment.id]);
 
-    //При первом раскрытии или если комментарии еще не загружены
+
     useEffect(() => {
         if (expanded && !hasLoaded) {
-            fetchComments({ parentId: parentComment.id, postId: parentComment.post_id });
+            loadMoreComments();
         }
-    }, [expanded, fetchComments, parentComment.id, parentComment.post_id, hasLoaded]);
+    }, [expanded, hasLoaded, loadMoreComments]);
 
-    // Обновляем комментарии только если lazyComments есть и это не инвалидация
+
     useEffect(() => {
-        if (lazyComments) {
+        if (lazyComments && lazyComments.length > 0) {
             setHasLoaded(true);
             dispatch(
                 updateComments({
@@ -54,11 +76,9 @@ const useChildComment = (parentComment: CommentType) => {
     }, [lazyComments, dispatch, parentComment.id]);
 
     return {
-        comments,
-        isSuccess,
-        expanded,
-        loadMoreComments,
-        handleCollapseClick,
+        data: { comments, expanded },
+        actions: { loadMoreComments, handleCollapseClick },
+        state: { isSuccess, isLoading, error },
     };
 };
 

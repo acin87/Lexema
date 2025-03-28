@@ -10,9 +10,12 @@ interface CommentsProps {
 }
 
 const RootComments: FC<CommentsProps> = (props) => {
-    const { comments, loadMoreComments, count } = useRootComment(props.postId);
+    const { data, actions, meta } = useRootComment(props.postId);
+    const { comments } = data;
+    const { loadMoreComments } = actions;
+    const { count } = meta;
 
-    const renderCommentsTree = useMemo(() => {        
+    const renderCommentsTree = useMemo(() => {
         return comments.map((comment) => {
             const childComments = comment.replies || [];
             if (comments.length === 0) {

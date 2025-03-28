@@ -1,49 +1,27 @@
-import { Box, Button, Divider } from '@mui/material';
-import { FC, memo } from 'react';
-import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
+import { Box, Button } from '@mui/material';
+import { FC } from 'react';
+import { CommentType } from '../../../entities/comment/types/commntsType'
 import AddIcon from '@mui/icons-material/Add';
 
 interface ExpandCommentsButtonProps {
-    expanded: boolean;
-    handleCollapseClick: () => void;
-    child_count: number;
+    parentComment: Pick<CommentType, 'id' | 'post_id' | 'child_count'> ;
     loadMoreComments: () => void;
 }
-const ExpandCommentsButton: FC<ExpandCommentsButtonProps> = ({ expanded, handleCollapseClick, child_count, loadMoreComments }) => {
-    return expanded ? (
-        //Если ветка раскрыта, то показываем кнопку для скрытия ветки
-        <Box
-            sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                width: '40px',
-                paddingBottom: 4,
-                lineHeight: '22px',
-                paddingLeft: '15px',
-            }}
-        >
+
+const ExpandCommentsButton: FC<ExpandCommentsButtonProps> = ({ parentComment, loadMoreComments }) => {
+    return (
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
             <Button
-                sx={{ textTransform: 'lowercase', '& .MuiButton-startIcon': { marginRight: '0px' } }}
-                size="small"
-                onClick={handleCollapseClick}
-                startIcon={<IndeterminateCheckBoxOutlinedIcon sx={{ marginRight: 0 }} />}
-            ></Button>
-            <Divider orientation="vertical" />
-        </Box>
-    ) : (
-        //Если ветка скрыта, то показываем кнопку для раскрытия ветки
-        <Box sx={{ display: 'flex' }}>
-            <Button
-                sx={{ textTransform: 'lowercase', ml: '16px', lineHeight: '22px' }}
+                sx={{ textTransform: 'lowercase', ml: '16px' }}
                 size="small"
                 startIcon={<AddIcon />}
-                onClick={loadMoreComments}
+                onClick={() => loadMoreComments()}
             >
-                раскрыть ветку ({child_count})
+                раскрыть ветку ({parentComment.child_count})
             </Button>
         </Box>
     );
 };
 
-export default memo(ExpandCommentsButton);
+export default ExpandCommentsButton;
+

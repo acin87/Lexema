@@ -1,16 +1,4 @@
-import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
-import {
-    Box,
-    Card,
-    CardActions,
-    CardContent,
-    CardHeader,
-    CardMedia,
-    Divider,
-    InputAdornment,
-    TextField,
-    Typography,
-} from '@mui/material';
+import { Box, Card, CardActions, CardContent, CardHeader, CardMedia, Divider, Typography } from '@mui/material';
 import { FC, memo, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useSelector } from 'react-redux';
@@ -22,26 +10,38 @@ import { usePostButtonAction } from '../../hooks/usePostButtonAction';
 import { usePostViewsActions } from '../../hooks/usePostViewsActions';
 import AddPostModal from '../addPostButton/AddPostModal';
 import Avatar from '../avatar/Avatar';
-import SnackBar from '../snackbar/SnackBar';
+import RootComments from '../comments/RootComments';
+import AddCommentButton from './AddCommentButton';
 import LikeActions from './LikeActions';
 import PostImages from './PostImages';
 import PostMenu from './PostMenu';
 import PostSkeleton from './PostSkeleton';
 import RepostButton from './RepostButton';
 import RepostContent from './RepostContent';
-import RootComments from '../comments/RootComments';
 
+/**
+ * Пропсы для компонента Post
+ */
 interface PostProps {
     post: PostTypes;
     context: 'profile' | 'group';
     group_id?: number;
 }
-
+/**
+ * Компонент для отображения поста
+ * @param post - Пост
+ * @param context - Контекст (профиль или группа)
+ * @param group_id - ID группы
+ * @returns Пост
+ */
 const Post: FC<PostProps> = ({ post, context, group_id }) => {
     const [openModal, setOpenModal] = useState(false);
     const user_id = useSelector(selectUser).id;
     const isAuthorized = useSelector(isAuthorizedUser);
-    const { data: originalPostData } = useGetOriginalPostQuery({ id: post.original_post! }, { skip: !post.original_post });
+    const { data: originalPostData } = useGetOriginalPostQuery(
+        { id: post.original_post! },
+        { skip: !post.original_post },
+    );
     const { ref, inView } = useInView({ triggerOnce: true });
     const { handleUpdateViews } = usePostViewsActions({
         postId: post.id,
@@ -64,7 +64,6 @@ const Post: FC<PostProps> = ({ post, context, group_id }) => {
     }, []);
 
     const isOwner = user_id === post.author.id;
- 
 
     useEffect(() => {
         if (inView && !isLoading && !isAuthorized) {
@@ -127,24 +126,8 @@ const Post: FC<PostProps> = ({ post, context, group_id }) => {
                     <LikeActions post={post} />
                 </CardActions>
                 <Divider />
-                <Box>{post.comments_count > 0 && <RootComments postId={post.id} />}</Box>
-                <Box sx={{ p: 2 }}>
-                    <TextField
-                        placeholder="Написать коментарий"
-                        fullWidth
-                        slotProps={{
-                            input: {
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <CommentOutlinedIcon />
-                                    </InputAdornment>
-                                ),
-                            },
-                        }}
-                        variant="outlined"
-                        size="small"
-                    />
-                </Box>
+                {post.comments_count > 0 && <RootComments postId={post.id} />}
+                <AddCommentButton postId={post.id} />
             </Card>
 
             <AddPostModal
@@ -156,7 +139,6 @@ const Post: FC<PostProps> = ({ post, context, group_id }) => {
                 context={context}
                 group_id={group_id}
             />
-            <SnackBar message="" severity="success" open={false} onClose={() => {}} />
         </Box>
     );
 };

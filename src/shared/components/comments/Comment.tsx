@@ -100,12 +100,8 @@ const Comment: FC<CommentProps> = ({ comment, user, level }) => {
         setIsDeleting(true);
     };
 
-    const handleDeleteEnd = () => {
-        setIsDeleting(false);
-    };
-
     return (
-        <Collapse in={!isDeleting} timeout={500}>
+        <Collapse in={!isDeleting} timeout={1000} >
             <Box>
                 <Card sx={{ boxShadow: 'none', width: '100%', paddingBottom: 0 }}>
                     <CardHeader
@@ -153,7 +149,6 @@ const Comment: FC<CommentProps> = ({ comment, user, level }) => {
                                 onUpdateStart={() => setIsLoading(true)}
                                 onUpdateEnd={() => setIsLoading(false)}
                                 onDeleteStart={handleDeleteStart}
-                                onDeleteEnd={handleDeleteEnd}
                             />
                         )}
                     </CardActions>

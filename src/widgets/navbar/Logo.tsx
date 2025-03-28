@@ -22,10 +22,11 @@ const Logo: FC = () => {
             <NavLink to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.938rem' }}>
                 <Box
                     component="img"
-                    src="/src/assets/icons/logo.png"
+                    src="/src/assets/icons/favicon2.png"
                     alt="Lexema"
                     width="2.813rem"
                     height="2.813rem"
+                    sx={{ filter: 'drop-shadow(0 5px 10px rgba(0, 0, 0, 0.5));' }}
                 ></Box>
                 <Typography component="span" fontSize="1.75rem" sx={{ flex: 1 }}>
                     Lexema

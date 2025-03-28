@@ -3,8 +3,6 @@ import { User } from '../../../entities/user/types/UserTypes';
 export type CommentResponse = { 
     results: CommentType[]; 
     count: number;
-    next: string | null;
-    previous: string | null;
 };
 
 export type CommentType = {

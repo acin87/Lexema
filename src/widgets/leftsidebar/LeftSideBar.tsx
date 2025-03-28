@@ -4,7 +4,8 @@ import { FC, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store/store';
 import Menu from '../menu/Menu';
-
+import { uiActions } from '../../shared/ui/uiSlice';
+import { useDispatch } from 'react-redux';
 const drawerWidth = 250;
 
 const openedMixin = (): SxProps => ({
@@ -59,15 +60,19 @@ const Drawer = styled(MuiDrawer, {
 
 /**
  * Левая боковая панель
- * @returns {React.ReactElement}
+ * @returns React.ReactElement
  */
 const LeftSideBar: FC = () => {
+    const dispatch = useDispatch();
     const openFromStore = useSelector((s: RootState) => s.ui.sidebar);
 
     const [isHovered, setIsHovered] = useState(false);
 
     const isOpen = openFromStore || isHovered;
 
+    const handleBlur = () => {
+        dispatch(uiActions.toggleSidebar());
+    };
 
     return (
         <Drawer
@@ -75,7 +80,11 @@ const LeftSideBar: FC = () => {
             anchor="left"
             open={isOpen}
             onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            onMouseLeave={() => {
+                setIsHovered(false);
+                handleBlur();
+            }}
+            onBlur={handleBlur}
             PaperProps={{
                 sx: {
                     top: '4.688rem',

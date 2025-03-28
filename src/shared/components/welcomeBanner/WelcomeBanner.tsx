@@ -24,7 +24,7 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ onFindFriendsClick
         >
             <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
                 <Avatar sx={{ bgcolor: theme.palette.primary.main, width: 60, height: 60 }}>
-                    <img src={'src/assets/icons/WelcomeRocketIcon.png'} style={{ width: '100%', height: '100%' }} />
+                    <img src={'src/assets/icons/favicon2.png'} style={{ width: '100%', height: '100%' }} />
                 </Avatar>
             </Box>
 

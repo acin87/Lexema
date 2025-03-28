@@ -25,7 +25,7 @@ const HighlightText = ({ text, searchTerm }: { text: string; searchTerm: string 
         <>
             {parts.map((part, i) =>
                 part.toLowerCase() === searchTerm.toLowerCase() ? (
-                    <Typography sx={{ color: 'primary.main', fontWeight: 'bold' }} component={'span'} key={i}>
+                    <Typography sx={{ color: 'warning.main', fontWeight: 300, fontSize: '18px' }} component={'span'} key={i}>
                         {part}
                     </Typography>
                 ) : (

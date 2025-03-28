@@ -1,15 +1,18 @@
-import { Box, Button, Collapse, Divider } from '@mui/material';
+import { Box, Collapse } from '@mui/material';
 import { FC, Fragment, memo } from 'react';
 import useChildComment from '../../../entities/comment/hooks/useChildComment';
 import { CommentType } from '../../../entities/comment/types/commntsType';
+import CollapseCommentsButton from './CollapseCommentsButton';
 import Comment from './Comment';
 import ExpandCommentsButton from './ExpandCommentsButton';
-import AddIcon from '@mui/icons-material/Add';
+import SingleComment from './SingleComment';
 /**
  * Пропсы компонента дочернего комментария
  */
 interface ChildCommentProps {
-    parentComment: CommentType;
+    parentComment: Pick<CommentType, 'id' | 'post_id' | 'child_count'> & {
+        replies?: CommentType[];
+    };
     level: number;
 }
 
@@ -37,73 +40,53 @@ const MemoizedComments = memo(({ comments, level }: { comments: CommentType[]; l
  * @param level - уровень вложенности комментария
  */
 const ChildComment: FC<ChildCommentProps> = ({ parentComment, level }) => {
-    const { comments, isSuccess, expanded, loadMoreComments, handleCollapseClick } = useChildComment(parentComment);
+    const { data, actions } = useChildComment(parentComment);
+    const { comments, expanded } = data;
+    const { loadMoreComments, handleCollapseClick } = actions;
+    // const { isSuccess, isLoading, error } = state;
 
-    const renderComment = () => {
-        if (parentComment.replies?.length === 1 && parentComment.child_count > 1 && !expanded) {
-            //Если у родительского комментария есть один дочерний комментарий но количество дочерних комментариев больше 1, то показываем кнопку для раскрытия ветки
-            return (
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                    <Button
-                        sx={{ textTransform: 'lowercase', ml: '16px' }}
-                        size="small"
-                        startIcon={<AddIcon />}
-                        onClick={loadMoreComments}
-                    >
-                        раскрыть ветку ({parentComment.child_count})
-                    </Button>
-                </Box>
-            );
-        } else if (parentComment.replies?.length === 1 && parentComment.child_count === 1 && !expanded) {
-            //Если у родительского комментария есть один дочерний комментарий и количество дочерних комментариев равно 1, то показываем комментарий
-            return (
-                <Box sx={{ display: 'flex', width: '100%' }}>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            width: '40px',
-                            height: '100%',
-                            paddingBottom: 4,
-                            paddingLeft: '15px',
-                        }}
-                    >
-                        <Divider orientation="vertical" />
-                    </Box>
-                    <Box sx={{ width: 'calc(100% - 40px)' }}>
-                        <Comment
-                            comment={parentComment.replies[0]}
-                            user={parentComment.replies[0].user}
-                            level={level}
-                        />
-                    </Box>
-                </Box>
-            );
-        } else if (isSuccess) {
-            //Если комментарии лениво загружены, то показываем ветку
-            return (
-                <Box sx={{ display: 'flex', flexDirection: `${expanded ? 'row' : 'column'}` }}>
-                    <ExpandCommentsButton
-                        expanded={expanded}
-                        handleCollapseClick={handleCollapseClick}
-                        child_count={parentComment.child_count}
-                        loadMoreComments={loadMoreComments}
-                    />
-                    <Collapse
-                        in={expanded}
-                        sx={{ marginLeft: `${!expanded ? '40px' : '0'}`, width: 'calc(100% - 40px)' }}
-                        timeout="auto"
-                        unmountOnExit
-                    >
-                        <MemoizedComments comments={comments} level={level} />
-                    </Collapse>
-                </Box>
-            );
-        }
-    };
+    const replies = parentComment.replies || [];
+    const hasReplies = replies.length > 0;
 
-    return renderComment();
+    const shouldShowExpandButton =
+        parentComment.child_count > 0 && (parentComment.child_count > 1 || (hasReplies && replies[0].child_count > 0));
+
+    if (shouldShowExpandButton && !expanded) {
+        /*Если у родительского комментария есть один дочерний комментарий но количество дочерних комментариев больше 1,
+         то показываем кнопку для раскрытия ветки
+        и при нажатии на кнопку загружаем дочерние комментарии
+             */
+        return <ExpandCommentsButton parentComment={parentComment} loadMoreComments={loadMoreComments} />;
+    }
+
+    if (hasReplies && parentComment.child_count === 1 && !expanded) {
+        /*Если у родительского комментария есть один дочерний комментарий и количество дочерних комментариев равно 1, 
+            то показываем комментарий который уже загружен */
+        return <SingleComment parentComment={parentComment} level={level} />;
+    }
+    //Если комментарии лениво загружены, то показываем ветку
+    return (
+        <Box sx={{ display: 'flex', flexDirection: `${expanded ? 'row' : 'column'}` }}>
+            <CollapseCommentsButton
+                expanded={expanded}
+                handleCollapseClick={handleCollapseClick}
+                child_count={parentComment.child_count}
+                loadMoreComments={loadMoreComments}
+            />
+            <Collapse
+                in={expanded}
+                sx={{
+                    marginLeft: `${!expanded ? '40px' : '0'}`,
+                    width: 'calc(100% - 40px)',
+                    transition: 'all 0.3s ease-in-out',
+                }}
+                timeout="auto"
+                unmountOnExit
+            >
+                <MemoizedComments comments={comments} level={level} />
+            </Collapse>
+        </Box>
+    );
 };
 
-export default ChildComment;
+export default memo(ChildComment);

@@ -4,7 +4,7 @@ const useCommentAction = () => {
     const [updateComment] = useUpdateCommentMutation();
     const [deleteComment] = useDeleteCommentMutation();
     
-    const handleAddComment =  (postId: number, content: string, parent_id: number, files?: File[], ) => {
+    const handleAddComment =  (postId: number, content: string, parent_id: number | null, files?: File[]) => {
         const formData = new FormData();
         formData.append('content', content);
         if (files) {
