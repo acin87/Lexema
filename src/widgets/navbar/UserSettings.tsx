@@ -8,11 +8,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute, SiteAppRoutePath } from '../../app/routes/Config';
 import { AppDispatch, RootState } from '../../app/store/store';
-import { logout } from '../../entities/auth/slice/authSlice';
+import { uiActions } from '../../app/store/uiSlice';
+import { logout } from '../../features/auth/slice/authSlice';
 import { selectUser } from '../../entities/user/slice/userSlice';
-import Avatar from '../../shared/components/avatar/Avatar';
-import ThemeSwitcher from '../../shared/components/themeSwitcher/ThemeSwitcher';
-import { uiActions } from '../../shared/ui/uiSlice';
+import Avatar from '../../shared/ui/avatar/Avatar';
+import ThemeSwitcher from '../../shared/ui/themeSwitcher/ThemeSwitcher';
 const itemMenuStyles: SxProps = {
     width: '2.813rem',
     height: '2.813rem',
@@ -114,7 +114,9 @@ const UserSettings: FC = () => {
                         sx={{ cursor: 'pointer', ':hover': { backgroundColor: 'rgba(255, 186, 104, .1)' } }}
                         title="Профиль"
                         subheader={<Typography variant="subtitle2">Редкатировать профиль</Typography>}
-                        onClick={() => navigate(SiteAppRoutePath[AppRoute.PROFILE].replace(':id', user.id.toString()) + '?tab=1')}
+                        onClick={() =>
+                            navigate(SiteAppRoutePath[AppRoute.PROFILE].replace(':id', user.id.toString()) + '?tab=1')
+                        }
                     />
                     <Divider />
                     <CardHeader
@@ -126,7 +128,9 @@ const UserSettings: FC = () => {
                         sx={{ cursor: 'pointer', ':hover': { backgroundColor: 'rgba(213, 146, 255, .1)' } }}
                         title="Настройки"
                         subheader={<Typography variant="subtitle2">Настройки страницы</Typography>}
-                        onClick={() => navigate(SiteAppRoutePath[AppRoute.PROFILE].replace(':id', user.id.toString()) + '?tab=3')}
+                        onClick={() =>
+                            navigate(SiteAppRoutePath[AppRoute.PROFILE].replace(':id', user.id.toString()) + '?tab=3')
+                        }
                     />
                 </Card>
             </Popover>

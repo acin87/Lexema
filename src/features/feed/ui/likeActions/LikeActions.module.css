@@ -1,0 +1,43 @@
+.likeActionsContainer {
+    display: flex;
+}
+
+.likeButton {
+    display: flex;
+}
+
+.likeButtonText {
+    font-size: 12px;
+}
+
+.likeButton:hover {
+    color: var(--error-main);
+}
+
+.actionCount {
+    display: flex;
+    width: 64px;
+    padding: 0 8px;
+}
+
+.actionIcon {
+    display: flex;
+    align-items: center;
+}
+
+.actionCountText {
+    margin-left: 8px;
+    font-size: 12px;
+    color: var(--primary-main);
+}
+
+.viewsContainer {
+    display: flex;
+    align-items: flex-end;
+    padding-right: 10px;
+    gap: 4px;
+}
+
+.viewsCount {
+    margin-left: 0.5rem;
+}

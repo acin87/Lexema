@@ -1,11 +1,10 @@
 import { styled, SxProps, Theme } from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import { FC, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store/store';
+import { uiActions } from '../../app/store/uiSlice';
 import Menu from '../menu/Menu';
-import { uiActions } from '../../shared/ui/uiSlice';
-import { useDispatch } from 'react-redux';
 const drawerWidth = 250;
 
 const openedMixin = (): SxProps => ({

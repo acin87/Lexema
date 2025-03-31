@@ -10,6 +10,7 @@ export enum API {
     REGISTRATION = 'api/auth/register/',
     LOGOUT = 'api/auth/logout',
     REFRESH = 'api/auth/refresh/',
+    NOTIFICATIONS = 'api/notifications/',
     ME = 'api/me/',
     POSTS ='api/posts/',
     CHILD_COMMENTS = 'api/child_comments/',

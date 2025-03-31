@@ -1,0 +1,8 @@
+.menuButton {
+    color: #666;
+    padding: 8px;
+}
+
+.menuButton:hover {
+    color: #333;
+}

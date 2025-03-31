@@ -1,13 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom';
-import RequireAuth from '../../entities/auth/component/RequireAuth';
+import RequireAuth from '../../features/auth/ui/RequireAuth';
 import AuthPage from '../../pages/auth/AuthPage';
 import FeedPage from '../../pages/FeedPage';
 import FriendsPage from '../../pages/FriendsPage';
 import HomePage from '../../pages/MainPage';
 import MessengerPageAsync from '../../pages/messenger/MessengerPageAsync';
-import ProfilePage from '../../pages/ProfilePage';
-import { AppRoute, SiteAppRoutePath } from './Config';
 import NotFoundPage from '../../pages/NotFoundPage/NotFoundPage';
+import ProfilePageAsync from '../../pages/ProfilePage/ProfilePageAsync';
+import { AppRoute, SiteAppRoutePath } from './Config';
 export const AppRoutes = createBrowserRouter([
     {
         path: SiteAppRoutePath[AppRoute.AUTH],
@@ -31,7 +31,7 @@ export const AppRoutes = createBrowserRouter([
             },
             {
                 path: SiteAppRoutePath[AppRoute.PROFILE],
-                element: <ProfilePage />,
+                element: <ProfilePageAsync />,
             },
             {
                 path: SiteAppRoutePath[AppRoute.MESSENGER],

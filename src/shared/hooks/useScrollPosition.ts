@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../app/store/store';
-import { uiActions } from '../ui/uiSlice';
+import { uiActions } from '../../app/store/uiSlice';
 
 const useScrollPosition = (page: string) => {
     const dispatch = useDispatch<AppDispatch>();

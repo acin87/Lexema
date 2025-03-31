@@ -4,13 +4,12 @@ import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { FC, memo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute, SiteAppRoutePath } from '../../app/routes/Config';
-import styles from './Menu.module.css';
-import { useSelector } from 'react-redux';
+import { uiActions } from '../../app/store/uiSlice';
 import { selectUser } from '../../entities/user/slice/userSlice';
-import { uiActions } from '../../shared/ui/uiSlice';
-import { useDispatch } from 'react-redux';
+import styles from './Menu.module.css';
 /**
  * Интерфейс для пропсов, открытие и закрытие панели
  */

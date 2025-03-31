@@ -8,7 +8,7 @@ import { DarkTheme, LightTheme } from '../shared/styles/Theme';
 import LeftSideBar from '../widgets/leftsidebar/LeftSideBar';
 import Navbar from '../widgets/navbar/Navbar';
 import RightSideBar from '../widgets/rightsidebar/RightSideBar';
-import LoadingProgress from '../shared/components/loadingProgress/LoadingProgress';
+import LoadingProgress from '../shared/ui/loadingProgress/LoadingProgress';
 const MainPage: FC = () => {
     const theme = useSelector((s: RootState) => s.ui.theme);
     const [darkOrLight, setDarkOrLight] = useState<string | null>(theme);

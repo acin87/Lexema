@@ -1,0 +1,31 @@
+
+.commentContainer {
+    padding: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.attachFileIcon {
+    cursor: pointer;
+    color: var(--primary-main);
+}
+
+.attachFileIcon:hover {
+    color: var(--error-main);
+}
+
+.sendButton {
+    margin-left: 16px;
+}
+
+.sendIcon {
+    color: var(--primary-main);
+}
+
+.sendIcon:hover {
+    color: var(--primary-main);
+}
+
+.sendIconFocused {
+    color: var(--error-main);
+}

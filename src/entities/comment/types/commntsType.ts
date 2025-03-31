@@ -1,7 +1,7 @@
-import { User } from '../../../entities/user/types/UserTypes';
+import { User } from '../../user/types/UserTypes';
 
-export type CommentResponse = { 
-    results: CommentType[]; 
+export type CommentResponse = {
+    results: CommentType[];
     count: number;
 };
 

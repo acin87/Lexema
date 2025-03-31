@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useGetUpcomingBirthdaysQuery } from '../../entities/friends/api/friendsApi';
+import { useGetUpcomingBirthdaysQuery } from '../../features/friends/api/friendsApi';
 import { checkUrl } from '../../shared/utils/Utils';
 import styles from './birthday.module.css';
 /**
@@ -42,7 +42,11 @@ const UpcomingBirthday: FC = () => {
         return (
             <ListItem key={index}>
                 <ListItemAvatar>
-                    {isLoading ? <Skeleton animation="wave" variant="circular" sx={{ height: '3.75rem', width: '3.75rem' }} /> : <Avatar src={avatarImage()} sx={{ height: '3.75rem', width: '3.75rem' }} />}
+                    {isLoading ? (
+                        <Skeleton animation="wave" variant="circular" sx={{ height: '3.75rem', width: '3.75rem' }} />
+                    ) : (
+                        <Avatar src={avatarImage()} sx={{ height: '3.75rem', width: '3.75rem' }} />
+                    )}
                 </ListItemAvatar>
                 <ListItemText
                     sx={{ paddingLeft: 3 }}

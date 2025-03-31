@@ -1,7 +1,7 @@
 import { Avatar, AvatarGroup, Box, CssThemeVariables, List, ListItem, Typography } from '@mui/material';
 import { cloneElement, FC, ReactElement } from 'react';
 import useCustomScrollBar from '../../../shared/hooks/useCustomScrollBar';
-import { useGetDialoguesQuery } from '../../../entities/messenger/api/messengerApi';
+import { useGetDialoguesQuery } from '../api/messengerApi';
 
 const dialoguePanel: CssThemeVariables = {
     borderRight: '1px solid #eaeaea',
@@ -18,7 +18,9 @@ const dialoguePanel: CssThemeVariables = {
 };
 
 const generate = (element: ReactElement<unknown>) => {
-    return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((value, index) => cloneElement(element, { key: value }, <span> {index} </span>));
+    return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((value, index) =>
+        cloneElement(element, { key: value }, <span> {index} </span>),
+    );
 };
 
 const MessangerPanel: FC = () => {
@@ -75,10 +77,24 @@ const MessangerPanel: FC = () => {
                     ref={contentRef}
                 >
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <Typography component="span" fontSize=".825rem" color="primary.main" fontWeight="500" sx={{ mb: 1 }}>
+                        <Typography
+                            component="span"
+                            fontSize=".825rem"
+                            color="primary.main"
+                            fontWeight="500"
+                            sx={{ mb: 1 }}
+                        >
                             Частые контакты
                         </Typography>
-                        <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', mb: 1}}>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '100%',
+                                mb: 1,
+                            }}
+                        >
                             <AvatarGroup max={5} spacing={1}>
                                 <Avatar alt="Remy Sharp" src="/public/user/1.jpg" />
                                 <Avatar alt="Travis Howard" src="/public/user/02.jpg" />

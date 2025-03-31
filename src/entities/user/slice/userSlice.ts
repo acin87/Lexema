@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UserState, USER_PERSISTENT_STATE, User } from '../types/UserTypes';
-import { loadState } from '../../../shared/utils/LocalStorage';
 import { RootState } from '../../../app/store/store';
+import { loadState } from '../../../shared/utils/LocalStorage';
+import { User, USER_PERSISTENT_STATE, UserState } from '../types/UserTypes';
 const initialState: UserState = loadState<UserState>(USER_PERSISTENT_STATE) || {
     data: {
         id: 0,
@@ -31,5 +31,3 @@ export const selectUserId = (state: RootState) => state.user.data.id;
 export const isAuthorizedUser = (state: RootState) => state.user.data.is_staff || state.user.data.is_superuser;
 export const isAdminUser = (state: RootState) => state.user.data.is_superuser;
 export default userSlice.reducer;
-
-

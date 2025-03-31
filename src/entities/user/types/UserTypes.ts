@@ -10,20 +10,23 @@ export type User = {
     username: string;
     first_name: string;
     last_name: string;
-    avatar: string;
+    avatar: string | null;
     is_staff: boolean;
     is_superuser: boolean;
     full_name: string;
 };
 
-export type UserAutocompleteResponse = {
-    results: UserAutocomplete[];
+
+//для поиска по пользователям
+export type AutocompleteResponse = {
+    results: Autocomplete[];
     count: number;
     previous: string | null;
     next: string | null;
 };
 
-export type UserAutocomplete = {
+
+export type Autocomplete = {
     id: number;
     username: string;
     first_name: string;

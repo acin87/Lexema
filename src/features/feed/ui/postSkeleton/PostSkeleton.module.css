@@ -1,0 +1,22 @@
+.skeletonContainer {
+    width: 100%;
+}
+
+.skeletonCard {
+    width: 100%;
+    height: calc(100% - 1rem);
+    margin-bottom: 1rem;
+}
+
+.skeletonImageContainer {
+    margin-top: 16px;
+}
+
+.skeletonActions {
+    padding: 0 16px 16px;
+}
+
+.skeletonActionsContent {
+    display: flex;
+    gap: 16px;
+}

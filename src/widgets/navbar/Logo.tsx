@@ -1,10 +1,10 @@
+import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import { Box, IconButton, Typography } from '@mui/material';
 import { FC } from 'react';
-import { NavLink } from 'react-router-dom';
-import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import { useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import { AppDispatch } from '../../app/store/store';
-import { uiActions } from '../../shared/ui/uiSlice';
+import { uiActions } from '../../app/store/uiSlice';
 
 /**
  * Компонент для отображения логотипа

@@ -1,0 +1,176 @@
+/************** COMMENT *******************/
+.commentContainer {
+    box-shadow: none;
+    width: 100%;
+    padding-bottom: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-shadow: none;
+}
+
+.commentHeader {
+    padding-bottom: 0;
+}
+
+.commentContent {
+    padding: 16px 20px 5px 20px;
+}
+
+.commentContent:last-child {
+    padding-bottom: 0;
+}
+
+.commentText {
+    word-break: break-word;
+}
+
+.commentActions {
+    padding: 0;
+}
+
+.commentActionsMobile {
+    @media (max-width: 600px) {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+}
+
+.commentActionsDesktop {
+    @media (min-width: 601px) {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+/************** COMMENT SKELETON *******************/
+.skeletonContainer {
+    box-shadow: none;
+    width: 100%;
+    padding-bottom: 0;
+}
+
+.skeletonContent {
+    padding: 16px 20px 5px 20px;
+}
+
+.skeletonContent:last-child {
+    padding-bottom: 0;
+}
+
+.skeletonActions {
+    padding-left: 24px;
+}
+
+/************** CHILD COMMENT *******************/
+.childCommentContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.childCommentContainerCollapsed {
+    display: flex;
+    flex-direction: column;
+}
+
+.childCommentContent {
+    width: calc(100% - 40px);
+    transition: all 0.3s ease-in-out;
+}
+
+/************** COLLAPSE BUTTON *******************/
+.collapseButtonContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40px;
+    padding-bottom: 32px;
+    line-height: 22px;
+    padding-left: 15px;
+}
+
+.collapseButton {
+    text-transform: lowercase;
+}
+
+.collapseButtonText {
+    font-size: .720rem;
+}
+
+.collapseButtonIcon {
+    margin-right: 0;
+}
+
+/************** EXPAND BUTTON *******************/
+.expandButtonContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 14px;
+}
+
+/************** REPLY BUTTON *******************/
+.replyButton {
+    text-transform: lowercase;
+    margin-left: 16px;
+}
+
+.replyButtonText {
+    font-size: .720rem;
+}
+
+/************** ACTION BUTTON *******************/
+.actionButton {
+    text-transform: lowercase;
+    margin-left: 16px;
+}
+
+.actionButtonText {
+    font-size: .720rem;
+}
+
+/************** ROOT COMMENTS *******************/
+.rootCommentsDivider {
+    padding-top: 16px;
+}
+
+/************** SINGLE COMMENT *******************/
+.singleCommentContainer {
+    display: flex;
+    width: 100%;
+}
+
+.singleCommentDivider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40px;
+    height: 100%;
+    padding-bottom: 32px;
+    padding-left: 15px;
+}
+
+.singleCommentContent {
+    width: calc(100% - 40px);
+}
+
+/************** COMMENT TIME *******************/
+.commentTimeContainer {
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.commentTimeEdited {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.commentTimeBadge {
+    padding: 1px 2px;
+    font-size: 10px;
+    background-color: var(--primary-main);
+    color: var(--background-paper);
+    border-radius: 5px;
+}

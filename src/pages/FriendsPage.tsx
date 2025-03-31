@@ -1,6 +1,6 @@
 import { Box, Container } from '@mui/material';
 import { FC, memo } from 'react';
-import FriendList from '../features/friends/components/FriendList';
+import FriendList from '../features/friends/ui/FriendList';
 import useScrollPosition from '../shared/hooks/useScrollPosition';
 import useDocumentTitle from '../shared/hooks/useDocumentTitle';
 const FriendsPage: FC = memo(() => {

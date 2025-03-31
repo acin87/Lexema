@@ -1,0 +1,7 @@
+.repostButton {
+    color: var(--primary-main);
+}
+
+.repostButton:hover {
+    color: var(--error-main);
+}

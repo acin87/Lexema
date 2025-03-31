@@ -1,0 +1,14 @@
+.repostContainer {
+    width: 100%;
+}
+
+.repostHeader {
+    padding: 0;
+}
+
+.repostAuthor {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 28px;
+}

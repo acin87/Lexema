@@ -1,10 +1,10 @@
 import { Box } from '@mui/material';
 import { FC } from 'react';
-import Posts from '../features/feed/components/MainFeedPosts';
+import Posts from '../features/feed/ui/mainFeed/MainFeed';
+import useDocumentTitle from '../shared/hooks/useDocumentTitle';
 import useScrollPosition from '../shared/hooks/useScrollPosition';
 import styles from '../shared/styles/FeedPage.module.css';
 import UpcomingBirthday from '../widgets/birthday/UpcomingBirthday';
-import useDocumentTitle from '../shared/hooks/useDocumentTitle';
 /**
  * Страница ленты
  * @returns Страница ленты

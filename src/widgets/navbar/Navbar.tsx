@@ -1,8 +1,8 @@
 import { Box, styled } from '@mui/material';
 import { FC, memo } from 'react';
-import SearchAutocomplete from '../../shared/components/searchAutocomlite/SearchAutocomplete';
 import Logo from './Logo';
 import UserSettings from './UserSettings';
+import SearchAutocomplete from './SearchAutocomplete';
 /**
  * Компонент для отображения навигации
  * @returns Компонент для отображения навигации
