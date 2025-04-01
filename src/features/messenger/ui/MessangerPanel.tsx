@@ -1,9 +1,9 @@
-import { Avatar, AvatarGroup, Box, CssThemeVariables, List, ListItem, Typography } from '@mui/material';
+import { Avatar, AvatarGroup, Box, List, ListItem, SxProps, Typography } from '@mui/material';
 import { cloneElement, FC, ReactElement } from 'react';
 import useCustomScrollBar from '../../../shared/hooks/useCustomScrollBar';
 import { useGetDialoguesQuery } from '../api/messengerApi';
 
-const dialoguePanel: CssThemeVariables = {
+const dialoguePanel: SxProps = {
     borderRight: '1px solid #eaeaea',
     display: 'flex',
     flexFlow: 'column',

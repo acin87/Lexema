@@ -2,18 +2,19 @@ import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Badge, ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material';
 import { FC, memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute, SiteAppRoutePath } from '../../app/routes/Config';
 import { uiActions } from '../../app/store/uiSlice';
 import { selectUser } from '../../entities/user/slice/userSlice';
+import useNotificationsBadge from '../../features/notifications/hooks/useNotifcationBadge';
 import styles from './Menu.module.css';
 /**
  * Интерфейс для пропсов, открытие и закрытие панели
  */
-interface MenuProps {
+export interface MenuProps {
     open: boolean | undefined;
 }
 
@@ -26,6 +27,7 @@ const Menu: FC<MenuProps> = memo((open) => {
     const navigate = useNavigate();
     const id = useSelector(selectUser).id;
     const dispatch = useDispatch();
+    const { count: friendshipNotificationsCount } = useNotificationsBadge(['friend_request', 'friend_accepted']);
 
     const handleNavigate = (path: string) => {
         dispatch(uiActions.toggleSidebar());
@@ -45,7 +47,11 @@ const Menu: FC<MenuProps> = memo((open) => {
         },
         {
             path: SiteAppRoutePath[AppRoute.FRIENDS],
-            icon: <PeopleAltOutlinedIcon className={styles.svgIcon} />,
+            icon: (
+                <Badge badgeContent={friendshipNotificationsCount} color="primary">
+                    <PeopleAltOutlinedIcon className={styles.svgIcon} />
+                </Badge>
+            ),
             text: 'Друзья',
         },
         {
@@ -55,58 +61,46 @@ const Menu: FC<MenuProps> = memo((open) => {
         },
     ];
     return (
-        <List>
+        <MenuList>
             {menuItems.map((item, index) => (
-                <ListItem key={index} disablePadding sx={{ display: 'block' }} className={styles.ListItem}>
-                    <ListItemButton
+                <MenuItem
+                    key={index}
+                    className={styles.ListItem}
+                    sx={{ pl: 2, py: 1, pr: 0, justifyContent: 'space-between' }}
+                    onClick={() => handleNavigate(item.path)}
+                >
+                    <ListItemIcon
                         sx={[
                             {
-                                minHeight: 48,
-                                px: 2.5,
+                                minWidth: 0,
+                                justifyContent: 'center',
                             },
                             open
                                 ? {
-                                      justifyContent: 'initial',
+                                      mr: 3,
                                   }
                                 : {
-                                      justifyContent: 'center',
+                                      mr: 'auto',
                                   },
                         ]}
-                        onClick={() => handleNavigate(item.path)}
                     >
-                        <ListItemIcon
-                            sx={[
-                                {
-                                    minWidth: 0,
-                                    justifyContent: 'center',
-                                },
-                                open
-                                    ? {
-                                          mr: 3,
-                                      }
-                                    : {
-                                          mr: 'auto',
-                                      },
-                            ]}
-                        >
-                            {item.icon}
-                        </ListItemIcon>
-                        <ListItemText
-                            primary={item.text}
-                            sx={[
-                                open
-                                    ? {
-                                          opacity: 1,
-                                      }
-                                    : {
-                                          opacity: 0,
-                                      },
-                            ]}
-                        />
-                    </ListItemButton>
-                </ListItem>
+                        {item.icon}
+                    </ListItemIcon>
+                    <ListItemText
+                        primary={item.text}
+                        sx={[
+                            open
+                                ? {
+                                      opacity: 1,
+                                  }
+                                : {
+                                      opacity: 0,
+                                  },
+                        ]}
+                    />
+                </MenuItem>
             ))}
-        </List>
+        </MenuList>
     );
 });
-export default Menu;
+export default memo(Menu);

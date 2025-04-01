@@ -16,23 +16,17 @@ export const userApi = createApi({
         },
     }),
     endpoints: (builder) => ({
-        getUser: builder.query<User, void>({
-            query: () => ({
+        getUser: builder.query<User, {accessToken: string}>({
+            query: ({accessToken}) => ({
                 url: `/${API.ME}`,
                 method: 'GET',
-            }),
-        }),
-
-        //эндпоинт для уведомлений
-        getNotifications: builder.query<Notification[], { accessToken: string }>({
-            query: ({ accessToken }) => ({
-                url: `/${API.NOTIFICATIONS}`,
-                method: 'GET',
                 headers: {
-                    Authorization: `Bearer ${accessToken}`,
+                    'Authorization': `Bearer ${accessToken}`
                 },
             }),
         }),
+
+
         getAutocomplete: builder.query<AutocompleteResponse, { q: string }>({
             query: ({ q }) => ({
                 url: `/${API.AUTOCOMPLETE}?q=${q}`,

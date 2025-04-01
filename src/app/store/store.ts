@@ -18,13 +18,16 @@ import { messengerApi } from '../../features/messenger/api/messengerApi';
 import { profileApi } from '../../features/profile/api/profileApi';
 import profileSlice from '../../features/profile/slices/profileSlice';
 import uiSlice, { UI_PERSISTENT_STATE, UiTypes } from './uiSlice';
+import notificationsSlice from '../../features/notifications/slice/notificationsSlice';
+import { notificationApi } from '../../features/notifications/api/notificationApi';
 const listenerMiddleware = createListenerMiddleware();
 
 listenerMiddleware.startListening({
     predicate: isAnyOf(authApi.endpoints.login.matchFulfilled),
-    effect: async (_action: PayloadAction<TokenResponse>, listenerApi) => {
+    effect: async (action: PayloadAction<TokenResponse>, listenerApi) => {
+        const { access } = action.payload;
         try {
-            const result = await listenerApi.dispatch(userApi.endpoints.getUser.initiate());
+            const result = await listenerApi.dispatch(userApi.endpoints.getUser.initiate({accessToken: access}));
             if (result.data) {
                 listenerApi.dispatch(setUser(result.data));
                 saveState<UserState>(store.getState().user, USER_PERSISTENT_STATE);
@@ -41,6 +44,7 @@ export interface RootState {
     feed: ReturnType<typeof feedSlice>;
     profile: ReturnType<typeof profileSlice>;
     friends: ReturnType<typeof friendsSlice>;
+    notifications: ReturnType<typeof notificationsSlice>;
     auth: AuthState;
     user: UserState;
     comments: ReturnType<typeof commentSlice>;
@@ -51,6 +55,7 @@ export interface RootState {
     [authApi.reducerPath]: ReturnType<typeof authApi.reducer>;
     [profileApi.reducerPath]: ReturnType<typeof profileApi.reducer>;
     [userApi.reducerPath]: ReturnType<typeof userApi.reducer>;
+    [notificationApi.reducerPath]: ReturnType<typeof notificationApi.reducer>;
 }
 
 const rootAppReducer = combineReducers({
@@ -61,6 +66,7 @@ const rootAppReducer = combineReducers({
     [authApi.reducerPath]: authApi.reducer,
     [profileApi.reducerPath]: profileApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
+    [notificationApi.reducerPath]: notificationApi.reducer,
     ui: uiSlice,
     feed: feedSlice,
     profile: profileSlice,
@@ -68,6 +74,7 @@ const rootAppReducer = combineReducers({
     auth: authSlice,
     user: userSlice,
     comments: commentSlice,
+    notifications: notificationsSlice,
 });
 
 const rootReducer: (state: RootState | undefined, action: PayloadAction) => RootState = (state, action) => {
@@ -77,7 +84,7 @@ const rootReducer: (state: RootState | undefined, action: PayloadAction) => Root
     return rootAppReducer(state, action);
 };
 
-const apis = [postApi, friendsApi, commentsApi, messengerApi, authApi, profileApi, userApi] as const;
+const apis = [postApi, friendsApi, commentsApi, messengerApi, authApi, profileApi, userApi, notificationApi] as const;
 
 export const store = configureStore({
     reducer: rootReducer,

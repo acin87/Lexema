@@ -63,10 +63,9 @@ const SearchAutocomplete: FC = () => {
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center',
                     justifyContent: 'center',
                     position: 'relative',
-                    width: '100%',
+                    width: '53%',
                 }}
             >
                 <Box

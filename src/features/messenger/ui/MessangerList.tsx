@@ -1,22 +1,21 @@
-import React, { useState } from 'react';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import MarkChatUnreadIcon from '@mui/icons-material/MarkChatUnread';
+import SearchIcon from '@mui/icons-material/Search';
 import {
-    Paper,
     Box,
-    TextField,
-    InputAdornment,
     Divider,
+    IconButton,
+    InputAdornment,
     List,
     ListItem,
     ListItemText,
-    Typography,
-    IconButton,
+    Paper,
+    TextField,
     Tooltip,
+    Typography,
 } from '@mui/material';
 import { styled } from '@mui/system';
-import SearchIcon from '@mui/icons-material/Search';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import MarkChatUnreadIcon from '@mui/icons-material/MarkChatUnread';
-
+import React, { useState } from 'react';
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
     position: 'static',
@@ -75,12 +74,14 @@ const MessangerList: React.FC = () => {
                     size="small"
                     variant="outlined"
                     sx={{ width: '40ch' }}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="end">
-                                <SearchIcon />
-                            </InputAdornment>
-                        ),
+                    slotProps={{
+                        input: {
+                            startAdornment: (
+                                <InputAdornment position="end">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            ),
+                        },
                     }}
                 />
             </Box>
