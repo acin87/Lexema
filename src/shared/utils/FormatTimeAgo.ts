@@ -5,7 +5,7 @@
  * @param dateString - строка с датой
  * @returns строку с прошедшим временем
  */
-export const formatTimeAgo = (dateString: string): string => {
+export const formatTimeAgo = (dateString: string, isText: boolean = true): string => {
 
     const date = new Date(dateString);
 
@@ -13,6 +13,7 @@ export const formatTimeAgo = (dateString: string): string => {
 
     const diffInMs = now.getTime() - date.getTime();
 
+    const text = isText ? ' назад' : '';
  
     const seconds = Math.floor(diffInMs / 1000);
 
@@ -27,11 +28,11 @@ export const formatTimeAgo = (dateString: string): string => {
         
         switch(rule) {
             case 'one':
-                return `${seconds} секунду назад`;
+                return `${seconds} секунду ${text}`;
             case 'few':
-                return `${seconds} секунды назад`;
+                return `${seconds} секунды ${text}`;
             default:
-                return `${seconds} секунд назад`;
+                return `${seconds} секунд ${text}`;
         }
     }
 
@@ -45,11 +46,11 @@ export const formatTimeAgo = (dateString: string): string => {
         
         switch(rule) {
             case 'one':
-                return `${minutes} минуту назад`;
+                return `${minutes} минуту ${text}`;
             case 'few':
-                return `${minutes} минуты назад`;
+                return `${minutes} минуты ${text}`;
             default:
-                return `${minutes} минут назад`;
+                return `${minutes} минут ${text}`;
         }
     }
 
@@ -63,11 +64,11 @@ export const formatTimeAgo = (dateString: string): string => {
         
         switch(rule) {
             case 'one':
-                return `${hours} час назад`;
+                return `${hours} час ${text}`;
             case 'few':
-                return `${hours} часа назад`;
+                return `${hours} часа ${text}`;
             default:
-                return `${hours} часов назад`;
+                return `${hours} часов ${text}`;
         }
     }
 
@@ -80,10 +81,10 @@ export const formatTimeAgo = (dateString: string): string => {
     
     switch(rule) {
         case 'one':
-            return `${days} день назад`;
+            return `${days} день ${text}`;
         case 'few':
-            return `${days} дня назад`;
+            return `${days} дня ${text}`;
         default:
-            return `${days} дней назад`;
+            return `${days} дней ${text}`;
     }
 };

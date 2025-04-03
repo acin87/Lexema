@@ -10,7 +10,7 @@ export type User = {
     username: string;
     first_name: string;
     last_name: string;
-    avatar: string | null;
+    avatar: string | undefined;
     is_staff: boolean;
     is_superuser: boolean;
     full_name: string;

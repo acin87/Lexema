@@ -1,29 +1,49 @@
-import { Box } from '@mui/material';
+import { Box, SxProps } from '@mui/material';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 const useCustomScrollBar = () => {
     const contentRef = useRef<HTMLDivElement>(null);
     const listRef = useRef<HTMLUListElement>(null);
     const scrollbarThumbRef = useRef<HTMLDivElement>(null);
+    const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
     const [startY, setStartY] = useState(0);
     const [startTop, setStartTop] = useState(0);
+
+    const [isScrollbarVisible, setIsScrollbarVisible] = useState(false);
 
     // Обновление положения и размера ползунка
     const updateScrollbarThumb = useCallback(() => {
         if (contentRef.current && listRef.current && scrollbarThumbRef.current) {
-            const contentHeight = contentRef.current.clientHeight;
+            const computedStyle = window.getComputedStyle(contentRef.current);
+            const paddingTop = parseFloat(computedStyle.paddingTop);
+            const paddingBottom = parseFloat(computedStyle.paddingBottom);
+            const contentHeight = contentRef.current.clientHeight - paddingTop - paddingBottom;
 
             const listHeight = listRef.current.scrollHeight;
 
-            const thumbHeight = (contentHeight / listHeight) * contentHeight;
-
+            // Высота ползунка (не меньше минимума, например 20px)
+            const thumbHeight = Math.max(
+                20, // Минимальная высота
+                (contentHeight / listHeight) * contentHeight,
+            );
             scrollbarThumbRef.current.style.height = `${thumbHeight}px`;
 
+            // Максимальная прокрутка
             const maxScrollTop = listHeight - contentHeight;
-            const scrollPercent = contentRef.current.scrollTop / maxScrollTop;
-            const thumbPosition = scrollPercent * (contentHeight - thumbHeight);
-            //scrollbarThumbRef.current.style.top = `${thumbPosition}px`;
-            scrollbarThumbRef.current.style.transform = `translate3d(0px, ${thumbPosition}px, 0px)`;
+
+            // Ограничиваем scrollTop (на случай инерции или резкого скролла)
+            const scrollTop = Math.min(
+                Math.max(0, contentRef.current.scrollTop), // Не меньше 0
+                maxScrollTop, // Не больше максимума
+            );
+
+            // Позиция ползунка (0% - 100%)
+            const scrollPercent = maxScrollTop > 0 ? scrollTop / maxScrollTop : 0;
+
+            // Ограничиваем позицию, чтобы не выходила за границы
+            const thumbPosition = Math.min(scrollPercent * (contentHeight - thumbHeight), contentHeight - thumbHeight);
+
+            scrollbarThumbRef.current.style.transform = `translateY(${thumbPosition}px)`;
         }
     }, []);
 
@@ -61,10 +81,19 @@ const useCustomScrollBar = () => {
         document.addEventListener('mouseup', onMouseUp);
     };
 
+    const activateScrollbar = () => {
+        setIsScrollbarVisible(true);
+        if (inactivityTimerRef.current) {
+            clearTimeout(inactivityTimerRef.current);
+        }
+        inactivityTimerRef.current = setTimeout(() => {
+            setIsScrollbarVisible(false);
+        }, 1000);
+    };
+
     // Инициализация скроллбара
     useEffect(() => {
         const content = contentRef.current;
-
         if (content) {
             content.addEventListener('scroll', handleScroll);
             updateScrollbarThumb();
@@ -75,6 +104,41 @@ const useCustomScrollBar = () => {
             }
         };
     }, [handleScroll, updateScrollbarThumb]);
+
+    useEffect(() => {
+        const content = contentRef.current;
+
+        if (!content) return;
+        const handleScroll = () => activateScrollbar();
+        const handleMouseMove = () => activateScrollbar();
+        const handleTouchMove = () => activateScrollbar();
+        content.addEventListener('scroll', handleScroll);
+        content.addEventListener('mousemove', handleMouseMove);
+        content.addEventListener('touchmove', handleTouchMove);
+
+        return () => {
+            content.removeEventListener('scroll', handleScroll);
+            content.removeEventListener('mousemove', handleMouseMove);
+            content.removeEventListener('touchmove', handleTouchMove);
+            if (inactivityTimerRef.current) {
+                clearTimeout(inactivityTimerRef.current);
+            }
+        };
+    }, []);
+
+    const scrollbarStyle: SxProps = {
+        position: 'absolute',
+        minHeight: '10px',
+        cursor: 'pointer',
+        top: '2px',
+        bottom: '2px',
+        left: '2px',
+        right: '2px',
+        borderRadius: '7px',
+        backgroundColor: '#d6d9da',
+        opacity: isScrollbarVisible ? 0.8 : 0,
+        transition: 'opacity 0.3s ease',
+    };
 
     const scrollBar = (
         <Box
@@ -89,20 +153,7 @@ const useCustomScrollBar = () => {
                 ref={scrollbarThumbRef}
                 onMouseDown={handleThumbMouseDown}
                 className="scrollbar-thumb"
-                sx={{
-                    position: 'absolute',
-                    minHeight: '10px',
-                    cursor: 'pointer',
-
-                    top: '2px',
-                    bottom: '2px',
-                    left: '2px',
-                    right: '2px',
-                    borderRadius: '7px',
-                    opacity: 0,
-                    transition: 'opacity .2s linear',
-                    backgroundColor: '#d6d9da',
-                }}
+                sx={{ ...scrollbarStyle }}
             />
         </Box>
     );

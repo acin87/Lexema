@@ -2,13 +2,10 @@ import { createTheme, CssThemeVariables } from '@mui/material';
 
 const typography: CssThemeVariables = {
     fontFamily: [
-        'Montserrat',
-        'sans-serif',
-        'Apple Color Emoji',
-        'Segoe UI Emoji',
-        'Segoe UI Symbol',
-        'Noto Color Emoji',
+        'Inter',
+        'sans-serif', 
     ].join(','),
+  
     h1: {
         fontSize: 'calc(1.39205rem + 1.7046vw)',
     },
@@ -28,6 +25,9 @@ const typography: CssThemeVariables = {
         fontSize: '1.05rem',
     },
     h6: {
+        fontSize: '0.875rem',
+    },
+    subtitle1: {
         fontSize: '0.875rem',
     },
     subtitle2: {
@@ -71,6 +71,7 @@ const components = {
 };
 
 export const DarkTheme = createTheme({
+
     palette: {
         mode: 'dark',
         primary: {
@@ -82,7 +83,7 @@ export const DarkTheme = createTheme({
         secondary: {
             main: '#777d74',
             dark: '#656a63',
-            light: '#2b2b2b',
+            light: '#3b3b3b',
             contrastText: '#ffffff',
         },
         background: {
@@ -92,6 +93,7 @@ export const DarkTheme = createTheme({
         text: {
             primary: '#a0a0a0',
             secondary: '#a0a0a0',
+
         },
     },
     typography: { ...typography },
@@ -109,7 +111,7 @@ export const LightTheme = createTheme({
         secondary: {
             main: '#777d74',
             dark: '#656a63',
-            light: '#f8f9fa',
+            light: '#dddddd',
             contrastText: '#ffffff',
         },
         background: {

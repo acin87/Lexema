@@ -1,19 +1,25 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API, BASEURL } from '../../../app/api/ApiConfig';
-import { User } from '../../friends/types/User';
-import { DialoguesResponse } from '../types/MessengerTypes';
+import { RootState } from '../../../app/store/store';
+import { MessagesResponse } from '../types/MessengerTypes';
 
 export const messengerApi = createApi({
-    baseQuery: fetchBaseQuery({ baseUrl: BASEURL }),
+    baseQuery: fetchBaseQuery({
+        baseUrl: BASEURL,
+        prepareHeaders: (headers, { getState }) => {
+            const accessToken = (getState() as RootState).auth.access;
+            if (accessToken) {
+                headers.set('Authorization', `Bearer ${accessToken}`);
+            }
+            return headers;
+        },
+    }),
     reducerPath: 'messengerApi',
     tagTypes: ['Dialogues'],
     endpoints: (builder) => ({
-        getDialogues: builder.query<DialoguesResponse, Pick<User, 'id'>>({
-            query: ({ id }) => ({
-                url: API.MESSENGER,
-                params: {
-                    id,
-                },
+        getDialogues: builder.query<MessagesResponse, void>({
+            query: () => ({
+                url: `${API.MESSENGER}-latest/`,
                 method: 'GET',
             }),
             providesTags: ['Dialogues'],

@@ -16,7 +16,7 @@ export enum API {
     CHILD_COMMENTS = 'api/child_comments/',
     ROOT_COMMENTS = 'api/root_comments/',
     COMMENT = 'api/comments/',
-    MESSENGER = '/messenger',
+    MESSENGER = 'api/message',
     FILES = '/files-upload',
     UPCOMING_BIRTHDAYS = 'api/upcoming-birth-day/',
     USERS = 'api/users/',

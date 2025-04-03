@@ -1,27 +1,18 @@
-import { User } from '../../friends/types/User';
+import { User } from '../../../entities/user/types/UserTypes';
 
 export type MessagesResponse = {
-    totalCount: number;
-    messages: Message[];
-};
-
-export type DialoguesResponse = {
-    totalCount: number;
-    dialogues: Dialogues[];
-};
-
-export type Dialogues = {
-    id: string;
-    user_1: Pick<User, 'id' | 'firstName' | 'lastName' | 'image'>;
-    user_2: Pick<User, 'id' | 'firstName' | 'lastName' | 'image'>;
-    lastMessage: string;
-    createdAt: string;
+    count: number;
+    previous: string;
+    next: string;
+    results: Message[];
 };
 
 export type Message = {
-    dialogue_id: number;
-    sender_id: number;
-    message: string;
+    id: number;
+    sender: Pick<User, 'id' | 'full_name' | 'avatar'>;
+    content?: string;
+    short_content?: string;
     is_read: boolean;
-    sent_at: string;
+    unread_count: number;
+    timestamp: string;
 };
