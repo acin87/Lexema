@@ -1,5 +1,5 @@
 // const ROUTE_CONFIG_USER_LOGIN = 'login';
-const ROUTE_CONFIG_MESSEGE_ID = 'messegeId';
+const ROUTE_CONFIG_DIALOGUES_ID = 'dialoguesId';
 
 export const BASE_SITE_URL = 'http:/localhost:5173'
 
@@ -24,7 +24,7 @@ export const SiteAppRoutePath: Record<AppRoute, string> = {
     [AppRoute.SETTINGS]: '/settings',
     [AppRoute.SEARCH]: '/search',
     [AppRoute.ABOUT]: '/about',
-    [AppRoute.MESSEGE]: `/message/:${ROUTE_CONFIG_MESSEGE_ID}`,
-    [AppRoute.MESSENGER]: '/messenger',
+    [AppRoute.MESSEGE]: `/messenger/:${ROUTE_CONFIG_DIALOGUES_ID}`,
+    [AppRoute.MESSENGER]: '/messenger/',
     [AppRoute.NOT_FOUND]: '*',
 };

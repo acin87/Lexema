@@ -1,24 +1,6 @@
-.row {
-    display: flex;
-    flex-wrap: wrap;
-}
-.row > * {
-    padding-left: calc(1rem * 0.5);
-    padding-right: calc(1rem * 0.5);
-}
-@media (max-width: 992px) {
-    .col4 {
-        flex-shrink: 0;
-        width: 100%;
-        max-width: 100%;
-    }
-}
-@media (min-width: 992px) {
-    .col4 {
-        flex: 0 0 auto;
-        width: 33.33333%;
-    }
-}
+@import '../../shared//styles/RootStyles.module.css';
+
+
 .container,.container-fluid,.container-lg,.container-md,.container-sm,.container-xl,.container-xxl {
     width: 100%;
     padding-right: var(--bs-gutter-x,.5rem);

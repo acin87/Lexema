@@ -21,14 +21,9 @@ const useCustomScrollBar = () => {
 
             const listHeight = listRef.current.scrollHeight;
 
-            // Высота ползунка (не меньше минимума, например 20px)
-            const thumbHeight = Math.max(
-                20, // Минимальная высота
-                (contentHeight / listHeight) * contentHeight,
-            );
+            const thumbHeight = Math.max(20, (contentHeight / listHeight) * contentHeight);
             scrollbarThumbRef.current.style.height = `${thumbHeight}px`;
 
-            // Максимальная прокрутка
             const maxScrollTop = listHeight - contentHeight;
 
             // Ограничиваем scrollTop (на случай инерции или резкого скролла)
@@ -47,12 +42,10 @@ const useCustomScrollBar = () => {
         }
     }, []);
 
-    // Обработка прокрутки контента
     const handleScroll = useCallback(() => {
         updateScrollbarThumb();
     }, [updateScrollbarThumb]);
 
-    // Обработка начала перетаскивания ползунка
     const handleThumbMouseDown = (e: React.MouseEvent) => {
         e.preventDefault();
         setStartY(e.clientY);
@@ -91,7 +84,6 @@ const useCustomScrollBar = () => {
         }, 1000);
     };
 
-    // Инициализация скроллбара
     useEffect(() => {
         const content = contentRef.current;
         if (content) {
@@ -135,13 +127,14 @@ const useCustomScrollBar = () => {
         left: '2px',
         right: '2px',
         borderRadius: '7px',
-        backgroundColor: '#d6d9da',
+        backgroundColor: 'divider',
         opacity: isScrollbarVisible ? 0.8 : 0,
         transition: 'opacity 0.3s ease',
     };
 
     const scrollBar = (
         <Box
+            className="scrollbar"
             sx={{
                 position: 'absolute',
                 top: 0,

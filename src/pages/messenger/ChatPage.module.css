@@ -1,0 +1,32 @@
+@import '../../shared/styles/RootStyles.module.css';
+
+.chatWrapper {
+    position: relative;
+    overflow: hidden;
+    height: calc(100vh - 155px);
+    transition: height 0.2s ease;
+}
+
+.chatContainer {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+@media (max-width: 992px) {
+    .chatList {
+        flex-shrink: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+}
+@media (min-width: 992px) {
+    .chatList {
+        display: flex;
+        flex: 0 0 auto;
+        width: 66.66667%;
+        flex-wrap: wrap;
+        max-width: 100%;
+        margin: 0;
+    }
+}

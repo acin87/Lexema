@@ -20,6 +20,7 @@ import profileSlice from '../../features/profile/slices/profileSlice';
 import uiSlice, { UI_PERSISTENT_STATE, UiTypes } from './uiSlice';
 import notificationsSlice from '../../features/notifications/slice/notificationsSlice';
 import { notificationApi } from '../../features/notifications/api/notificationApi';
+import messagesSlice from '../../features/messenger/slice/messagesSlice';
 const listenerMiddleware = createListenerMiddleware();
 
 listenerMiddleware.startListening({
@@ -45,6 +46,7 @@ export interface RootState {
     profile: ReturnType<typeof profileSlice>;
     friends: ReturnType<typeof friendsSlice>;
     notifications: ReturnType<typeof notificationsSlice>;
+    messages: ReturnType<typeof messagesSlice>;
     auth: AuthState;
     user: UserState;
     comments: ReturnType<typeof commentSlice>;
@@ -75,6 +77,7 @@ const rootAppReducer = combineReducers({
     user: userSlice,
     comments: commentSlice,
     notifications: notificationsSlice,
+    messages: messagesSlice,
 });
 
 const rootReducer: (state: RootState | undefined, action: PayloadAction) => RootState = (state, action) => {

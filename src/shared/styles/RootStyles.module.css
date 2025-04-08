@@ -1,0 +1,79 @@
+/* RootStyles.module.css */
+/*************FLEX************/
+.flex {
+    display: flex;
+}
+
+.alignItemsCenter {
+    align-items: center;
+}
+.alignItemsStart {
+    align-items: start;
+}
+.alignItemsEnd {
+    align-items: end;
+}
+.justifyContentCenter {
+    justify-content: center;
+}
+.justifyContentStart {
+    justify-content: start;
+}
+.justifyContentEnd {
+    justify-content: end;
+}
+.justifyContentSpaceBetween {
+    justify-content: space-between;
+}
+
+.row {
+    flex-direction: row;
+}
+
+.col {
+    flex-direction: column;
+}
+.row > * {
+    padding-left: calc(1rem * 0.5);
+    padding-right: calc(1rem * 0.5);
+}
+
+.flexWrap__wrap {
+    flex-wrap: wrap;
+}
+
+.flexWrap__nowrap {
+    flex-wrap: nowrap;
+}
+@media (max-width: 992px) {
+    .col4 {
+        flex-shrink: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+    .col8{
+        flex-shrink: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+}
+@media (min-width: 992px) {
+    .col4 {
+        flex: 0 0 auto;
+        width: 33.33333%;
+    }
+    .col8 {
+        flex: 0 0 auto;
+        width: 66.66667%;
+    }
+}
+/***********GRID************/
+.grid {
+    display: grid;
+}
+.grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+.grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+}

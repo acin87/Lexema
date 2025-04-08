@@ -1,0 +1,49 @@
+@import '../../../shared/styles/RootStyles.module.css';
+
+
+.chatContainer{
+    height: calc(100vh - 125px);
+    padding-bottom: 15px;
+}
+
+.chatFeature{
+    width: 100%;
+    height: 100%;
+}
+
+
+
+.chatSidebar {
+    position: relative;
+    width: 35%;
+    flex-shrink: 0;
+    border-right: 1px solid #eaeaea;
+}
+.chatFeature__header{
+    height: 65px;
+    padding: 0 1.25rem;
+}
+.chatScrollWrapper{
+    position: relative;
+    overflow: hidden;
+    padding: .10rem;
+    height: 100%;
+}
+.chatScrollContainer{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: .2rem .5rem 0 .5rem; 
+    overflow: hidden scroll;
+    scrollbar-width: none;
+}
+.chatScrollContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.chatMessageWrapper{
+    border-radius: 5px;
+    width: 100%;
+}

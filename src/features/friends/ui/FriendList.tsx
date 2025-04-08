@@ -1,11 +1,11 @@
-import { Box, CircularProgress, CssThemeVariables } from '@mui/material';
+import { Box, CircularProgress, SxProps } from '@mui/material';
 import { FC, Fragment, memo } from 'react';
 
 import useAllFriends from '../hooks/useAllFriends';
 import FriendView from './FriendView';
 import FriendViewSkeleton from './FriendViewSkeleton';
 
-const containerStyles: CssThemeVariables = {
+const containerStyles: SxProps = {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(19rem, 1fr))',
     gap: 2,
@@ -16,7 +16,7 @@ const containerStyles: CssThemeVariables = {
         gridTemplateColumns: 'repeat(auto-fit, minmax(21rem, 1fr))',
     },
 };
-const circularProgressStyles: CssThemeVariables = {
+const circularProgressStyles: SxProps = {
     gridColumn: 'span 3',
     display: 'flex',
     alignItems: 'center',

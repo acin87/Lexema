@@ -1,7 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
 import RequireAuth from '../../features/auth/ui/RequireAuth';
+import ChatFeature from '../../features/messenger/ui/ChatFeature';
+import ChatMessageList from '../../features/messenger/ui/ChatMessageList';
 import AuthPage from '../../pages/auth/AuthPage';
-import FeedPage from '../../pages/FeedPage';
+import FeedPage from '../../pages/FeedPage/FeedPage';
 import FriendsPage from '../../pages/FriendsPage';
 import HomePage from '../../pages/MainPage';
 import MessengerPageAsync from '../../pages/messenger/MessengerPageAsync';
@@ -36,6 +38,16 @@ export const AppRoutes = createBrowserRouter([
             {
                 path: SiteAppRoutePath[AppRoute.MESSENGER],
                 element: <MessengerPageAsync />,
+                children: [
+                    {
+                        element: <ChatFeature />,
+                        index: true,
+                    },
+                    {
+                        element: <ChatMessageList />,
+                        path: SiteAppRoutePath[AppRoute.MESSEGE],
+                    },
+                ],
             },
         ],
     },
