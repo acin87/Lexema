@@ -1,8 +1,8 @@
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import SendIcon from '@mui/icons-material/Send';
 import { Button, InputAdornment, TextField } from '@mui/material';
-import { FC, useState } from 'react';
-import { useSendMessageMutation } from '../api/messengerApi';
+import { FC, memo, useState } from 'react';
+import { useMessageActions } from '../hooks/useMessageActions';
 
 interface AddMessageProps {
     recipient_id: number;
@@ -11,10 +11,10 @@ interface AddMessageProps {
 const AddMessage: FC<AddMessageProps> = ({ recipient_id }) => {
     const [focus, setFocus] = useState(false);
     const [messageText, setMessageText] = useState('');
-    const [sendMessage] = useSendMessageMutation();
+    const { sendMessage } = useMessageActions();
 
     const handleSendMessage = () => {
-        sendMessage({ recipient_id, content: messageText });
+        sendMessage(recipient_id, messageText);
         setMessageText('');
     };
     return (
@@ -45,4 +45,4 @@ const AddMessage: FC<AddMessageProps> = ({ recipient_id }) => {
     );
 };
 
-export default AddMessage;
+export default memo(AddMessage);

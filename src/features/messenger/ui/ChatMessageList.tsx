@@ -2,7 +2,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Divider, IconButton } from '@mui/material';
 import cn from 'classnames';
-import { FC, memo, ReactNode, useCallback, useEffect } from 'react';
+import { memo, ReactNode, useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import useCustomScrollBar from '../../../shared/hooks/useCustomScrollBar';
 import { useGetMessagesBySenderIdQuery } from '../api/messengerApi';
@@ -14,7 +14,7 @@ import MessageItem from './MessageItem';
  * Компонент сообщений чата
  * @returns JSX.Element
  */
-const ChatMessageList: FC = () => {
+const ChatMessageList = () => {
     const { dialoguesId } = useParams();
     const { contentRef, listRef, scrollBar } = useCustomScrollBar();
     const navigate = useNavigate();

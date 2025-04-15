@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API, BASEURL } from '../../../app/api/ApiConfig';
 import { RootState } from '../../../app/store/store';
 import { Message, MessagesResponse } from '../types/MessengerTypes';
-import { send } from 'vite';
 
 export const messengerApi = createApi({
     baseQuery: fetchBaseQuery({
@@ -25,8 +24,8 @@ export const messengerApi = createApi({
             }),
             providesTags: ['Dialogues'],
         }),
-        getMessagesBySenderId: builder.query<Message[], {sender_id: number | undefined}>({
-            query: ({sender_id}) => ({
+        getMessagesBySenderId: builder.query<Message[], { sender_id: number | undefined }>({
+            query: ({ sender_id }) => ({
                 url: `${API.MESSENGER}/`,
                 method: 'GET',
                 params: {
@@ -35,8 +34,8 @@ export const messengerApi = createApi({
             }),
             providesTags: ['Messages'],
         }),
-        sendMessage: builder.mutation<Message, {recipient_id: number | undefined, content: string}>({
-            query: ({recipient_id, content}) => ({
+        sendMessage: builder.mutation<Message, { recipient_id: number | undefined; content: string }>({
+            query: ({ recipient_id, content }) => ({
                 url: `${API.MESSENGER}/send_message/`,
                 method: 'POST',
                 body: {
@@ -46,6 +45,30 @@ export const messengerApi = createApi({
             }),
             invalidatesTags: ['Messages'],
         }),
+        deleteAllMessage: builder.mutation<void, { recipient_id: number }>({
+            query: ({ recipient_id }) => ({
+                url: `${API.MESSENGER}/delete_all_messages/`,
+                method: 'DELETE',
+                body: {
+                        recipient_id : recipient_id,
+                },
+            }),
+            invalidatesTags: ['Messages'],
+        }),
+        markAsReadMessages: builder.mutation<void, { message_id: number }>({
+            query: ({ message_id }) => ({
+                url: `${API.MESSENGER}/${message_id} /mark_as_read/`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['Messages'],
+        }),        
     }),
 });
-export const { useGetDialoguesQuery, useGetMessagesBySenderIdQuery, useLazyGetMessagesBySenderIdQuery, useSendMessageMutation } = messengerApi;
+export const {
+    useGetDialoguesQuery,
+    useGetMessagesBySenderIdQuery,
+    useLazyGetMessagesBySenderIdQuery,
+    useSendMessageMutation,
+    useDeleteAllMessageMutation,
+    useMarkAsReadMessagesMutation,
+} = messengerApi;

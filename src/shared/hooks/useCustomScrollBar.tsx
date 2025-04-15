@@ -1,5 +1,18 @@
 import { Box, SxProps } from '@mui/material';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+const scrollbarStyle: SxProps = {
+    position: 'absolute',
+    minHeight: '10px',
+    cursor: 'pointer',
+    top: '2px',
+    bottom: '2px',
+    left: '2px',
+    right: '2px',
+    borderRadius: '7px',
+    backgroundColor: 'divider',
+    transition: 'opacity 0.3s ease',
+};
 
 const useCustomScrollBar = () => {
     const contentRef = useRef<HTMLDivElement>(null);
@@ -46,35 +59,39 @@ const useCustomScrollBar = () => {
         updateScrollbarThumb();
     }, [updateScrollbarThumb]);
 
-    const handleThumbMouseDown = (e: React.MouseEvent) => {
-        e.preventDefault();
-        setStartY(e.clientY);
-        if (scrollbarThumbRef.current) {
-            setStartTop(parseFloat(scrollbarThumbRef.current.style.top) || 0);
-        }
-
-        const onMouseMove = (e: MouseEvent) => {
-            if (contentRef.current && scrollbarThumbRef.current) {
-                const deltaY = e.clientY - startY;
-                const newTop = startTop + deltaY;
-
-                const maxTop = contentRef.current.clientHeight - scrollbarThumbRef.current.clientHeight;
-                const scrollTop = (newTop / maxTop) * (listRef.current!.scrollHeight - contentRef.current.clientHeight);
-                contentRef.current.scrollTop = scrollTop;
-                updateScrollbarThumb();
+    const handleThumbMouseDown = useCallback(
+        (e: React.MouseEvent) => {
+            e.preventDefault();
+            setStartY(e.clientY);
+            if (scrollbarThumbRef.current) {
+                setStartTop(parseFloat(scrollbarThumbRef.current.style.top) || 0);
             }
-        };
 
-        const onMouseUp = () => {
-            document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseup', onMouseUp);
-        };
+            const onMouseMove = (e: MouseEvent) => {
+                if (contentRef.current && scrollbarThumbRef.current) {
+                    const deltaY = e.clientY - startY;
+                    const newTop = startTop + deltaY;
 
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-    };
+                    const maxTop = contentRef.current.clientHeight - scrollbarThumbRef.current.clientHeight;
+                    const scrollTop =
+                        (newTop / maxTop) * (listRef.current!.scrollHeight - contentRef.current.clientHeight);
+                    contentRef.current.scrollTop = scrollTop;
+                    updateScrollbarThumb();
+                }
+            };
 
-    const activateScrollbar = () => {
+            const onMouseUp = () => {
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            };
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        },
+        [updateScrollbarThumb, startY, startTop],
+    );
+
+    const activateScrollbar = useCallback(() => {
         setIsScrollbarVisible(true);
         if (inactivityTimerRef.current) {
             clearTimeout(inactivityTimerRef.current);
@@ -82,7 +99,7 @@ const useCustomScrollBar = () => {
         inactivityTimerRef.current = setTimeout(() => {
             setIsScrollbarVisible(false);
         }, 1000);
-    };
+    }, []);
 
     useEffect(() => {
         const content = contentRef.current;
@@ -116,39 +133,28 @@ const useCustomScrollBar = () => {
                 clearTimeout(inactivityTimerRef.current);
             }
         };
-    }, []);
+    }, [activateScrollbar]);
 
-    const scrollbarStyle: SxProps = {
-        position: 'absolute',
-        minHeight: '10px',
-        cursor: 'pointer',
-        top: '2px',
-        bottom: '2px',
-        left: '2px',
-        right: '2px',
-        borderRadius: '7px',
-        backgroundColor: 'divider',
-        opacity: isScrollbarVisible ? 0.8 : 0,
-        transition: 'opacity 0.3s ease',
-    };
-
-    const scrollBar = (
-        <Box
-            className="scrollbar"
-            sx={{
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                width: '11px',
-            }}
-        >
+    const scrollBar = useMemo(
+        () => (
             <Box
-                ref={scrollbarThumbRef}
-                onMouseDown={handleThumbMouseDown}
-                className="scrollbar-thumb"
-                sx={{ ...scrollbarStyle }}
-            />
-        </Box>
+                className="scrollbar"
+                sx={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    width: '11px',
+                }}
+            >
+                <Box
+                    ref={scrollbarThumbRef}
+                    onMouseDown={handleThumbMouseDown}
+                    className="scrollbar-thumb"
+                    sx={{ ...scrollbarStyle, opacity: isScrollbarVisible ? 0.8 : 0 }}
+                />
+            </Box>
+        ),
+        [handleThumbMouseDown, isScrollbarVisible],
     );
 
     return { contentRef, listRef, scrollBar };

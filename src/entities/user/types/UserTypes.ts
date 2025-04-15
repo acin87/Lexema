@@ -14,6 +14,7 @@ export type User = {
     is_staff: boolean;
     is_superuser: boolean;
     full_name: string;
+    last_login: string | null;
 };
 
 

@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectUserId } from '../../../entities/user/slice/userSlice';
 import { User } from '../../../entities/user/types/UserTypes';
+import { useMessageActions } from '../hooks/useMessageActions';
 
 interface DialogueItemProps {
     sender: Pick<User, 'id' | 'full_name' | 'avatar' | 'username'>;
@@ -14,6 +15,7 @@ interface DialogueItemProps {
 
 const DialogueItem: FC<DialogueItemProps> = ({ sender, subHeader, recipient }) => {
     const userId = useSelector(selectUserId);
+    const {deleteAllMessages} = useMessageActions()
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const itsMeSender = userId === sender.id;
@@ -27,7 +29,7 @@ const DialogueItem: FC<DialogueItemProps> = ({ sender, subHeader, recipient }) =
     const handleClose = () => {
         setAnchorEl(null);
     };
-    const handleNavigate = (event: MouseEvent) => {
+    const handleNavigate = () => {
         navigate(`/messenger/${dialogSender.id}`);
     };
 
@@ -89,7 +91,7 @@ const DialogueItem: FC<DialogueItemProps> = ({ sender, subHeader, recipient }) =
                 }}
             >
                 <MenuItem onClick={handleClose}>Пометить все прочитанными</MenuItem>
-                <MenuItem onClick={handleClose}>Удалить переписку</MenuItem>
+                <MenuItem onClick={()=> deleteAllMessages(dialogSender.id)}>Удалить переписку</MenuItem>
             </Menu>
         </>
     );
