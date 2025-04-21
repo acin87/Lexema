@@ -7,6 +7,12 @@ interface MessageSkeletonProps {
     sender: boolean;
 }
 
+
+/**
+ * Компонент Skeleton для отображения загрузки сообщения
+ * @param sender - является ли отправитель сообщения
+ * @returns JSX.Element
+ */
 const MessageSkeleton: FC<MessageSkeletonProps> = ({ sender }) => {
     return (
         <Box sx={{ display: 'flex', width: '100%', mb: 1, p: 3, gap: 2 }}>

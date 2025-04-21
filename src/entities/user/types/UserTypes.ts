@@ -11,6 +11,7 @@ export type User = {
     first_name: string;
     last_name: string;
     avatar: string | undefined;
+    profile_image: string | undefined;
     is_staff: boolean;
     is_superuser: boolean;
     full_name: string;

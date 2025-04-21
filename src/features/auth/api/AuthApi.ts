@@ -1,56 +1,8 @@
-import { BaseQueryApi, createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import Cookies from 'js-cookie';
-import { API, BASEURL } from '../../../app/api/ApiConfig';
-import { RootState } from '../../../app/store/store';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { API } from '../../../app/api/ApiConfig';
+import { baseQueryWithReauth } from '../../../app/api/Utils';
 import { clearCredentials, setCredentials } from '../slice/authSlice';
 import { AuthResponse, LoginRequest, RefreshTokenRequest, RegisterRequest, TokenResponse } from '../types/AuthTypes';
-
-/**
- * Базовый запрос
- * @param headers - заголовки запроса
- * @param getState - функция для получения состояния
- */
-const baseQuery = fetchBaseQuery({
-    baseUrl: BASEURL,
-    prepareHeaders: (headers, { getState }) => {
-        const accessToken = (getState() as RootState).auth.access;
-        if (accessToken) {
-            headers.set('authorization', `Bearer ${accessToken}`);
-        }
-        return headers;
-    },
-});
-
-/**
- * Базовый запрос с перезапросом токена
- * @param args - аргументы запроса
- * @param api - API
- * @param extraOptions - дополнительные опции
- */
-export const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: object) => {
-    let result = await baseQuery(args, api, extraOptions);
-    if (result.error?.status === 401 && typeof args !== 'string' && args.url !== API.LOGIN) {
-        console.warn('User is not authenticated. Refreshing token...');
-        const refreshToken = Cookies.get('refreshToken');
-        if (refreshToken) {
-            const refreshResult = await baseQuery(
-                { url: API.REFRESH, method: 'POST', body: { refreshToken } },
-                api,
-                extraOptions,
-            );
-            if (refreshResult.data) {
-                const data = refreshResult.data as TokenResponse;
-                api.dispatch(setCredentials(data));
-                result = await baseQuery(args, api, extraOptions);
-            } else {
-                api.dispatch(clearCredentials());
-            }
-        } else {
-            api.dispatch(clearCredentials());
-        }
-    }
-    return result;
-};
 
 /**
  * API для авторизации пользователя

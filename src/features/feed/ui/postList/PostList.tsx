@@ -1,7 +1,8 @@
 import { Box, CircularProgress } from '@mui/material';
-import { FC, Fragment, memo, useCallback, useEffect } from 'react';
+import { FC, Fragment, memo, useCallback, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { ApiError } from '../../../../app/api/Utils';
 import { Post as PostType } from '../../../../entities/post/types/PostTypes';
 import { selectUserId } from '../../../../entities/user/slice/userSlice';
 import { WelcomeBanner } from '../../../../shared/ui/welcomeBanner/WelcomeBanner';
@@ -19,6 +20,7 @@ type PostListProps = {
     isProfile?: boolean;
     group_id?: number;
     isLoading: boolean;
+    error?: ApiError | undefined;
 };
 
 const MemoizedPost = memo(
@@ -37,6 +39,7 @@ const PostList: FC<PostListProps> = ({
     group_id,
     isProfile,
     isLoading,
+    error,
 }) => {
     const navigate = useNavigate();
     const user_id = useSelector(selectUserId);
@@ -46,11 +49,15 @@ const PostList: FC<PostListProps> = ({
         return user_id === posts[0].author.id;
     }, [posts, user_id]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (isError) {
-            navigate('/error', { replace: true });
+            if (error && error.status === 401) {
+                navigate('/auth');
+            } else {
+                navigate('/error');
+            }
         }
-    }, [isError, navigate]);
+    }, [isError, navigate, error]);
 
     if (posts.length === 0 && !isProfile && !isLoading) {
         return <WelcomeBanner />;

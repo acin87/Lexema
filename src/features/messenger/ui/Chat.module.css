@@ -18,7 +18,7 @@
 }
 .chatFeature__header {
     height: 65px;
-    padding: 0 1.25rem;
+    padding: .9rem 1.25rem;
 }
 .chatScrollWrapper {
     position: relative;
@@ -48,4 +48,35 @@
 .dialogCard {
     padding: 0.5rem;
     border-radius: 0.5rem;
+}
+
+
+.typingDots {
+    display: inline-block;
+}
+
+.typingDots span {
+    opacity: 0;
+    animation: dot-wave 1.5s infinite ease-in-out;
+}
+
+.typingDots span:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.typingDots span:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.typingDots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes dot-wave {
+    0%, 60%, 100% {
+        opacity: 0;
+    }
+    30% {
+        opacity: 1;
+    }
 }

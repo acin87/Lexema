@@ -15,6 +15,15 @@ interface MessageItemProps {
     avatar: string | undefined;
 }
 
+
+/**
+ * Компонент для отображения сообщения в чате
+ * @param content - текст сообщения
+ * @param sender - отправитель сообщения
+ * @param timestamp - время отправки сообщения
+ * @param avatar - аватар отправителя
+ * @returns JSX.Element
+ */
 const MessageItem: FC<MessageItemProps> = ({ content, sender, timestamp, avatar }) => {
     const user_id = useSelector(selectUserId);
     const [isLoading, setIsLoading] = useState<boolean>(false);

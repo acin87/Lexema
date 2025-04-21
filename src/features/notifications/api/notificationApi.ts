@@ -1,20 +1,11 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API, BASEURL } from '../../../app/api/ApiConfig';
-import { RootState } from '../../../app/store/store';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { API } from '../../../app/api/ApiConfig';
+import { baseQueryWithReauth } from '../../../app/api/Utils';
 import { Notifications } from '../types/NotificationsTypes';
 
 export const notificationApi = createApi({
     reducerPath: 'notificationApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: BASEURL,
-        prepareHeaders: (headers, { getState }) => {
-            const accessToken = (getState() as RootState).auth.access;
-            if (accessToken) {
-                headers.set('Authorization', `Bearer ${accessToken}`);
-            }
-            return headers;
-        },
-    }),
+    baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
         getUnreadNotifications: builder.query<Notifications[], void>({
             query: () => ({

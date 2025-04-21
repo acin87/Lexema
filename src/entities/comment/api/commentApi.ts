@@ -1,20 +1,11 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API, BASEURL } from '../../../app/api/ApiConfig';
-import { RootState } from '../../../app/store/store';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { API } from '../../../app/api/ApiConfig';
+import { baseQueryWithReauth } from '../../../app/api/Utils';
 import { CommentResponse, CommentType } from '../types/commntsType';
 
 export const commentsApi = createApi({
     reducerPath: 'commentsApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: BASEURL,
-        prepareHeaders: (headers, { getState }) => {
-            const accessToken = (getState() as RootState).auth.access;
-            if (accessToken) {
-                headers.set('Authorization', `Bearer ${accessToken}`);
-            }
-            return headers;
-        },
-    }),
+    baseQuery: baseQueryWithReauth,
     tagTypes: ['Post', 'Comment', 'CommentList'],
     endpoints: (builder) => ({
         getRootComments: builder.query<CommentResponse, { postId: number; offset: number; limit: number }>({

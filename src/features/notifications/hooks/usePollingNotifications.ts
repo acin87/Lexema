@@ -4,6 +4,6 @@ export const usePollingNotifications = () => {
     return useGetUnreadNotificationsQuery(undefined, {
         refetchOnMountOrArgChange: true,
         refetchOnReconnect: true,
-        pollingInterval: 100000,
+        pollingInterval: 5000,
     });
 };

@@ -1,21 +1,11 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API, BASEURL } from '../../../app/api/ApiConfig';
-import { RootState } from '../../../app/store/store';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { API } from '../../../app/api/ApiConfig';
+import { baseQueryWithReauth } from '../../../app/api/Utils';
 import { Friend, FriendRequest, UpcomingBirthdaysResponse } from '../types/FriendTypes';
 
 export const friendsApi = createApi({
     reducerPath: 'friendsApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: BASEURL,
-        prepareHeaders: (headers, { getState }) => {
-            const accessToken = (getState() as RootState).auth.access;
-            if (accessToken) {
-                headers.set('Authorization', `Bearer ${accessToken}`);
-                headers.set('Content-Type', 'application/json');
-            }
-            return headers;
-        },
-    }),
+    baseQuery: baseQueryWithReauth,
     tagTypes: ['Friend', 'Profile'],
     endpoints: (builder) => ({
         getAllFriends: builder.query<Friend[], FriendRequest>({

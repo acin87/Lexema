@@ -1,22 +1,12 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API, BASEURL } from '../../../app/api/ApiConfig';
-import { RootState } from '../../../app/store/store';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { API } from '../../../app/api/ApiConfig';
+import { baseQueryWithReauth } from '../../../app/api/Utils';
 import { Friend } from '../../friends/types/FriendTypes';
 import { Profile } from '../types/ProfileTypes';
 
 export const profileApi = createApi({
     reducerPath: 'profileApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: BASEURL,
-        prepareHeaders: (headers, { getState }) => {
-            const accessToken = (getState() as RootState).auth.access;
-            if (accessToken) {
-                headers.set('Authorization', `Bearer ${accessToken}`);
-                headers.set('Content-Type', 'application/json');
-            }
-            return headers;
-        },
-    }),
+    baseQuery: baseQueryWithReauth,
     tagTypes: ['ProfilePost', 'Post', 'Profile'],
     endpoints: (builder) => ({
         getProfile: builder.query<Profile, { id: number }>({

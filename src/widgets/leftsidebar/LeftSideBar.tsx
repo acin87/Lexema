@@ -2,7 +2,7 @@ import { styled, SxProps, Theme } from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import { FC, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../app/store/store';
+import { AppDispatch, RootState } from '../../app/store/store';
 import { uiActions } from '../../app/store/uiSlice';
 import Menu from '../menu/Menu';
 const drawerWidth = 250;
@@ -62,7 +62,7 @@ const Drawer = styled(MuiDrawer, {
  * @returns React.ReactElement
  */
 const LeftSideBar: FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const openFromStore = useSelector((s: RootState) => s.ui.sidebar);
 
     const [isHovered, setIsHovered] = useState(false);

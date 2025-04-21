@@ -23,7 +23,7 @@ body {
 }
 .contentPage{
     overflow: hidden;
-    padding: 1rem 1rem 0;
+    padding-top: 1rem;
     transition: all .3s ease-in-out;
 }
 .container {

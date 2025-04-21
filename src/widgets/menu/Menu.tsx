@@ -11,6 +11,7 @@ import { uiActions } from '../../app/store/uiSlice';
 import { selectUser } from '../../entities/user/slice/userSlice';
 import useNotificationsBadge from '../../features/notifications/hooks/useNotifcationBadge';
 import styles from './Menu.module.css';
+import { AppDispatch } from '../../app/store/store';
 /**
  * Интерфейс для пропсов, открытие и закрытие панели
  */
@@ -26,8 +27,9 @@ export interface MenuProps {
 const Menu: FC<MenuProps> = memo((open) => {
     const navigate = useNavigate();
     const id = useSelector(selectUser).id;
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const { count: friendshipNotificationsCount } = useNotificationsBadge(['friend_request', 'friend_accepted']);
+    const { count: messageNotificationsCount } = useNotificationsBadge(['new_message']);
 
     const handleNavigate = (path: string) => {
         dispatch(uiActions.toggleSidebar());
@@ -56,7 +58,11 @@ const Menu: FC<MenuProps> = memo((open) => {
         },
         {
             path: SiteAppRoutePath[AppRoute.MESSENGER],
-            icon: <ChatOutlinedIcon className={styles.svgIcon} />,
+            icon: (
+                <Badge badgeContent={messageNotificationsCount} color="primary">
+                    <ChatOutlinedIcon className={styles.svgIcon} />
+                </Badge>
+            ),
             text: 'Сообщения',
         },
     ];

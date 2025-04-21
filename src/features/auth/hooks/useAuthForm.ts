@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { ApiError, isApiError } from '../../../app/api/Utils';
 import { useLoginMutation, useRegisterMutation } from '../api/AuthApi';
-import { ApiError, isAuthApiError } from '../utils/AuthUtils';
 
 export const useAuthForm = (isSignUp: boolean) => {
     const methods = useForm();
@@ -11,13 +11,14 @@ export const useAuthForm = (isSignUp: boolean) => {
     const [isError, setIsError] = useState(false);
 
     const [login, { isError: isLoginError, error: loginError, isLoading: isLoginLoading }] = useLoginMutation();
-    const [register, { isError: isRegisterError, isLoading: isRegisterLoading, error: registerError }] = useRegisterMutation();
+    const [register, { isError: isRegisterError, isLoading: isRegisterLoading, error: registerError }] =
+        useRegisterMutation();
 
     const isLoading = isLoginLoading || isRegisterLoading;
 
     const handleApiError = useCallback(
         (error: unknown) => {
-            if (isAuthApiError(error)) {
+            if (isApiError(error)) {
                 const apiError = error as ApiError;
 
                 if (apiError.status === 'FETCH_ERROR') {
@@ -80,5 +81,3 @@ export const useAuthForm = (isSignUp: boolean) => {
 
     return { methods, onSubmit, isLoading, message, isError, handleClearError };
 };
-
-

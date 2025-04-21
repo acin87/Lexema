@@ -13,9 +13,17 @@ interface DialogueItemProps {
     subHeader: string | undefined;
 }
 
+
+/**
+ * Компонент для отображения элемента диалога
+ * @param sender - отправитель сообщения
+ * @param recipient - получатель сообщения
+ * @param subHeader - текст сообщения
+ * @returns JSX.Element
+ */
 const DialogueItem: FC<DialogueItemProps> = ({ sender, subHeader, recipient }) => {
     const userId = useSelector(selectUserId);
-    const {deleteAllMessages} = useMessageActions()
+    const {deleteAllMessages, markAllMessagesAsRead} = useMessageActions()
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const itsMeSender = userId === sender.id;
@@ -90,7 +98,7 @@ const DialogueItem: FC<DialogueItemProps> = ({ sender, subHeader, recipient }) =
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                <MenuItem onClick={handleClose}>Пометить все прочитанными</MenuItem>
+                <MenuItem onClick={()=> markAllMessagesAsRead(dialogSender.id)}>Пометить все прочитанными</MenuItem>
                 <MenuItem onClick={()=> deleteAllMessages(dialogSender.id)}>Удалить переписку</MenuItem>
             </Menu>
         </>

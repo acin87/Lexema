@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../app/store/store';
+import { AppDispatch, RootState } from '../../../app/store/store';
 import { useLazyGetChildCommentsQuery } from '../api/commentApi';
 import { getCommentsByParentId, getExpandedById, setExpanded, updateComments } from '../slice/comment.Slice';
 import { CommentType } from '../types/commntsType';
@@ -12,7 +12,7 @@ import { CommentType } from '../types/commntsType';
  * @returns объект с комментариями и функция для загрузки новых комментариев
  * */
 const useChildComment = (parentComment: Pick<CommentType, 'id' | 'post_id' | 'child_count'>) => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const rawComments = useSelector((state: RootState) => getCommentsByParentId(state, parentComment.id.toString()));
 

@@ -1,4 +1,4 @@
-import { Avatar, ListItemIcon, ListItemText, Menu, MenuItem, MenuList } from '@mui/material';
+import { Avatar, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import { FC, memo, useState } from 'react';
 import { checkUrl } from '../../../shared/utils/Utils';
 import useAllFriends from '../../friends/hooks/useAllFriends';
@@ -11,6 +11,13 @@ interface ChatAddMenuProps {
     onClose: () => void;
 }
 
+/**
+ * Компонент для добавления нового диалога
+ * @param open - открытие и закрытие диалога
+ * @param anchor - элемент, к которому прикрепляется меню
+ * @param onClose - функция закрытия диалога
+ * @returns
+ */
 const ChatAddMenu: FC<ChatAddMenuProps> = ({ open, anchor, onClose }) => {
     const { friends } = useAllFriends(); //временно, или сделать компонент с поддержкой ref
     const [openModal, setOpenModal] = useState(false);
@@ -43,30 +50,29 @@ const ChatAddMenu: FC<ChatAddMenuProps> = ({ open, anchor, onClose }) => {
                 horizontal: 'center',
             }}
         >
-            <MenuList>
-                {friends.map((user, index) => {
-                    return (
-                        <MenuItem
-                            onClick={() => handleOpen(user)}
-                            key={index}
-                            sx={{
-                                '&.MuiMenuItem-root:not(:last-child)': {
-                                    borderBottom: '1px solid',
-                                    borderBottomColor: 'divider',
-                                },
-                            }}
-                        >
-                            <ListItemIcon>
-                                <Avatar
-                                    src={user.avatar && checkUrl(user.avatar)}
-                                    sx={{ mr: 1, width: '40px', height: '40px' }}
-                                />
-                            </ListItemIcon>
-                            <ListItemText> {user.full_name} </ListItemText>
-                        </MenuItem>
-                    );
-                })}
-            </MenuList>
+            {friends.map((user, index) => {
+                return (
+                    <MenuItem
+                        onClick={() => handleOpen(user)}
+                        key={index}
+                        sx={{
+                            '&.MuiMenuItem-root:not(:last-child)': {
+                                borderBottom: '1px solid',
+                                borderBottomColor: 'divider',
+                            },
+                        }}
+                    >
+                        <ListItemIcon>
+                            <Avatar
+                                src={user.avatar && checkUrl(user.avatar)}
+                                sx={{ mr: 1, width: '40px', height: '40px' }}
+                            />
+                        </ListItemIcon>
+                        <ListItemText> {user.full_name} </ListItemText>
+                    </MenuItem>
+                );
+            })}
+
             <AddNewDialogue open={openModal} onClose={handleClose} user={user} />
         </Menu>
     );

@@ -1,6 +1,8 @@
 import { FC } from 'react';
 import useFeedPosts from '../../hooks/useFeedPosts';
 import PostList from '../postList/PostList';
+import { isApiError } from '../../../../app/api/Utils';
+
 
 /**
  * Пропсы для компонента Posts
@@ -14,7 +16,7 @@ interface PostsProps {
  * @returns Список постов
  */
 const MainFeed: FC<PostsProps> = ({ context }) => {
-    const { posts, isError, ref, isSuccess, totalCount, isLoading } = useFeedPosts('main');
+    const { posts, isError, ref, isSuccess, totalCount, isLoading, error} = useFeedPosts('main');
     return (
         <PostList
             posts={posts}
@@ -24,6 +26,7 @@ const MainFeed: FC<PostsProps> = ({ context }) => {
             totalCount={totalCount}
             context={context}
             isLoading={isLoading}
+            error={isApiError(error) ? error : undefined} // Проверка на ошибку API
         />
     );
 };

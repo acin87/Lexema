@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import {
     useDeleteAllMessageMutation,
+    useMarkAsReadAllMessagesMutation,
     useMarkAsReadMessagesMutation,
     useSendMessageMutation,
 } from '../api/messengerApi';
@@ -9,6 +10,7 @@ export const useMessageActions = () => {
     const [uploadMessage] = useSendMessageMutation();
     const [deleteMessages] = useDeleteAllMessageMutation();
     const [markAsRead] = useMarkAsReadMessagesMutation();
+    const [markAsReadAll] = useMarkAsReadAllMessagesMutation();
 
     const deleteAllMessages = useCallback(
         async (userId: number) => {
@@ -46,9 +48,22 @@ export const useMessageActions = () => {
         [markAsRead],
     );
 
+    const markAllMessagesAsRead = useCallback(
+        async (userId: number) => {
+            try {
+                await markAsReadAll({ sender_id: userId });
+                console.log('All messages marked as read successfully');
+            } catch (error) {
+                console.error('Failed to mark all messages as read:', error);
+            }
+        },
+        [markAsReadAll],
+    );
+
     return {
         deleteAllMessages,
         sendMessage,
         markMessageAsRead,
+        markAllMessagesAsRead,
     };
 };

@@ -20,6 +20,7 @@ const authSlice = createSlice({
     reducers: {
         setCredentials: (state, action: PayloadAction<TokenResponse>) => {
             const { access, refresh } = action.payload;
+            console.log('setCredentials', action.payload);
             state.access = access;
             Cookies.set('refreshToken', refresh, { expires: 7 });
         },

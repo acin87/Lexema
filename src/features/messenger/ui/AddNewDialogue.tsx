@@ -25,9 +25,16 @@ interface AddNewDialogueProps {
     onClose: () => void;
     user: Pick<Friend, 'friend_id' | 'avatar' | 'full_name' | 'last_login'> | undefined;
 }
+
+/**
+ * Компонент для добавления нового диалога
+ * @param open - открытие и закрытие диалога
+ * @param onClose - функция закрытия диалога
+ * @param user - пользователь, которому отправляется сообщение
+ * @returns 
+ */
 const AddNewDialogue: FC<AddNewDialogueProps> = ({ open, onClose, user }) => {
     const { sendMessage } = useMessageActions();
-    const [focus, setFocus] = useState(false);
     const [messageText, setMessageText] = useState('');
     const handleSendMessage = () => {
         if (!user) return;
@@ -87,8 +94,6 @@ const AddNewDialogue: FC<AddNewDialogueProps> = ({ open, onClose, user }) => {
                             multiline
                             maxRows={7}
                             minRows={5}
-                            onFocus={() => setFocus(true)}
-                            onBlur={() => setFocus(false)}
                             onChange={(e) => setMessageText(e.target.value)}
                             value={messageText}
                         />

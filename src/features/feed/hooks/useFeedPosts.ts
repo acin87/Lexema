@@ -44,7 +44,7 @@ const useFeedPosts = (feedType: FeedType, profileOrGroupOwnerId?: number) => {
         }
     };
 
-    const { data: response, isError, isSuccess, isFetching, isLoading } = getQuery();
+    const { data: response, isError, isSuccess, isFetching, isLoading, error } = getQuery();
 
     const { ref, inView } = useInView({ threshold: 0.8 }); //react-intersection-observer
 
@@ -77,6 +77,6 @@ const useFeedPosts = (feedType: FeedType, profileOrGroupOwnerId?: number) => {
         }
     }, [isFetching]);
 
-    return { posts, isError, ref, isSuccess, totalCount, isFetching, isLoading };
+    return { posts, isError, ref, isSuccess, totalCount, isFetching, isLoading, error };
 };
 export default useFeedPosts;

@@ -9,7 +9,6 @@ export type FriendsResponse = {
 export type Friend = {
     friend_id: number;
     status: 'accepted' | 'pending' | 'rejected';
-    images: Images;
     friends_count: number;
     posts_count: number;
     groups_count: number;

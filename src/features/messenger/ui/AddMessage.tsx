@@ -8,6 +8,11 @@ interface AddMessageProps {
     recipient_id: number;
 }
 
+/**
+ * Компонент для добавления сообщения в чат
+ * @param recipient_id - id получателя сообщения
+ * @returns JSX.Element
+ */
 const AddMessage: FC<AddMessageProps> = ({ recipient_id }) => {
     const [focus, setFocus] = useState(false);
     const [messageText, setMessageText] = useState('');

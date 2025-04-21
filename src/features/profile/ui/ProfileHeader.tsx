@@ -5,17 +5,18 @@ import { useParams } from 'react-router-dom';
 import { selectUserId } from '../../../entities/user/slice/userSlice';
 import useDocumentTitle from '../../../shared/hooks/useDocumentTitle';
 import checkImages from '../../../shared/utils/ImageUtils';
+import { checkUrl } from '../../../shared/utils/Utils';
 import useProfile from '../hooks/useProfile';
 import FriendActions from './FriendActions';
 import styles from './Profile.module.css';
 
 const ProfileHeader: React.FC = () => {
-    const {id} = useParams();
+    const { id } = useParams();
     const profileOwnerId = Number(id);
     const { response } = useProfile(profileOwnerId);
     const user_id = useSelector(selectUserId);
 
-    const { avatarImage, mainImage } = checkImages(response?.images);
+    const { mainImage } = checkImages(response?.profile_image);
 
     useDocumentTitle(`Lexema | Профиль - ${response?.full_name}`);
 
@@ -30,7 +31,11 @@ const ProfileHeader: React.FC = () => {
                     </Box>
                     <Box className={styles.profileHeadDetail}>
                         <Box className={styles.profileHeadImg}>
-                            <Avatar sx={{ width: 130, height: 130 }} src={avatarImage} aria-label="avatar"></Avatar>
+                            <Avatar
+                                sx={{ width: 130, height: 130 }}
+                                src={response?.avatar && checkUrl(response?.avatar)}
+                                aria-label="avatar"
+                            ></Avatar>
                         </Box>
                         <Box className={styles.profileHeadUserName}>
                             <Typography variant="h3">{response?.full_name}</Typography>
