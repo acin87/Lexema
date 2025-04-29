@@ -1,7 +1,7 @@
 import { Box, Card, CardContent, CardHeader, Skeleton } from '@mui/material';
 import { FC } from 'react';
-import PostSkeleton from '../../../../oldFiles/PostSkeleton';
 import styles from './Profile.module.css';
+import PostSkeleton from '../../feed/ui/postSkeleton/PostSkeleton';
 
 const ProfileSkeleton: FC = () => {
     return (

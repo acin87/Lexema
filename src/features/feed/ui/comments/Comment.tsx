@@ -12,7 +12,6 @@ import {
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import PostImages from '../../../../../oldFiles/PostImages';
 import { CommentType } from '../../../../entities/comment/types/commntsType';
 import { selectUser } from '../../../../entities/user/slice/userSlice';
 import { User } from '../../../../entities/user/types/UserTypes';
@@ -22,6 +21,7 @@ import styles from './Comment.module.css';
 import CommentActionButton from './CommentActionButton';
 import CommentSkeleton from './CommentSkeleton';
 import ReplyCommentButton from './ReplyCommentButton';
+import PostImages from '../postImages/PostImages';
 /**
  * Пропсы для компонента комментария
  */
