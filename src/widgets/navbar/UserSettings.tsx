@@ -9,8 +9,9 @@ import { useNavigate } from 'react-router-dom';
 import { AppRoute, SiteAppRoutePath } from '../../app/routes/Config';
 import { AppDispatch, RootState } from '../../app/store/store';
 import { uiActions } from '../../app/store/uiSlice';
-import { logout } from '../../features/auth/slice/authSlice';
 import { selectUser } from '../../entities/user/slice/userSlice';
+import { logout } from '../../features/auth/slice/authSlice';
+import NotificationsWidget from '../../features/notifications/ui/NotificationsWidget';
 import Avatar from '../../shared/ui/avatar/Avatar';
 import ThemeSwitcher from '../../shared/ui/themeSwitcher/ThemeSwitcher';
 const itemMenuStyles: SxProps = {
@@ -64,9 +65,11 @@ const UserSettings: FC = () => {
                 flexGrow: 1,
                 justifyContent: 'flex-end',
                 position: 'relative',
+                gap: '1rem',
             }}
             component="nav"
         >
+            <NotificationsWidget />
             <IconButton onClick={handleOpen}>
                 <Avatar src={user.avatar} />
             </IconButton>

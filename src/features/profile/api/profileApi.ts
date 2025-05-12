@@ -1,7 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { API } from '../../../app/api/ApiConfig';
 import { baseQueryWithReauth } from '../../../app/api/Utils';
-import { Friend } from '../../friends/types/FriendTypes';
 import { Profile } from '../types/ProfileTypes';
 
 export const profileApi = createApi({
@@ -26,37 +25,7 @@ export const profileApi = createApi({
             }),
             providesTags: (result) => [{ type: 'Profile', id: result?.id }],
         }),
-        addFriend: builder.mutation<Friend, { id: number }>({
-            query: ({ id }) => ({
-                url: `${API.FRIENDS}`,
-                method: 'POST',
-                body: {
-                    friend_id: id,
-                },
-            }),
-            invalidatesTags: ['Profile'],
-        }),
-        removeFriend: builder.mutation<void, { id: number }>({
-            query: ({ id }) => ({
-                url: `${API.FRIENDS}${id}/remove_friend/`,
-                method: 'DELETE',
-            }),
-            invalidatesTags: ['Profile'],
-        }),
-        cancelFriendRequest: builder.mutation<void, { id: number }>({
-            query: ({ id }) => ({
-                url: `${API.FRIENDS}${id}/cancel_request/`,
-                method: 'DELETE',
-            }),
-            invalidatesTags: ['Profile'],
-        }),
     }),
 });
 
-export const {
-    useGetProfileQuery,
-    useGetMyProfileQuery,
-    useAddFriendMutation,
-    useRemoveFriendMutation,
-    useCancelFriendRequestMutation,
-} = profileApi;
+export const { useGetProfileQuery, useGetMyProfileQuery } = profileApi;

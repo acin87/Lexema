@@ -48,12 +48,10 @@ export const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQue
         } else {
             console.warn('No refresh token found. User is not authenticated.');
             api.dispatch(clearCredentials());
-            
         }
     }
     return result;
 };
-
 
 export interface ApiError {
     data?: {
@@ -69,12 +67,7 @@ export const isApiError = (error: unknown): error is ApiError => {
     }
 
     // Проверка для ошибки типа FETCH_ERROR
-    if (
-        'status' in error &&
-        error.status === 'FETCH_ERROR' &&
-        'error' in error &&
-        typeof error.error === 'string'
-    ) {
+    if ('status' in error && error.status === 'FETCH_ERROR' && 'error' in error && typeof error.error === 'string') {
         return true;
     }
 
@@ -85,9 +78,9 @@ export const isApiError = (error: unknown): error is ApiError => {
         'data' in error &&
         typeof error.data === 'object' &&
         error.data !== null &&
-        Object.values(error.data).every((value) => 
-            typeof value === 'string' || 
-            (Array.isArray(value) && value.every((item) => typeof item === 'string'))
+        Object.values(error.data).every(
+            (value) =>
+                typeof value === 'string' || (Array.isArray(value) && value.every((item) => typeof item === 'string')),
         )
     ) {
         return true;

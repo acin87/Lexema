@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { ApiError, isApiError } from '../../../app/api/Utils';
 import { AppDispatch, RootState } from '../../../app/store/store';
 import { useGetMainPostsQuery, useGetProfilePostsQuery } from '../../../entities/post/api/postApi ';
 import { addPosts, setPosts, setSkip } from '../slice/feedSlice';
@@ -21,6 +23,7 @@ import { FeedType } from '../types/FeedTypes';
  */
 const useFeedPosts = (feedType: FeedType, profileOrGroupOwnerId?: number) => {
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const { posts, skip } = useSelector((state: RootState) => state.feed[feedType]);
@@ -76,6 +79,15 @@ const useFeedPosts = (feedType: FeedType, profileOrGroupOwnerId?: number) => {
             setIsLoadingMore(false);
         }
     }, [isFetching]);
+
+    useEffect(() => {
+        if (isError && isApiError(error)) {
+            const apiError = error as ApiError;
+            if (apiError.status === 401) {
+                navigate('/auth');
+            }
+        }
+    }, [isError, error, navigate]);
 
     return { posts, isError, ref, isSuccess, totalCount, isFetching, isLoading, error };
 };

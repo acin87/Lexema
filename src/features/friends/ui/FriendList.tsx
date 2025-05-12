@@ -38,7 +38,7 @@ const FriendList: FC = () => {
 
     return (
         <Box sx={{ ...containerStyles }}>
-            {friends.map((user, index) => {
+            {friends.filter((user) => user.status === 'accepted').map((user, index) => {
                 if (index + 1 === friends?.length) {
                     return (
                         <Fragment key={index}>
@@ -50,7 +50,7 @@ const FriendList: FC = () => {
                             )}
                             {isSuccess && index + 1 == totalCount && (
                                 <Box sx={{ ...circularProgressStyles }}>
-                                    <Box component="h2">У Вас больше нет друзей</Box>
+                                    { totalCount > 9 && <Box component="h2">У Вас больше нет друзей</Box>}
                                 </Box>
                             )}
                         </Fragment>

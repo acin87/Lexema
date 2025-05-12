@@ -1,13 +1,16 @@
 import {
+    useAcceptFriendRequestMutation,
     useAddFriendMutation,
     useCancelFriendRequestMutation,
     useRemoveFriendMutation,
-} from '../../profile/api/profileApi';
+} from '../api/friendsApi';
+
 const useFriendActions = () => {
     const [addFriend, { isSuccess: isAdded, isError: isErrorAdding }] = useAddFriendMutation();
     const [removeFriend, { isSuccess: isRemoved, isError: isErrorRemoving }] = useRemoveFriendMutation();
     const [cancelFriendRequest, { isSuccess: isCanceled, isError: isErrorCanceling }] =
         useCancelFriendRequestMutation();
+    const [acceptFriendRequest, { isSuccess: isAccepted, isError: isErrorAcepting }] = useAcceptFriendRequestMutation();
 
     const handleAddFriend = async (id: number) => {
         await addFriend({ id });
@@ -21,6 +24,10 @@ const useFriendActions = () => {
         await cancelFriendRequest({ id });
     };
 
+    const handleAcceptFriendRequest = async (id: number) => {
+        await acceptFriendRequest({ id });
+    };
+
     return {
         handleAddFriend,
         handleRemoveFriend,
@@ -31,6 +38,9 @@ const useFriendActions = () => {
         handleCancelFriendRequest,
         isCanceled,
         isErrorCanceling,
+        handleAcceptFriendRequest,
+        isAccepted,
+        isErrorAcepting,
     };
 };
 

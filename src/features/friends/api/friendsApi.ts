@@ -24,6 +24,46 @@ export const friendsApi = createApi({
                 method: 'GET',
             }),
         }),
+        addFriend: builder.mutation<Friend, { id: number }>({
+            query: ({ id }) => ({
+                url: `${API.FRIENDS}`,
+                method: 'POST',
+                body: {
+                    friend_id: id,
+                },
+            }),
+            invalidatesTags: ['Profile'],
+        }),
+        removeFriend: builder.mutation<void, { id: number }>({
+            query: ({ id }) => ({
+                url: `${API.FRIENDS}${id}/remove_friend/`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Profile'],
+        }),
+        cancelFriendRequest: builder.mutation<void, { id: number }>({
+            query: ({ id }) => ({
+                url: `${API.FRIENDS}${id}/cancel_request/`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Profile'],
+        }),
+        acceptFriendRequest: builder.mutation<void, {id: number}>({
+            query: ({id})=>({
+                 url: `${API.FRIENDS}${id}/update_status/`,
+                 method: 'PATCH',
+                 body: {
+                    'status': 'accepted'
+                 }
+            })
+        })
     }),
 });
-export const { useGetAllFriendsQuery, useGetUpcomingBirthdaysQuery } = friendsApi;
+export const {
+    useGetAllFriendsQuery,
+    useGetUpcomingBirthdaysQuery,
+    useAddFriendMutation,
+    useRemoveFriendMutation,
+    useCancelFriendRequestMutation,
+    useAcceptFriendRequestMutation
+} = friendsApi;

@@ -61,6 +61,17 @@ const FriendView = forwardRef<HTMLDivElement, Friend>((friend, ref) => {
         handleClose();
     };
 
+    const friendsAvatars = friend.friend_friends_data.map((friends) => {
+        if(friends.id === friend.friend_id) return null;
+        return (
+            <NavLink key={friends.id} to={`/${AppRoute.PROFILE}/${friends.id}`}>
+                <Tooltip title={friends.full_name}>
+                    <Avatar src={checkUrl(friends.avatar_image)} />
+                </Tooltip>
+            </NavLink>
+        );
+    });
+
     return (
         <>
             <Card
@@ -122,19 +133,17 @@ const FriendView = forwardRef<HTMLDivElement, Friend>((friend, ref) => {
                         </Box>
                     </Box>
                     <AvatarGroup sx={{ pt: 2, pb: 2, minHeight: '70px' }} max={5}>
-                        {friend.friend_friends_data.map((friend) => (
-                            <NavLink key={friend.id} to={`/${AppRoute.PROFILE}/${friend.id}`}>
-                                <Tooltip title={friend.full_name}>
-                                    <Avatar src={checkUrl(friend.avatar_image)} />
-                                </Tooltip>
-                            </NavLink>
-                        ))}
+                        {friendsAvatars}
                     </AvatarGroup>
                     <ButtonGroup variant="text" size="small">
                         <Button color="primary" aria-label="Написать сообщение" onClick={() => handleOpen(friend)}>
                             Сообщение
                         </Button>
-                        <Button color="primary" aria-label="Открыть диалог" onClick={() => navigate(`/${AppRoute.MESSENGER}/${friend.friend_id}`)}>
+                        <Button
+                            color="primary"
+                            aria-label="Открыть диалог"
+                            onClick={() => navigate(`/${AppRoute.MESSENGER}/${friend.friend_id}`)}
+                        >
                             В диалоги
                         </Button>
                     </ButtonGroup>
