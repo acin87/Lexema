@@ -10,8 +10,8 @@ export type User = {
     username: string;
     first_name: string;
     last_name: string;
-    avatar: string | undefined;
-    profile_image: string | undefined;
+    avatar: string | undefined | File;
+    profile_image: string | undefined | File;
     is_staff: boolean;
     is_superuser: boolean;
     full_name: string;

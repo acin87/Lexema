@@ -1,4 +1,4 @@
-import CancelIcon from '@mui/icons-material/Cancel';
+import CloseIcon from '@mui/icons-material/Close';
 import { Box, Modal, SxProps } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import cn from 'classnames';
@@ -32,17 +32,10 @@ const imageWrapper: SxProps = {
  * Стили для модального окна
  */
 const modalStyles: SxProps = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: window.innerWidth * 0.95 + 'px',
-    height: window.innerHeight * 0.95 + 'px',
-    transition: 'all 0.3s ease-in-out',
-    paddingRight: 6,
-    paddingLeft: 2,
-    paddingTop: 2,
-    paddingBottom: 2,
+    position: 'relative',
+    maxWidth: '90vw',
+    maxHeight: '90vh',
+    outline: 'none',
 };
 
 /**
@@ -80,25 +73,40 @@ const PostImages: FC<PostImagesProps> = ({ images }) => {
             <Modal
                 open={isOneImageModalOpen}
                 onClose={handleCloseOneImageModal}
-                component="div"
-                style={{ transformOrigin: '0 0 0' }}
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    p: 2,
+                }}
             >
                 <Box sx={modalStyles}>
+                    <IconButton
+                        aria-label="Закрыть"
+                        sx={{
+                            position: 'absolute',
+                            top: 8,
+                            right: 8,
+                            color: 'common.white',
+                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                            zIndex: 1,
+                        }}
+                        onClick={handleCloseOneImageModal}
+                    >
+                        <CloseIcon />
+                    </IconButton>
                     <Box
                         component="img"
-                        sx={{ width: '100%', height: '100%', borderRadius: '5px' }}
+                        sx={{
+                            maxWidth: '100%',
+                            maxHeight: '90vh',
+                            display: 'block',
+                            borderRadius: '4px',
+                        }}
                         src={checkUrl(selectedImage)}
                         alt={`image-${selectedImage}`}
                         onClick={handleCloseOneImageModal}
                     />
-                    <IconButton
-                        aria-label="Закрыть"
-                        sx={{ position: 'absolute', top: 0, right: 0, color: 'secondary.light' }}
-                        size="large"
-                        onClick={handleCloseOneImageModal}
-                    >
-                        <CancelIcon />
-                    </IconButton>
                 </Box>
             </Modal>
         </>

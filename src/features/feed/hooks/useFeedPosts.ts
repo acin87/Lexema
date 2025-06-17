@@ -33,13 +33,19 @@ const useFeedPosts = (feedType: FeedType, profileOrGroupOwnerId?: number) => {
     const mainQuery = useGetMainPostsQuery({ ...baseParams }, { skip: feedType !== 'main' });
     const profileQuery = useGetProfilePostsQuery(
         { ...baseParams, profileOrGroupOwnerId },
-        { skip: feedType !== 'profile' },
+        { skip: feedType !== 'profile'},
+    );
+        const friendQuery = useGetProfilePostsQuery(
+        { ...baseParams, profileOrGroupOwnerId },
+        { skip: feedType !== 'friend'},
     );
 
     const getQuery = () => {
         switch (feedType) {
             case 'profile':
                 return profileQuery;
+            case 'friend':
+                return friendQuery;
             // case 'group':
             //     return useGetGroupPostsQuery;
             default:

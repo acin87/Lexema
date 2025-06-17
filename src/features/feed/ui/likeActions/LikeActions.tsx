@@ -34,7 +34,7 @@ const LikeActions: FC<LikeActionsProps> = ({ post }) => {
                     <Tooltip title={`Комментариев: ${post.comments_count}`}>
                         <Box className={styles.actionIcon}>
                             <CommentOutlinedIcon fontSize="small" color="primary" />
-                            <Box className={styles.actionCountText} component="span">
+                            <Box className={styles.actionCountText} component="span" color='primary.main'>
                                 {post.comments_count}
                             </Box>
                         </Box>
@@ -45,7 +45,7 @@ const LikeActions: FC<LikeActionsProps> = ({ post }) => {
                     <Tooltip title={`Репостов: ${post.reposts_count}`}>
                         <Box className={styles.actionIcon}>
                             <ShareIcon fontSize="small" color="primary" />
-                            <Box className={styles.actionCountText} component="span">
+                            <Box className={styles.actionCountText} component="span" color='primary.main'>
                                 {post.reposts_count}
                             </Box>
                         </Box>

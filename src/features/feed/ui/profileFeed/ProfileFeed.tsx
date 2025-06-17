@@ -1,12 +1,18 @@
-import { FC, memo } from 'react';
+import { FC } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { selectUserId } from '../../../../entities/user/slice/userSlice';
 import useFeedPosts from '../../hooks/useFeedPosts';
 import PostList from '../postList/PostList';
-import { useParams } from 'react-router-dom';
 
-
-const ProfileFeed: FC = ( ) => {
-    const {id} = useParams()
-    const { posts, isError, ref, isSuccess, totalCount, isLoading } = useFeedPosts('profile', Number(id));
+const ProfileFeed: FC = () => {
+    const { id } = useParams();
+    const userId = useSelector(selectUserId);
+    const isOwner = userId === Number(id);
+    const { posts, isError, ref, isSuccess, totalCount, isLoading } = useFeedPosts(
+        isOwner ? 'profile' : 'friend',
+        Number(id),
+    );
     return (
         <PostList
             posts={posts}
@@ -21,4 +27,4 @@ const ProfileFeed: FC = ( ) => {
     );
 };
 
-export default memo(ProfileFeed);
+export default ProfileFeed;

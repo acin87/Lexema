@@ -11,7 +11,7 @@ import { AppDispatch, RootState } from '../../app/store/store';
 import { uiActions } from '../../app/store/uiSlice';
 import { selectUser } from '../../entities/user/slice/userSlice';
 import { logout } from '../../features/auth/slice/authSlice';
-import NotificationsWidget from '../../features/notifications/ui/NotificationsWidget';
+import Notifications from '../../features/notifications/ui/Notifications';
 import Avatar from '../../shared/ui/avatar/Avatar';
 import ThemeSwitcher from '../../shared/ui/themeSwitcher/ThemeSwitcher';
 const itemMenuStyles: SxProps = {
@@ -69,9 +69,9 @@ const UserSettings: FC = () => {
             }}
             component="nav"
         >
-            <NotificationsWidget />
+            <Notifications />
             <IconButton onClick={handleOpen}>
-                <Avatar src={user.avatar} />
+                <Avatar src={ typeof user.avatar == 'string' ? user.avatar : ''} />
             </IconButton>
             <Popover
                 open={open}
@@ -106,6 +106,9 @@ const UserSettings: FC = () => {
                         sx={{ cursor: 'pointer', ':hover': { backgroundColor: 'rgba(80, 181, 255, .1)' } }}
                         title={<Typography variant="body1">Моя страница</Typography>}
                         subheader={<Typography variant="subtitle2">Просмотр страницы</Typography>}
+                          onClick={() =>
+                            navigate(SiteAppRoutePath[AppRoute.PROFILE].replace(':id', user.id.toString()) + '?tab=0')
+                        }
                     />
                     <Divider />
                     <CardHeader

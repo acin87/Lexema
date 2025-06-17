@@ -105,7 +105,7 @@ const FriendView = forwardRef<HTMLDivElement, Friend>((friend, ref) => {
                     />
                     <Box sx={{ pb: 2, pt: 2 }}>
                         <NavLink to={`/${AppRoute.PROFILE}/${friend.friend_id}`}>
-                            {friend.isFilledProfile ? `${friend.full_name}` : 'Профиль не заполнен'}
+                            {friend.isFilledProfile ? friend.full_name : friend.username }
                         </NavLink>
                     </Box>
                     <Box

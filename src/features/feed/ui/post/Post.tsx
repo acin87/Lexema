@@ -97,7 +97,7 @@ const PostUI: FC<PostProps> = ({ post, context, group_id }) => {
                     }
                     subheader={
                         <Typography variant="caption" component="div" sx={{ height: post.signature ? 'auto' : '20px' }}>
-                            {post.signature}
+                            {post.signature ? post.signature : 'Здесь могла быть Ваша подпись'}
                         </Typography>
                     }
                 />

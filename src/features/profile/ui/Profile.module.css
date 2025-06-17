@@ -68,6 +68,7 @@
     display: grid;
     grid-template-columns: calc(30% - 1rem) calc(70% - 1rem);
     gap: 2rem;
+    
 }
 .profilePosts {
     grid-column: 2 / 3;

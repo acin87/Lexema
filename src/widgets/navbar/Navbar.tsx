@@ -25,7 +25,7 @@ const Navbar: FC = memo(() => {
     }));
 
     return (
-        <DrawerHeader>
+        <DrawerHeader className='header' sx={{overflow: 'hidden!important'}}>
             <Box
                 sx={{
                     display: 'flex',

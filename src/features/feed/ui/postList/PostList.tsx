@@ -1,7 +1,7 @@
 import { Box, CircularProgress } from '@mui/material';
 import { FC, Fragment, memo, useCallback, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ApiError } from '../../../../app/api/Utils';
 import { Post as PostType } from '../../../../entities/post/types/PostTypes';
 import { selectUserId } from '../../../../entities/user/slice/userSlice';
@@ -9,6 +9,7 @@ import { WelcomeBanner } from '../../../../shared/ui/welcomeBanner/WelcomeBanner
 import AddPostButton from '../addPostButton/AddPostButton';
 import Post from '../post/Post';
 import styles from './PostList.module.css';
+import { FriendEmptyBanner } from '../../../profile/ui/FriendsEmptyBanner';
 
 type PostListProps = {
     posts: PostType[];
@@ -43,6 +44,9 @@ const PostList: FC<PostListProps> = ({
 }) => {
     const navigate = useNavigate();
     const user_id = useSelector(selectUserId);
+    const {id} = useParams();
+
+    
 
     const isOwner = useCallback(() => {
         if (posts.length === 0) return false;
@@ -51,16 +55,17 @@ const PostList: FC<PostListProps> = ({
 
     useLayoutEffect(() => {
         if (isError) {
-            if (error && error.status === 401) {
+            if (error) {
                 navigate('/auth');
-            } else {
-                navigate('/error');
             }
         }
     }, [isError, navigate, error]);
 
-    if (posts.length === 0 && !isProfile && !isLoading) {
+    if (totalCount === 0  && !isLoading && (Number(id) === user_id || !isProfile)) {
         return <WelcomeBanner />;
+    }
+    if(totalCount === 0 && !isLoading && Number(id) !== user_id && isProfile){
+        return<FriendEmptyBanner />
     }
 
     return (

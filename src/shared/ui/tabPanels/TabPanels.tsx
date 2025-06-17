@@ -1,6 +1,6 @@
 import { AppBar, Box, BoxProps, styled, Tab, TabProps, Tabs } from '@mui/material';
 import classNames from 'classnames';
-import { ReactNode, SyntheticEvent, useEffect, useState } from 'react';
+import { JSX, ReactNode, SyntheticEvent, useEffect, useState } from 'react';
 import styles from './TabPanels.module.css';
 
 export type TabPanelProps = {
@@ -9,6 +9,7 @@ export type TabPanelProps = {
     tabs: {
         label: string;
         children: ReactNode;
+        icon?: JSX.Element;
     }[];
 } & TabProps;
 
@@ -21,6 +22,7 @@ type PanelProps = {
 
 interface StyledTabProps {
     label: string;
+    icon?: JSX.Element;
 }
 
 const Panel = (props: PanelProps) => {
@@ -46,35 +48,36 @@ const TabPanels = (props: TabPanelProps) => {
         setValue(props.activeTab || 0);
     }, [props.activeTab]);
 
-
     const handleChange = (event: SyntheticEvent, newValue: number) => {
         event.preventDefault();
         setValue(newValue);
     };
 
-    const AntTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} />)(({ theme }) => ({
-        textTransform: 'none',
-        minWidth: 0,
-        [theme.breakpoints.up('sm')]: {
+    const AntTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} icon={props.icon} iconPosition='start' />)(
+        ({ theme }) => ({
+            textTransform: 'none',
             minWidth: 0,
-        },
-        fontWeight: theme.typography.fontWeightRegular,
-        marginRight: theme.spacing(1),
-        color: 'text.primary',
-        '&:hover': {
-            color: '#40a9ff',
-            opacity: 1,
-        },
-        '&.Mui-selected': {
+            [theme.breakpoints.up('sm')]: {
+                minWidth: 0,
+            },
+            fontWeight: theme.typography.fontWeightRegular,
+            marginRight: theme.spacing(1),
             color: 'text.primary',
-            fontWeight: theme.typography.fontWeightMedium,
-            backgroundColor: 'primary.main',
-            borderRadius: '5px',
-        },
-        '&.Mui-focusVisible': {
-            backgroundColor: '#d1eaff',
-        },
-    }));
+            '&:hover': {
+                color: '#40a9ff',
+                opacity: 1,
+            },
+            '&.Mui-selected': {
+                color: 'text.primary',
+                fontWeight: theme.typography.fontWeightMedium,
+                backgroundColor: 'primary.main',
+                borderRadius: '5px',
+            },
+            '&.Mui-focusVisible': {
+                backgroundColor: '#d1eaff',
+            },
+        }),
+    );
 
     const AntTabs = styled(Tabs)({
         '& .MuiTabs-indicator': {
@@ -100,13 +103,13 @@ const TabPanels = (props: TabPanelProps) => {
                     variant="fullWidth"
                     sx={{
                         width: '100%',
-                        '@media (max-width: 579.98px)': { '.MuiTabs-flexContainer': { flexDirection: 'column' } },
+                        '@media (max-width: 579.98px)': { '.MuiTabs-flexContainer': { flexDirection: 'row', alignItems: 'flex-start', '.MuiButtonBase-root svg': {display: 'none'} } },
                         backgroundColor: 'background.paper',
                         borderRadius: '5px',
                     }}
                 >
                     {props.tabs.map((tab, index) => (
-                        <AntTab key={index} label={tab.label} {...a11yProps(index)} />
+                        <AntTab key={index} label={tab.label} icon={tab.icon} {...a11yProps(index)} />
                     ))}
                 </AntTabs>
             </AppBar>

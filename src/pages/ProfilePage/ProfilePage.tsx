@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { FC, memo } from 'react';
+import { FC } from 'react';
 import ProfileHeader from '../../features/profile/ui/ProfileHeader';
 import ProfileBody from '../../features/profile/ui/ProfileTabs';
 // import ProfileSkeleton from '../../features/profile/components/ProfileSkeleton';
@@ -19,4 +19,4 @@ const ProfilePage: FC = () => {
     );
 };
 
-export default memo(ProfilePage);
+export default ProfilePage;

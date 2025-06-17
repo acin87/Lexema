@@ -6,6 +6,7 @@ const initialState: FeedState = {
     main: { posts: [], skip: 0 },
     profile: { posts: [], skip: 0 },
     group: { posts: [], skip: 0 },
+    friend: { posts: [], skip: 0 },
 };
 
 const feedSlice = createSlice({

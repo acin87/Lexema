@@ -48,15 +48,31 @@ export const friendsApi = createApi({
             }),
             invalidatesTags: ['Profile'],
         }),
-        acceptFriendRequest: builder.mutation<void, {id: number}>({
-            query: ({id})=>({
-                 url: `${API.FRIENDS}${id}/update_status/`,
-                 method: 'PATCH',
-                 body: {
-                    'status': 'accepted'
-                 }
-            })
-        })
+        acceptFriendRequest: builder.mutation<void, { id: number }>({
+            query: ({ id }) => ({
+                url: `${API.FRIENDS}${id}/update_status/`,
+                method: 'PATCH',
+                body: {
+                    status: 'accepted',
+                },
+            }),
+        }),
+        getMutualFriends: builder.query<Friend[], { friend_id: number }>({
+            query: ({ friend_id }) => ({
+                url: `${API.FRIENDS}${friend_id}/mutual_friends/`,
+                method: 'GET',
+            }),
+            providesTags: (result) =>
+                result
+                    ? [...result.map(({ id }: { id: number }) => ({ type: 'Friend' as const, id })), 'Friend']
+                    : ['Friend'],
+        }),
+        checkFriendStatus: builder.query<Friend, { friend_id: number }>({
+            query: ({ friend_id }) => ({
+                url: `${API.FRIENDS}${friend_id}/status/`,
+                method: 'GET',
+            }),
+        }),
     }),
 });
 export const {
@@ -65,5 +81,6 @@ export const {
     useAddFriendMutation,
     useRemoveFriendMutation,
     useCancelFriendRequestMutation,
-    useAcceptFriendRequestMutation
+    useAcceptFriendRequestMutation,
+    useGetMutualFriendsQuery,
 } = friendsApi;

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../../app/store/store';
-import { loadState } from '../../../shared/utils/LocalStorage';
+import { loadState, saveState } from '../../../shared/utils/LocalStorage';
 import { User, USER_PERSISTENT_STATE, UserState } from '../types/UserTypes';
 const initialState: UserState = loadState<UserState>(USER_PERSISTENT_STATE) || {
     data: {
@@ -8,10 +8,12 @@ const initialState: UserState = loadState<UserState>(USER_PERSISTENT_STATE) || {
         username: '',
         first_name: '',
         last_name: '',
+        profile_image: '',
         avatar: '',
         is_staff: false,
         is_superuser: false,
         full_name: '',
+        last_login: '',
     },
 };
 
@@ -21,6 +23,7 @@ export const userSlice = createSlice({
     reducers: {
         setUser: (state, action: PayloadAction<User>) => {
             state.data = action.payload;
+            saveState<UserState>(state, USER_PERSISTENT_STATE);
         },
     },
 });

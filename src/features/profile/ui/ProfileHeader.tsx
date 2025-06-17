@@ -16,7 +16,7 @@ const ProfileHeader: React.FC = () => {
     const { response } = useProfile(profileOwnerId);
     const user_id = useSelector(selectUserId);
 
-    const { mainImage } = checkImages(response?.profile_image);
+    const { mainImage } = checkImages(response?.profile_image );
 
     useDocumentTitle(`Lexema | Профиль - ${response?.full_name}`);
 
@@ -47,7 +47,7 @@ const ProfileHeader: React.FC = () => {
                             <Stack
                                 direction="row"
                                 spacing={2}
-                                sx={{ textAlign: 'center', backgroundColor: 'background.paper' }}
+                                sx={{ textAlign: 'center'}}
                             >
                                 <Box>
                                     <Typography variant="body2">Постов</Typography>

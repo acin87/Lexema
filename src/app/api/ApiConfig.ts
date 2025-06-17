@@ -21,4 +21,5 @@ export enum API {
     UPCOMING_BIRTHDAYS = 'api/upcoming-birth-day/',
     USERS = 'api/users/',
     AUTOCOMPLETE = 'api/users/autocomplete/',
+    GALLERY = 'api/gallery/',
 }

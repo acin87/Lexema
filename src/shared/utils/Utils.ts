@@ -37,7 +37,11 @@ export const getRelativeTime = (serverDateString: string | undefined): string =>
     return 'error';
 };
 
-export const checkUrl = (url: string) => {
+export const checkUrl = (url: string | File) => {
+    if(!url){
+        return url;
+    }
+    if (url instanceof File) url = URL.createObjectURL(url);
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
         return `${BASEURL}${url}`;
     }
