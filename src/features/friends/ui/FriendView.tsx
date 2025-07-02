@@ -16,16 +16,18 @@ import {
     useTheme,
 } from '@mui/material';
 import { forwardRef, memo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AppRoute } from '../../../app/routes/Config';
 import { AppDispatch } from '../../../app/store/store';
 
+import { selectUserId } from '../../../entities/user/slice/userSlice';
 import checkImages from '../../../shared/utils/ImageUtils';
 import { checkUrl } from '../../../shared/utils/Utils';
 import AddNewDialogue from '../../messenger/ui/AddNewDialogue';
 import { removeFriends } from '../slices/friendsSlice';
 import { Friend } from '../types/FriendTypes';
+import { setNewDialogueUser } from '../../messenger/slice/messagesSlice';
 
 /**
  * Компонент для отображения друзей
@@ -39,6 +41,7 @@ const FriendView = forwardRef<HTMLDivElement, Friend>((friend, ref) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [openModal, setOpenModal] = useState(false);
     const [user, setUser] = useState<Pick<Friend, 'friend_id' | 'avatar' | 'full_name' | 'last_login'> | undefined>();
+    const current_user_id = useSelector(selectUserId);
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
     const navigate = useNavigate();
@@ -61,8 +64,8 @@ const FriendView = forwardRef<HTMLDivElement, Friend>((friend, ref) => {
         handleClose();
     };
 
-    const friendsAvatars = friend.friend_friends_data.map((friends) => {
-        if(friends.id === friend.friend_id) return null;
+    const friendsAvatars = friend.friend_friends_data?.map((friends) => {
+        if (friends.id === friend.friend_id || friends.id === current_user_id) return null;
         return (
             <NavLink key={friends.id} to={`/${AppRoute.PROFILE}/${friends.id}`}>
                 <Tooltip title={friends.full_name}>
@@ -105,7 +108,7 @@ const FriendView = forwardRef<HTMLDivElement, Friend>((friend, ref) => {
                     />
                     <Box sx={{ pb: 2, pt: 2 }}>
                         <NavLink to={`/${AppRoute.PROFILE}/${friend.friend_id}`}>
-                            {friend.isFilledProfile ? friend.full_name : friend.username }
+                            {friend.isFilledProfile && friend.full_name ? friend.full_name : friend.username}
                         </NavLink>
                     </Box>
                     <Box
@@ -142,7 +145,10 @@ const FriendView = forwardRef<HTMLDivElement, Friend>((friend, ref) => {
                         <Button
                             color="primary"
                             aria-label="Открыть диалог"
-                            onClick={() => navigate(`/${AppRoute.MESSENGER}/${friend.friend_id}`)}
+                            onClick={() => {
+                                navigate(`/${AppRoute.MESSENGER}/${friend.friend_id}`)
+                                dispatch(setNewDialogueUser(friend))
+                            }}
                         >
                             В диалоги
                         </Button>

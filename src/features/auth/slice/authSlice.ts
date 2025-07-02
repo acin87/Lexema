@@ -6,12 +6,14 @@ import { TokenResponse } from '../types/AuthTypes';
 
 export interface AuthState {
     access: string | null;
+    isAuthorized: boolean;
 }
 
 export const AUTH_PERSISTENT_STATE = 'auth';
 
 const initialState: AuthState = loadState<AuthState>(AUTH_PERSISTENT_STATE) || {
     access: null,
+    isAuthorized: false,
 };
 
 const authSlice = createSlice({
@@ -20,25 +22,31 @@ const authSlice = createSlice({
     reducers: {
         setCredentials: (state, action: PayloadAction<TokenResponse>) => {
             const { access, refresh } = action.payload;
-            console.log('setCredentials', action.payload);
             state.access = access;
+            state.isAuthorized = true;
             Cookies.set('refreshToken', refresh, { expires: 7 });
         },
         clearCredentials: (state) => {
             state.access = null;
+            state.isAuthorized = false;
             Cookies.remove('refreshToken');
         },
         logout: (state) => {
             state.access = null;
+            state.isAuthorized = false;
             localStorage.removeItem(AUTH_PERSISTENT_STATE);
             localStorage.removeItem(USER_PERSISTENT_STATE);
             Cookies.remove('refreshToken');
         },
+        setIsAutorized: (state, action: PayloadAction<boolean>) => {
+            state.isAuthorized = action.payload;
+        },
     },
 });
 
-export const { setCredentials, clearCredentials, logout } = authSlice.actions;
+export const { setCredentials, clearCredentials, logout, setIsAutorized } = authSlice.actions;
 
 export default authSlice.reducer;
 
 export const selectAccessToken = (state: { auth: AuthState }) => state.auth.access;
+export const selectIsAuthorized = (state: { auth: AuthState }) => state.auth.isAuthorized;

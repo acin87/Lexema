@@ -21,6 +21,7 @@ import uiSlice, { UI_PERSISTENT_STATE, UiTypes } from './uiSlice';
 import notificationsSlice from '../../features/notifications/slice/notificationsSlice';
 import { notificationApi } from '../../features/notifications/api/notificationApi';
 import messagesSlice from '../../features/messenger/slice/messagesSlice';
+import { weatherApi } from '../../widgets/weather/weatherApi';
 const listenerMiddleware = createListenerMiddleware();
 
 listenerMiddleware.startListening({
@@ -29,6 +30,7 @@ listenerMiddleware.startListening({
         const { access } = action.payload;
         try {
             const result = await listenerApi.dispatch(userApi.endpoints.getUser.initiate({accessToken: access}));
+            console.log(result);
             if (result.data) {
                 listenerApi.dispatch(setUser(result.data));
                 saveState<UserState>(store.getState().user, USER_PERSISTENT_STATE);
@@ -58,6 +60,8 @@ export interface RootState {
     [profileApi.reducerPath]: ReturnType<typeof profileApi.reducer>;
     [userApi.reducerPath]: ReturnType<typeof userApi.reducer>;
     [notificationApi.reducerPath]: ReturnType<typeof notificationApi.reducer>;
+    [weatherApi.reducerPath]: ReturnType<typeof weatherApi.reducer>;
+    
 }
 
 const rootAppReducer = combineReducers({
@@ -69,6 +73,7 @@ const rootAppReducer = combineReducers({
     [profileApi.reducerPath]: profileApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [notificationApi.reducerPath]: notificationApi.reducer,
+    [weatherApi.reducerPath]: weatherApi.reducer,
     ui: uiSlice,
     feed: feedSlice,
     profile: profileSlice,
@@ -87,7 +92,7 @@ const rootReducer: (state: RootState | undefined, action: PayloadAction) => Root
     return rootAppReducer(state, action);
 };
 
-const apis = [postApi, friendsApi, commentsApi, messengerApi, authApi, profileApi, userApi, notificationApi] as const;
+const apis = [postApi, friendsApi, commentsApi, messengerApi, authApi, profileApi, userApi, notificationApi, weatherApi] as const;
 
 export const store = configureStore({
     reducer: rootReducer,

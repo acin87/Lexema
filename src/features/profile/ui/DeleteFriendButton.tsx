@@ -49,10 +49,8 @@ const DeleteFriendButton: FC<DeleteFriendButtonProps> = ({ id, handleRemoveFrien
                 open={open}
                 onClose={handleClose}
                 id="simple-menu"
-                MenuListProps={{
-                    onMouseLeave: handleClose,
-                    'aria-labelledby': 'add-friend-button',
-                }}
+                slotProps={{list: {onMouseLeave: handleClose}}}
+                disableScrollLock={true}
                 transformOrigin={{ horizontal: 'left', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
             >

@@ -3,7 +3,6 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, IconButton, Modal, SxProps } from '@mui/material';
 import React, { useState } from 'react';
-import { checkUrl } from '../../utils/Utils';
 interface ImageCarouselProps {
     images: string[];
     onDelete?: (index: number) => void;
@@ -57,7 +56,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, onDelete }) => {
             <Box sx={{ position: 'relative' }}>
                 <Box
                     component="img"
-                    src={checkUrl(images[activeIndex])}
+                    src={images[activeIndex]}
                     alt={`carousel-image-${activeIndex}`}
                     width="100%"
                     maxWidth="500px"
@@ -105,7 +104,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, onDelete }) => {
                 <Box sx={{ ...modalStyles }}>
                     <Box
                         component="img"
-                        src={checkUrl(images[activeIndex])}
+                        src={images[activeIndex]}
                         alt={`carousel-image-${activeIndex}`}
                         width="100%"
                         height="100%"
@@ -128,7 +127,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, onDelete }) => {
                     <Box
                         key={index}
                         component="img"
-                        src={checkUrl(images[index])}
+                        src={images[index]}
                         alt={`carousel-image-${index}`}
                         width="30%"
                         height="auto"
@@ -146,7 +145,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, onDelete }) => {
             {onDelete && (
                 <IconButton
                     aria-label="Удалить"
-                    sx={{ position: 'absolute', top: 0, right: 0, color: 'secondary.light' }}
+                    sx={{ position: 'absolute', top: 0, right: '20px', color: 'secondary.light' }}
                     onClick={() => onDelete(activeIndex)}
                 >
                     <DeleteIcon sx={{ ':hover': { color: 'primary.main' } }} />

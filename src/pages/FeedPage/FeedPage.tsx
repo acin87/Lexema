@@ -7,6 +7,7 @@ import useScrollPosition from '../../shared/hooks/useScrollPosition';
 import AdvertisingWidget from '../../widgets/advertising/AdvertisingWidget';
 import UpcomingBirthday from '../../widgets/birthday/UpcomingBirthday';
 import styles from './FeedPage.module.css';
+import WeatherWidget from '../../widgets/weather/WeatherWidget';
 /**
  * Страница ленты
  * @returns Страница ленты
@@ -15,6 +16,7 @@ const FeedPage: FC = () => {
     useScrollPosition('FeedPage');
     useDocumentTitle('Lexema | Лента новостей');
     const isLargeScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
+    const isMediumScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'));
     return (
         <Box
             className={cn(styles.flex, styles.row, styles.flexWrap__wrap)}
@@ -37,13 +39,14 @@ const FeedPage: FC = () => {
                         position: isLargeScreen ? 'fixed' : 'relative',
                         top: isLargeScreen ? 'calc(4.563rem + 0.938rem)' : 0,
                         display: 'flex',
-                        flexDirection: isLargeScreen ? 'column' : 'row',
+                        flexDirection: isMediumScreen ? 'column' : 'row',
                         gap: '1rem',
                     }}
                 >
                     <UpcomingBirthday />
+                    <WeatherWidget />
                     <AdvertisingWidget />
-                    <AdvertisingWidget />
+                    
                 </Box>
             </Box>
         </Box>

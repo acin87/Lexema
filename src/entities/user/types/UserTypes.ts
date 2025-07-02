@@ -14,7 +14,7 @@ export type User = {
     profile_image: string | undefined | File;
     is_staff: boolean;
     is_superuser: boolean;
-    full_name: string;
+    full_name: string | null;
     last_login: string | null;
 };
 

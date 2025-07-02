@@ -8,7 +8,7 @@
     z-index: 55;
 }
 
-.imageContainer > div:only-child {
+.imageContainer > div:only-child:not([class*="image-carousel"]) {
     grid-column: span 2;
     grid-row: span 2;
     height: 280px;

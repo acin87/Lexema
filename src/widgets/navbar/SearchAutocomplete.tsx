@@ -89,7 +89,7 @@ const SearchAutocomplete: FC = () => {
                         value={searchTerm}
                         onChange={handleInputChange}
                         onFocus={() => searchTerm.length > 1 && setShowSuggestions(true)}
-                        onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                        
                         slotProps={{
                             input: {
                                 startAdornment: (
@@ -113,6 +113,7 @@ const SearchAutocomplete: FC = () => {
                                 position: 'absolute',
                                 p: 0,
                                 backgroundColor: 'background.paper',
+                                lineHeight: 'normal'
                             }}
                         >
                             {suggestions?.length > 0
@@ -132,7 +133,7 @@ const SearchAutocomplete: FC = () => {
                                           }}
                                       >
                                           <Box className={styles.userName}>
-                                              <HighlightText text={searchResult.first_name} searchTerm={searchTerm} />
+                                              <HighlightText user={searchResult} searchTerm={searchTerm} />
                                           </Box>
                                           <Tooltip title="Добавить в друзья">
                                               <IconButton
@@ -152,16 +153,6 @@ const SearchAutocomplete: FC = () => {
                         </List>
                     )}
                 </Box>
-                {/* {selectedUser && (
-                    <div className="selected-user">
-                        <h3>Выбран пользователь:</h3>
-                        <p>
-                            Имя: {selectedUser.first_name} {selectedUser.last_name}
-                        </p>
-                        <p>Логин: {selectedUser.username}</p>
-                        <p>ID: {selectedUser.id}</p>
-                    </div>
-                )} */}
             </Box>
         </>
     );

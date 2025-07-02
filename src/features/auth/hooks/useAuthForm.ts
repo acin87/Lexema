@@ -54,11 +54,18 @@ export const useAuthForm = (isSignUp: boolean) => {
                     return;
                 }
                 await register({ username: data.username, password: data.password, email: data.email }).unwrap();
-                await login({ username: data.username, password: data.password }).unwrap();
+                 const response = await login({ username: data.username, password: data.password }).unwrap();
+                 if (response){
+                    console.log('Registered')
+                    navigate('/', { replace: true });
+                }
             } else {
-                await login({ username: data.username, password: data.password }).unwrap();
+                const response = await login({ username: data.username, password: data.password }).unwrap();
+                if (response){
+                    console.log('Logged in')
+                    navigate('/');
+                }
             }
-            navigate('/', { replace: true });
         } catch (error) {
             handleApiError(error);
         }

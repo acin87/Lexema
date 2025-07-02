@@ -1,4 +1,4 @@
-import '../wdyr.ts';
+// import '../wdyr.ts';
 import { createRoot } from 'react-dom/client';
 
 import App from './app/App.tsx';

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
     useAcceptFriendRequestMutation,
     useAddFriendMutation,
@@ -11,13 +12,19 @@ const useFriendActions = () => {
     const [cancelFriendRequest, { isSuccess: isCanceled, isError: isErrorCanceling }] =
         useCancelFriendRequestMutation();
     const [acceptFriendRequest, { isSuccess: isAccepted, isError: isErrorAcepting }] = useAcceptFriendRequestMutation();
+    const [friendship_id, setFriendshipId] = useState<number | undefined>(0);
+    const [status, setStatus] = useState<{ code: number; name: string } | undefined>();
 
     const handleAddFriend = async (id: number) => {
-        await addFriend({ id });
+        const response = await addFriend({ id }).unwrap();
+        setFriendshipId(response.friendship_id);
+        setStatus(response.status_data);
     };
 
     const handleRemoveFriend = async (id: number) => {
         await removeFriend({ id });
+        setFriendshipId(0);
+        setStatus(undefined);
     };
 
     const handleCancelFriendRequest = async (id: number) => {
@@ -41,6 +48,8 @@ const useFriendActions = () => {
         handleAcceptFriendRequest,
         isAccepted,
         isErrorAcepting,
+        friendship_id,
+        status,
     };
 };
 

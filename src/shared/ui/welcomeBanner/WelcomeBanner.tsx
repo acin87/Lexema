@@ -13,18 +13,18 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ onFindFriendsClick
         <Paper
             elevation={3}
             sx={{
+                flex: 1,
                 p: 4,
                 borderRadius: 2,
                 textAlign: 'center',
                 backgroundColor: theme.palette.background.paper,
-                maxWidth: 600,
                 mx: 'auto',
-                my: 4,
+                mb: 4,
             }}
         >
             <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
                 <Avatar sx={{ bgcolor: theme.palette.primary.main, width: 60, height: 60 }}>
-                    <img src={'src/assets/icons/favicon2.png'} style={{ width: '100%', height: '100%' }} />
+                    <img src={'/public/icons/favicon2.png'} style={{ width: '100%', height: '100%' }} />
                 </Avatar>
             </Box>
 

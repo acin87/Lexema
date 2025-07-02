@@ -82,6 +82,7 @@ const DropZone: FC<DropZoneAreaProps> = ({ onFilesChange }) => {
     }, [addFiles]); 
 
     const hasFiles = selectedFiles.length > 0;
+
     const dropZoneStyles: SxProps = {
         display: hasFiles ? 'none' : 'flex',
         flexDirection: 'column',

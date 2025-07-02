@@ -37,10 +37,6 @@ const ChatAddMenu: FC<ChatAddMenuProps> = ({ open, anchor, onClose }) => {
             open={open}
             anchorEl={anchor}
             onClose={onClose}
-            MenuListProps={{
-                // onMouseLeave: onClose,
-                'aria-labelledby': 'add-friend-button',
-            }}
             anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'left',
@@ -68,7 +64,7 @@ const ChatAddMenu: FC<ChatAddMenuProps> = ({ open, anchor, onClose }) => {
                                 sx={{ mr: 1, width: '40px', height: '40px' }}
                             />
                         </ListItemIcon>
-                        <ListItemText> {user.full_name} </ListItemText>
+                        <ListItemText> {user.full_name ? user.full_name : user.username} </ListItemText>
                     </MenuItem>
                 );
             })}

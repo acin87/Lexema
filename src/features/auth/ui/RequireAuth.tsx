@@ -1,7 +1,7 @@
 import { memo, ReactNode, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AUTH_PERSISTENT_STATE, AuthState } from '../slice/authSlice';
 import { loadState } from '../../../shared/utils/LocalStorage';
+import { AUTH_PERSISTENT_STATE, AuthState } from '../slice/authSlice';
 
 const RequireAuth = memo(({ children }: { children: ReactNode }) => {
     const jwt = loadState<AuthState>(AUTH_PERSISTENT_STATE)?.access ?? null;
@@ -9,6 +9,7 @@ const RequireAuth = memo(({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         if (jwt === null) {
+            console.log('jwt is null');
             navigate('/auth');
         }
     }, [jwt, navigate]);

@@ -25,11 +25,16 @@ interface FriendActionsProps {
  * @param profile - Профиль пользователя
  */
 const FriendActions: FC<FriendActionsProps> = ({ user_id, profile }) => {
-    const { handleAddFriend, handleRemoveFriend, handleCancelFriendRequest } = useFriendActions();
-    const friendStatusCode = profile?.friend_status?.code;
+    const { handleAddFriend, handleRemoveFriend, handleCancelFriendRequest, friendship_id: friendship_id_response , status} = useFriendActions();
+    let friendStatusCode =  status?.code;
+
+    if(profile && profile.friend_status){
+        friendStatusCode = profile.friend_status.code;
+    }
 
     const isFriend = profile?.is_friend;
-    const friendship_id = profile?.friendship_id || 0;
+    const friendship_id = profile?.friendship_id || friendship_id_response || 0;
+
 
     // Основные состояния
     switch (friendStatusCode) {

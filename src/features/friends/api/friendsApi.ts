@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { API } from '../../../app/api/ApiConfig';
 import { baseQueryWithReauth } from '../../../app/api/Utils';
-import { Friend, FriendRequest, UpcomingBirthdaysResponse } from '../types/FriendTypes';
+import { Friend, FriendRequest, MutualFriendsRespoonse, UpcomingBirthdaysResponse } from '../types/FriendTypes';
 
 export const friendsApi = createApi({
     reducerPath: 'friendsApi',
@@ -57,19 +57,15 @@ export const friendsApi = createApi({
                 },
             }),
         }),
-        getMutualFriends: builder.query<Friend[], { friend_id: number }>({
+        getMutualFriends: builder.query<MutualFriendsRespoonse, { friend_id: number }>({
             query: ({ friend_id }) => ({
                 url: `${API.FRIENDS}${friend_id}/mutual_friends/`,
                 method: 'GET',
             }),
-            providesTags: (result) =>
-                result
-                    ? [...result.map(({ id }: { id: number }) => ({ type: 'Friend' as const, id })), 'Friend']
-                    : ['Friend'],
         }),
         checkFriendStatus: builder.query<Friend, { friend_id: number }>({
             query: ({ friend_id }) => ({
-                url: `${API.FRIENDS}${friend_id}/status/`,
+                url: `${API.FRIENDS}${friend_id}/check_friendship/`,
                 method: 'GET',
             }),
         }),
@@ -83,4 +79,5 @@ export const {
     useCancelFriendRequestMutation,
     useAcceptFriendRequestMutation,
     useGetMutualFriendsQuery,
+    useCheckFriendStatusQuery,
 } = friendsApi;

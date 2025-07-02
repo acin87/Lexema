@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 
 
 
-export const FriendEmptyBanner: FC= () => {
+export const GalleryEmptyBanner: FC= () => {
     const theme = useTheme();
 
     return (
@@ -33,17 +33,15 @@ export const FriendEmptyBanner: FC= () => {
             </Box>
 
             <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 600 }}>
-                Лента Вашего друга пока пуста
+                У Вашего друга нет загруженных фотографий
             </Typography>
 
             <Typography variant="body1" component='p'>
-                Здесь будут отображаться посты людей и сообществ, на которые подписан Ваш друг, но пока здесь ничего
-                нет.
+                Здесь будут отображаться изображения, которые загрузил Ваш друг.
             </Typography>
 
-            <SectionBlock theme={theme} title="Почему лента пуста?">
-                Возможно, Ваш друг еще не успел подписаться на кого-то или не публиковал посты. Вы можете помочь ему
-                найти интересных авторов или друзей.
+            <SectionBlock theme={theme} title="Почему галлерея пуста?">
+                Возможно, Ваш друг еще не успел загрузить изображения
             </SectionBlock>
 
             <SectionBlock theme={theme} title="Предложите интересный контент">

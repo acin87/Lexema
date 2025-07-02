@@ -7,6 +7,7 @@ import { AppDispatch, RootState } from '../../../app/store/store';
 import { useGetMainPostsQuery, useGetProfilePostsQuery } from '../../../entities/post/api/postApi ';
 import { addPosts, setPosts, setSkip } from '../slice/feedSlice';
 import { FeedType } from '../types/FeedTypes';
+import { selectIsAuthorized } from '../../auth/slice/authSlice';
 
 /**
  * Хук для получения постов для главной страницы, профиля или группы
@@ -27,10 +28,11 @@ const useFeedPosts = (feedType: FeedType, profileOrGroupOwnerId?: number) => {
 
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const { posts, skip } = useSelector((state: RootState) => state.feed[feedType]);
+    const isAutorized = useSelector(selectIsAuthorized)
 
     const baseParams = { limit: 5, offset: skip };
 
-    const mainQuery = useGetMainPostsQuery({ ...baseParams }, { skip: feedType !== 'main' });
+    const mainQuery = useGetMainPostsQuery({ ...baseParams }, { skip: (feedType !== 'main' && !isAutorized)});
     const profileQuery = useGetProfilePostsQuery(
         { ...baseParams, profileOrGroupOwnerId },
         { skip: feedType !== 'profile'},
@@ -89,7 +91,9 @@ const useFeedPosts = (feedType: FeedType, profileOrGroupOwnerId?: number) => {
     useEffect(() => {
         if (isError && isApiError(error)) {
             const apiError = error as ApiError;
+            console.log(apiError);
             if (apiError.status === 401) {
+                console.log('Unauthorized');
                 navigate('/auth');
             }
         }

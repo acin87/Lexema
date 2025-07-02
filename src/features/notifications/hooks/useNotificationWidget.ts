@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import useFriendActions from '../../friends/hooks/useFriendActions';
 import { useMarkAsReadMutation } from '../api/notificationApi';
-import { selectAllNotifications } from '../slice/notificationsSlice';
+import { selectNotifications } from '../slice/notificationsSlice';
 import { Notifications } from '../types/NotificationsTypes';
 
 type NotificationsWithCount = Notifications & {
@@ -12,7 +12,7 @@ type NotificationsWithCount = Notifications & {
 
 export const useNotificationsWidget = () => {
     const [open, setOpen] = useState(false);
-    const notifications = useSelector(selectAllNotifications);
+    const notifications = useSelector(selectNotifications);
     const navigate = useNavigate();
     const [markAsRead] = useMarkAsReadMutation();
     const { handleAcceptFriendRequest, handleCancelFriendRequest } = useFriendActions();

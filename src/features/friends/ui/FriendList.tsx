@@ -4,6 +4,7 @@ import { FC, Fragment, memo } from 'react';
 import useAllFriends from '../hooks/useAllFriends';
 import FriendView from './FriendView';
 import FriendViewSkeleton from './FriendViewSkeleton';
+import { FriendsEmptyBanner } from './FriendsEmptyBanner';
 
 const containerStyles: SxProps = {
     display: 'grid',
@@ -34,6 +35,10 @@ const FriendList: FC = () => {
             skeletons.push(<FriendViewSkeleton key={i} />);
         }
         return <Box sx={{ ...containerStyles }}>{skeletons}</Box>;
+    }
+
+    if (isSuccess && totalCount === 0) {
+        return <FriendsEmptyBanner/>;
     }
 
     return (

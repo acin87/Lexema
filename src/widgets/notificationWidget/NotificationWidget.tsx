@@ -34,7 +34,7 @@ const NotificationWidget = () => {
             <Divider />
             <CardContent>
                 <List sx={{ width: '100%', maxWidth: 300 }}>
-                    {notifications && notifications?.length > 1 ? (
+                    {notifications && notifications?.length >= 1 ? (
                         Object.values(groupedNotifications).map((notification) => {
                             const { text, showCount, count } = getNotificationText(notification);
 

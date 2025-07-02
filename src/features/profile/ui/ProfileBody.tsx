@@ -34,13 +34,13 @@ const ProfileBody: FC = () => {
                     gap: '1rem',
                 }}
             >
-                {isOwner && (
+                {isOwner ? (
                     <>
                         <UpcomingBirthday />
                         <NotificationWidget />
                         <AdvertisingWidget />
                     </>
-                )}
+                ) : <AdvertisingWidget />}
             </Box>
             <Box className={styles.profilePosts}>
                 <ProfilePosts />

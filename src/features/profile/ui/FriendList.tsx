@@ -15,16 +15,10 @@ import {
     styled,
     Typography,
 } from '@mui/material';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { checkUrl } from '../../../shared/utils/Utils';
 import { useGetMutualFriendsQuery } from '../../friends/api/friendsApi';
-import { useParams } from 'react-router-dom';
-
-const friends = [
-    { id: 1, name: 'Иван Иванов', avatar: '', mutualFriends: 5, online: true },
-    { id: 2, name: 'Петр Петров', avatar: '', mutualFriends: 3, online: false },
-    { id: 3, name: 'Сергей Сергеев', avatar: '', mutualFriends: 7, online: true },
-    // ... другие друзья
-];
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
@@ -56,11 +50,24 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 const FriendsList = () => {
-    const {id} = useParams();
+    const { id } = useParams();
+    const [filter, setFilter] = useState<'all' | 'online' | 'mutual'>('all');
+    const navigate = useNavigate();
+    const { data: response } = useGetMutualFriendsQuery({ friend_id: Number(id) });
 
-    
-    const {data: mutualFriends} = useGetMutualFriendsQuery({friend_id: Number(id)});
+    if (!response) {
+        return null;
+    }
 
+    const friends = () => {
+        if (filter === 'all') {
+            return response.friends;
+        } else if (filter === 'online') {
+            return response.friends.filter((friend) => friend.is_online);
+        } else if (filter === 'mutual') {
+            return response.friends.filter((friend) => friend.is_mutual);
+        }
+    };
 
     return (
         <Paper elevation={0} sx={{ borderRadius: 2, overflow: 'hidden', marginBottom: 2 }}>
@@ -75,10 +82,16 @@ const FriendsList = () => {
                 }}
             >
                 <Box sx={{ display: 'flex', gap: 2 }}>
-                   <ButtonGroup variant="text">
-                        <Button>Все ({friends.length})</Button>
-                        <Button>Онлайн ({friends.filter((friend) => friend.online).length})</Button>
-                        <Button>Общие ({friends.filter((friend) => friend.mutualFriends > 0).length})</Button>
+                    <ButtonGroup variant="text">
+                        <Button onClick={() => setFilter('all')} disabled={filter === 'all'}>
+                            Все ({response.stats.total_friends})
+                        </Button>
+                        <Button onClick={() => setFilter('online')} disabled={filter === 'online'}>
+                            Онлайн ({response.stats.online_friends})
+                        </Button>
+                        <Button onClick={() => setFilter('mutual')} disabled={filter === 'mutual'}>
+                            Общие ({response.stats.mutual_friends})
+                        </Button>
                     </ButtonGroup>
                 </Box>
 
@@ -91,8 +104,8 @@ const FriendsList = () => {
 
             {/* Список друзей */}
             <List sx={{ p: 0 }}>
-                {friends.map((friend, index) => (
-                    <Fragment key={friend.id}>
+                {friends()?.map((friend, index) => (
+                    <Fragment key={friend.friend_id}>
                         <ListItem
                             secondaryAction={
                                 <IconButton edge="end">
@@ -103,32 +116,41 @@ const FriendsList = () => {
                                 '&:hover': {
                                     backgroundColor: '#f5f5f5',
                                 },
+                                cursor: 'pointer',
                             }}
+                            onClick={() => navigate(`/profile/${friend.friend_id}`, { replace: true })}
                         >
                             <ListItemAvatar>
                                 <Box sx={{ position: 'relative' }}>
-                                    {friend.online ? (
+                                    {friend.is_online ? (
                                         <StyledBadge
                                             overlap="circular"
                                             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                                             variant="dot"
                                         >
                                             <Avatar
-                                                alt={friend.name}
-                                                src={friend.avatar}
+                                                alt={friend.full_name! || friend.username}
+                                                src={friend.avatar as string}
                                                 sx={{ width: 50, height: 50 }}
                                             />
                                         </StyledBadge>
                                     ) : (
-                                        <Avatar src={friend.avatar} alt={friend.name} sx={{ width: 50, height: 50 }} />
+                                        <Avatar
+                                            src={checkUrl(friend.avatar as string)}
+                                            alt={friend.full_name! || friend.username}
+                                            sx={{ width: 50, height: 50 }}
+                                        />
                                     )}
                                 </Box>
                             </ListItemAvatar>
+                            
                             <ListItemText
-                                primary={<Typography fontWeight="medium">{friend.name}</Typography>}
+                                primary={
+                                    <Typography fontWeight="medium">{friend.full_name || friend.username}</Typography>
+                                }
                                 secondary={
                                     <Typography variant="body2" color="text.secondary">
-                                        {friend.mutualFriends} общих друга
+                                        {friend.friend_friends_data?.length} общих друга
                                     </Typography>
                                 }
                                 sx={{ ml: 1 }}
@@ -139,7 +161,7 @@ const FriendsList = () => {
                 ))}
             </List>
             <Divider />
-            {/* Подвал (если нужно) */}
+
             <Box sx={{ p: 2, bgcolor: 'background.paper', textAlign: 'center' }}>
                 <Typography variant="body2" color="text.secondary">
                     Показать всех друзей

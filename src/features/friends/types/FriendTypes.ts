@@ -9,11 +9,18 @@ export type FriendsResponse = {
 export type Friend = {
     friend_id: number;
     status: 'accepted' | 'pending' | 'rejected';
+    status_data?: {
+        code: number;
+        name: string;
+    };
+    friendship_id?: number;
     friends_count: number;
     posts_count: number;
     groups_count: number;
     isFilledProfile: boolean;
-    friend_friends_data: [
+    is_mutual: boolean;
+    is_online: boolean;
+    friend_friends_data?: [
         {
             id: number;
             full_name: string;
@@ -21,6 +28,16 @@ export type Friend = {
         },
     ];
 } & User; // {full_name: string;}
+
+export type MutualFriendsRespoonse = {
+    friends: Friend[];
+    stats: {
+        total_friends: number;
+        mutual_friends: number;
+        online_friends: number;
+    };
+};
+
 export type Images = {
     avatar_image?: string;
     main_page_image?: string;

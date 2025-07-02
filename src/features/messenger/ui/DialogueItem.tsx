@@ -13,7 +13,6 @@ interface DialogueItemProps {
     subHeader: string | undefined;
 }
 
-
 /**
  * Компонент для отображения элемента диалога
  * @param sender - отправитель сообщения
@@ -23,7 +22,7 @@ interface DialogueItemProps {
  */
 const DialogueItem: FC<DialogueItemProps> = ({ sender, subHeader, recipient }) => {
     const userId = useSelector(selectUserId);
-    const {deleteAllMessages, markAllMessagesAsRead} = useMessageActions()
+    const { deleteAllMessages, markAllMessagesAsRead } = useMessageActions();
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const itsMeSender = userId === sender.id;
@@ -61,7 +60,15 @@ const DialogueItem: FC<DialogueItemProps> = ({ sender, subHeader, recipient }) =
                         '& .MuiCardHeader-action': { alignItems: 'center', opacity: 0, pr: 1 },
                         '&:hover .MuiCardHeader-action': { opacity: 1 },
                     }}
-                    avatar={<Avatar src={itsMeSender ? recipient.avatar : sender.avatar} />}
+                    avatar={
+                        <Avatar
+                            src={
+                                itsMeSender
+                                    ? (recipient.avatar as string | undefined)
+                                    : (sender.avatar as string | undefined)
+                            }
+                        />
+                    }
                     title={
                         <Typography variant="subtitle2" fontWeight="bold">
                             {itsMeSender
@@ -89,17 +96,9 @@ const DialogueItem: FC<DialogueItemProps> = ({ sender, subHeader, recipient }) =
                     }
                 />
             </Card>
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                }}
-            >
-                <MenuItem onClick={()=> markAllMessagesAsRead(dialogSender.id)}>Пометить все прочитанными</MenuItem>
-                <MenuItem onClick={()=> deleteAllMessages(dialogSender.id)}>Удалить переписку</MenuItem>
+            <Menu id="basic-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
+                <MenuItem onClick={() => markAllMessagesAsRead(dialogSender.id)}>Пометить все прочитанными</MenuItem>
+                <MenuItem onClick={() => deleteAllMessages(dialogSender.id)}>Удалить переписку</MenuItem>
             </Menu>
         </>
     );

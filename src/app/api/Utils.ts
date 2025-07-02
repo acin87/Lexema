@@ -1,6 +1,6 @@
 import { BaseQueryApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query';
 import Cookies from 'js-cookie';
-import { clearCredentials, setCredentials } from '../../features/auth/slice/authSlice';
+import { clearCredentials, setCredentials, setIsAutorized } from '../../features/auth/slice/authSlice';
 import { TokenResponse } from '../../features/auth/types/AuthTypes';
 import { RootState } from '../store/store';
 import { API, BASEURL } from './ApiConfig';
@@ -27,6 +27,12 @@ const baseQuery = fetchBaseQuery({
  * @param extraOptions - дополнительные опции
  */
 export const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: object) => {
+    const state = api.getState() as RootState;
+    if (typeof args !== 'string' && args.url !== API.LOGIN && args.url !== API.REFRESH && args.url !== `/${API.ME}` && args.url !== API.REGISTRATION && !state.auth.isAuthorized) {
+        console.warn('User is not authenticated. Redirecting to login...');
+        console.log(args.url);
+        return { error: { status: 401, data: 'Not authorized!!!' } };
+    }
     let result = await baseQuery(args, api, extraOptions);
     if (result.error?.status === 401 && typeof args !== 'string' && args.url !== API.LOGIN) {
         console.warn('User is not authenticated. Refreshing token...');
@@ -48,6 +54,7 @@ export const baseQueryWithReauth = async (args: string | FetchArgs, api: BaseQue
         } else {
             console.warn('No refresh token found. User is not authenticated.');
             api.dispatch(clearCredentials());
+            api.dispatch(setIsAutorized(false));
         }
     }
     return result;

@@ -57,6 +57,8 @@ const UserSettings: FC = () => {
         minWidth: '10.75rem',
         width: '18.75rem',
     };
+
+
     return (
         <Box
             sx={{
@@ -82,7 +84,7 @@ const UserSettings: FC = () => {
             >
                 <Card sx={{ ...styles }}>
                     <CardHeader
-                        title={user.first_name + ' ' + user.last_name}
+                        title={user.full_name ? user.full_name : user.username}
                         sx={{ backgroundColor: 'primary.main' }}
                         action={
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>

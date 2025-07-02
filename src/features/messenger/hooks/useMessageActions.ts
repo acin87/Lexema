@@ -16,7 +16,6 @@ export const useMessageActions = () => {
         async (userId: number) => {
             try {
                 await deleteMessages({ recipient_id: userId });
-                console.log('All messages deleted successfully');
             } catch (error) {
                 console.error('Failed to delete all messages:', error);
             }
@@ -27,8 +26,7 @@ export const useMessageActions = () => {
     const sendMessage = useCallback(
         async (userId: number, content: string) => {
             try {
-                const message = await uploadMessage({ recipient_id: userId, content });
-                console.log('Message sent successfully:', message);
+                await uploadMessage({ recipient_id: userId, content });
             } catch (error) {
                 console.error('Failed to send message:', error);
             }
@@ -40,7 +38,6 @@ export const useMessageActions = () => {
         async (messageId: number) => {
             try {
                 await markAsRead({ message_id: messageId });
-                console.log('Message marked as read successfully');
             } catch (error) {
                 console.error('Failed to mark message as read:', error);
             }
@@ -52,7 +49,6 @@ export const useMessageActions = () => {
         async (userId: number) => {
             try {
                 await markAsReadAll({ sender_id: userId });
-                console.log('All messages marked as read successfully');
             } catch (error) {
                 console.error('Failed to mark all messages as read:', error);
             }

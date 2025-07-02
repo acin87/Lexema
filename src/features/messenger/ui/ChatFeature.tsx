@@ -13,7 +13,6 @@ import styles from './Chat.module.css';
 import ChatAddMenu from './ChatAddMenu';
 import DialogueItem from './DialogueItem';
 
-
 /**
  * Компонент для отображения списка чатов
  * @returns JSX.Element Список чатов
@@ -57,7 +56,9 @@ const ChatFeature: FC = () => {
             case 'sender':
                 return dialoguesCopy.sort((a, b) => {
                     const getInterlocutorName = (dialogue: Message) => {
-                        return dialogue.sender.id === userId ? dialogue.recipient.full_name : dialogue.sender.full_name;
+                        const fullName =
+                            dialogue.sender.id === userId ? dialogue.recipient.full_name : dialogue.sender.full_name;
+                        return fullName || '';
                     };
 
                     return getInterlocutorName(a).localeCompare(getInterlocutorName(b));

@@ -33,7 +33,7 @@ export const profileApi = createApi({
             }),
             invalidatesTags: ['Profile'],
         }),
-        getGalleryItems: builder.query<GalleryResponse, void>({
+        getGalleryItems: builder.query<GalleryResponse, '0'>({
             query: () => ({
                 url: `/${API.GALLERY}`,
                 method: 'GET',

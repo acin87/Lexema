@@ -15,6 +15,7 @@ import { useMessageActions } from '../hooks/useMessageActions';
 import AddMessage from './AddMessage';
 import styles from './Chat.module.css';
 import MessageItem from './MessageItem';
+import { selectNewDialogueUser } from '../slice/messagesSlice';
 
 /**
  * Компонент сообщений чата
@@ -30,6 +31,7 @@ const ChatMessageList: FC = () => {
         sender_id: Number(dialoguesId),
     });
     const userId = useSelector(selectUserId);
+    const sender_user = useSelector(selectNewDialogueUser)
 
     const { markAllMessagesAsRead } = useMessageActions();
 
@@ -63,6 +65,10 @@ const ChatMessageList: FC = () => {
         }
     }, [notifications, refetch]);
 
+    const sender_full_name = messages && messages[0] ? messages[0].sender.full_name : sender_user?.full_name;
+    const sender_avatar = messages && messages[0] ? messages[0].sender.avatar as string : sender_user?.avatar;
+    const sender_username = messages && messages[0] ? messages[0].sender.username : sender_user?.username;
+
     return (
         <>
             <Box
@@ -80,16 +86,16 @@ const ChatMessageList: FC = () => {
                     sx={{ gap: 1, flexGrow: 1, ml: 2 }}
                 >
                     <Avatar
-                        src={messages && messages[0] ? messages[0].sender.avatar : ''}
+                        src={sender_avatar}
                         sx={{ width: 42, height: 42, mr: 1 }}
                     />
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Box sx={{ display: 'flex', gap: 0.5 }}>
                             <Typography component="span" fontSize=".875rem">
-                                {messages && messages[0] ? messages[0].sender.full_name : ''}
+                                {sender_full_name}
                             </Typography>
                             <Typography component="span" fontSize=".875rem" color="text.secondary">
-                                ({messages && messages[0] ? messages[0].sender.username : ''})
+                                ({sender_username})
                             </Typography>
                         </Box>
                         <Typography
@@ -131,7 +137,7 @@ const ChatMessageList: FC = () => {
                                     content={message.content}
                                     sender={message.sender}
                                     timestamp={message.timestamp}
-                                    avatar={message.sender.avatar}
+                                    avatar={message.sender.avatar as string | undefined}
                                 />,
                             );
                             return acc;
