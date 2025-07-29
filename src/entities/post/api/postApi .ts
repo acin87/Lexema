@@ -36,9 +36,28 @@ export const postApi = createApi({
                       ]
                     : ['ProfilePost'],
         }),
-        updateViewsPost: builder.mutation<void, { author_id: number; postId: number; views: number }>({
-            query: ({ author_id, postId, views }) => ({
-                url: `${API.PROFILE}${author_id}/posts/${postId}/`,
+        getGroupPosts: builder.query<PostResponse, PostRequest>({
+            query: ({ profileOrGroupOwnerId, limit, offset }) => ({
+                url: `${API.GROUP}${profileOrGroupOwnerId}/posts/`,
+                method: 'GET',
+                params: { limit, offset },
+            }),
+            providesTags: (result) =>
+                result
+                    ? [
+                          ...result.results.map(({ id }: { id: number }) => ({ type: 'GroupPost' as const, id })),
+                          'GroupPost',
+                      ]
+                    : ['GroupPost'],
+        }),
+        updateViewsPost: builder.mutation<
+            void,
+            { author_id: number; postId: number; views: number; isGroupPost?: boolean; group_id?: number }
+        >({
+            query: ({ author_id, postId, views, group_id, isGroupPost }) => ({
+                url: isGroupPost
+                    ? `${API.GROUP}${group_id}/posts/${postId}/`
+                    : `${API.PROFILE}${author_id}/posts/${postId}/`,
                 method: 'PATCH',
                 body: JSON.stringify({ views: views }),
                 headers: {
@@ -75,9 +94,9 @@ export const postApi = createApi({
             }),
             invalidatesTags: ['ProfilePost'],
         }),
-        addGroupPost: builder.mutation<PostResponse, { author_id: number; data: FormData | string }>({
-            query: ({ author_id, data }) => ({
-                url: `${API.GROUP}${author_id}/posts/`,
+        addGroupPost: builder.mutation<PostResponse, { group_id: number; data: FormData | string }>({
+            query: ({ group_id, data }) => ({
+                url: `${API.GROUP}${group_id}/posts/`,
                 method: 'POST',
                 body: data,
             }),
@@ -105,10 +124,18 @@ export const postApi = createApi({
                 dislikes_count: number;
                 user_reaction: string | null;
             },
-            { postId: number; user_id: number; reaction_type: 'like' | 'dislike' | null }
+            {
+                postId: number;
+                user_id: number;
+                reaction_type: 'like' | 'dislike' | null;
+                isGroupPost?: boolean;
+                group_id?: number;
+            }
         >({
-            query: ({ postId, reaction_type, user_id }) => ({
-                url: `${API.PROFILE}${user_id}/posts/${postId}/`,
+            query: ({ postId, reaction_type, user_id, isGroupPost, group_id }) => ({
+                url: isGroupPost
+                    ? `${API.GROUP}${group_id}/posts/${postId}/`
+                    : `${API.PROFILE}${user_id}/posts/${postId}/`,
                 method: 'PATCH',
                 body: { like_action: reaction_type },
             }),
@@ -123,6 +150,7 @@ export const postApi = createApi({
 export const {
     useGetMainPostsQuery,
     useGetProfilePostsQuery,
+    useGetGroupPostsQuery,
     useUpdateViewsPostMutation,
     useUpdatePostLikeMutation,
     useGetOriginalPostQuery,

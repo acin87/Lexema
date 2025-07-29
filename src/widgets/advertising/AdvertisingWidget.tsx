@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 const AdvertisingWidget: FC = () => {
     return (
-        <Card>
+        <Card sx={{maxHeight:'400px'}}>
             <CardHeader title="Рекламный виджет" />
             <Divider />
             <CardContent>

@@ -18,7 +18,7 @@ const Logo: FC = () => {
     };
 
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.938rem', flexGrow: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.938rem', flexGrow: 1, width: '20%' }}>
             <NavLink to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.938rem' }}>
                 <Box
                     component="img"

@@ -4,7 +4,7 @@ import { useUpdatePostLikeMutation } from '../../../entities/post/api/postApi ';
 import { Post } from '../../../entities/post/types/PostTypes';
 import { selectUserId } from '../../../entities/user/slice/userSlice';
 
-const useLikeActions = (post: Post) => {
+const useLikeActions = (post: Post, group_id?: number) => {
     const [updateReaction] = useUpdatePostLikeMutation();
     const user_id = useSelector(selectUserId);
     const [reaction, setReaction] = useState({
@@ -56,6 +56,8 @@ const useLikeActions = (post: Post) => {
                 postId: post.id,
                 user_id: post.author.id,
                 reaction_type: newReaction,
+                isGroupPost: group_id ? true : undefined,
+                group_id,
             }).unwrap();
         } catch (error) {
             // Откатываем при ошибке

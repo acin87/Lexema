@@ -44,14 +44,13 @@ const PostList: FC<PostListProps> = ({
 }) => {
     const navigate = useNavigate();
     const user_id = useSelector(selectUserId);
-    const {id} = useParams();
-
-    
+    const { id } = useParams();
 
     const isOwner = useCallback(() => {
         if (posts.length === 0) return false;
+        if (user_id != posts[0].author.id && context === 'profile' && !isProfile) return true;
         return user_id === posts[0].author.id;
-    }, [posts, user_id]);
+    }, [posts, user_id, context, isProfile]);
 
     useLayoutEffect(() => {
         if (isError) {
@@ -61,13 +60,18 @@ const PostList: FC<PostListProps> = ({
         }
     }, [isError, navigate, error]);
 
-    if (totalCount === 0  && !isLoading && (Number(id) === user_id || !isProfile)) {
-        return <WelcomeBanner />;
+    if (totalCount === 0 && !isLoading && (Number(id) === user_id || !isProfile)) {
+        return (
+            <>
+                {isOwner() && <AddPostButton context={context} group_id={group_id} />}
+                <WelcomeBanner />
+            </>
+        );
     }
-    if(totalCount === 0 && !isLoading && Number(id) !== user_id && isProfile){
-        return<FriendEmptyBanner />
+    if (totalCount === 0 && !isLoading && Number(id) !== user_id && isProfile) {
+        return <FriendEmptyBanner />;
     }
-
+    console.log(group_id);
     return (
         <Box className={styles.postList}>
             {isOwner() && <AddPostButton context={context} group_id={group_id} />}

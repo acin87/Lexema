@@ -13,6 +13,7 @@ export type Friend = {
         code: number;
         name: string;
     };
+    joined_at?: string;
     friendship_id?: number;
     friends_count: number;
     posts_count: number;

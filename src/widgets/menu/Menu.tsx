@@ -12,6 +12,7 @@ import { selectUser } from '../../entities/user/slice/userSlice';
 import useNotificationsBadge from '../../features/notifications/hooks/useNotifcationBadge';
 import styles from './Menu.module.css';
 import { AppDispatch } from '../../app/store/store';
+import GroupsIcon from '@mui/icons-material/Groups';
 /**
  * Интерфейс для пропсов, открытие и закрытие панели
  */
@@ -64,6 +65,11 @@ const Menu: FC<MenuProps> = memo((open) => {
                 </Badge>
             ),
             text: 'Сообщения',
+        },
+        {
+            path: SiteAppRoutePath[AppRoute.COMMUNITIES],
+            icon: <GroupsIcon className={styles.svgIcon} />,
+            text: 'Сообщества',
         },
     ];
     return (

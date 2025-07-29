@@ -5,16 +5,17 @@ import ChatMessageList from '../../features/messenger/ui/ChatMessageList';
 import AuthPage from '../../pages/auth/AuthPage';
 import ErrorPage from '../../pages/ErrorPage';
 import FeedPage from '../../pages/FeedPage/FeedPage';
-import FriendsPage from '../../pages/FriendsPage';
+import FriendsPage from '../../pages/FriendPage/FriendsPage';
 import HomePage from '../../pages/MainPage';
 import MessengerPageAsync from '../../pages/messenger/MessengerPageAsync';
 import ProfilePageAsync from '../../pages/ProfilePage/ProfilePageAsync';
 import { AppRoute, SiteAppRoutePath } from './Config';
-
+import CommunitiesPage from '../../pages/CommunitiesPage/CommunitiesPage';
+import CommunityDetails from '../../features/community/ui/CommunityDetails';
 
 /**
  * Маршруты приложения
- * 
+ *
  */
 export const AppRoutes = createBrowserRouter([
     {
@@ -40,6 +41,19 @@ export const AppRoutes = createBrowserRouter([
             {
                 path: SiteAppRoutePath[AppRoute.PROFILE],
                 element: <ProfilePageAsync />,
+            },
+            {
+                path: SiteAppRoutePath[AppRoute.COMMUNITIES],
+                children: [
+                    {
+                        element: <CommunitiesPage />,
+                        index: true,
+                    },
+                    {
+                        element: <CommunityDetails />,
+                        path: ':id',
+                    },
+                ],
             },
             {
                 path: SiteAppRoutePath[AppRoute.MESSENGER],

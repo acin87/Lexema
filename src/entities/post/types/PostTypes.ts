@@ -24,6 +24,12 @@ export type Post = {
     comments_count: number;
     reposts_count: number;
     signature: string;
+    group_info:{
+        id: number;
+        name: string;
+        avatar: string;
+        cover: string;
+    }
 };
 
 export type FileUploadResponse = {

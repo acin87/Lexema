@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../app/store/store';
-import { useGetProfilePostsQuery } from '../../post/types/postsApi';
+
 import { addPosts, setPosts, setSkipPost } from '../slices/profileSlice';
+import { useGetProfilePostsQuery } from '../../../entities/post/api/postApi ';
 
 interface UseProfilePostsProps {
     profileOwnerId: number;
@@ -22,7 +23,7 @@ const useProfilePosts = ({ profileOwnerId }: UseProfilePostsProps) => {
         isSuccess,
         isFetching,
         isLoading,
-    } = useGetProfilePostsQuery({ profileOwnerId: profileOwnerId, limit: 5, offset: skipPost });
+    } = useGetProfilePostsQuery({ profileOrGroupOwnerId: profileOwnerId, limit: 5, offset: skipPost });
 
     const { ref, inView } = useInView({ threshold: 0.8, rootMargin: '0px 0px 200px 0px' }); //react-intersection-observer
 

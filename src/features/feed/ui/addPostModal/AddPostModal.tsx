@@ -34,7 +34,6 @@ const AddPostModal: FC<ModalProps> = ({ onClose, open, title, post, context, gro
     const [postText, setPostText] = useState<string>('');
     const [files, setFiles] = useState<File[]>([]);
     const user_id = useSelector(selectUser).id;
-
     const { handleCreatePost, handleUpdatePost } = usePostButtonAction({
         context,
         group_id,

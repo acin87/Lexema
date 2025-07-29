@@ -46,7 +46,7 @@ export const usePostButtonAction = ({ context, group_id }: UsePostActionsProps) 
             if (context === 'profile') {
                 return addProfilePost({ author_id: user_id, data: data });
             } else if (context === 'group' && group_id) {
-                return addGroupPost({ author_id: user_id, data: data });
+                return addGroupPost({ group_id: group_id, data: data });
             }
             console.error('Не указан group_id для поста в группе');
         },

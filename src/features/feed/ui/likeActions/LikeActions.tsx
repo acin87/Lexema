@@ -13,6 +13,7 @@ import LikeButton from './LikeButton';
  */
 interface LikeActionsProps {
     post: Post;
+    group_id?: number;
 }
 
 /**
@@ -20,8 +21,8 @@ interface LikeActionsProps {
  * @param LikeActionsProps props - Пропсы для компонента LikeActions
  * @returns JSX.Element - Элемент JSX
  */
-const LikeActions: FC<LikeActionsProps> = ({ post }) => {
-    const { reaction, handleLike, handleDislike, isOwner } = useLikeActions(post);
+const LikeActions: FC<LikeActionsProps> = ({ post, group_id }) => {
+    const { reaction, handleLike, handleDislike, isOwner } = useLikeActions(post, group_id);
     const isLike = reaction.current === 'like';
     const isDislike = reaction.current === 'dislike';
 

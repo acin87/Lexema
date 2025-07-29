@@ -39,7 +39,7 @@ const RootComments: FC<CommentsProps> = (props) => {
     }, [comments]);
 
     const renderMoreButton = () => {
-        if (count && count > 10 && comments.length != count) {
+        if (count && count > 5 && comments.length != count) {
             return (
                 <Divider variant="middle" component="div" sx={{ pt: 2 }}>
                     <Chip

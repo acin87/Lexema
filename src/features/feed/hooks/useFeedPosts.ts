@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ApiError, isApiError } from '../../../app/api/Utils';
 import { AppDispatch, RootState } from '../../../app/store/store';
-import { useGetMainPostsQuery, useGetProfilePostsQuery } from '../../../entities/post/api/postApi ';
+import { useGetGroupPostsQuery, useGetMainPostsQuery, useGetProfilePostsQuery } from '../../../entities/post/api/postApi ';
 import { addPosts, setPosts, setSkip } from '../slice/feedSlice';
 import { FeedType } from '../types/FeedTypes';
 import { selectIsAuthorized } from '../../auth/slice/authSlice';
@@ -41,6 +41,10 @@ const useFeedPosts = (feedType: FeedType, profileOrGroupOwnerId?: number) => {
         { ...baseParams, profileOrGroupOwnerId },
         { skip: feedType !== 'friend'},
     );
+    const groupQuery = useGetGroupPostsQuery(
+        { ...baseParams, profileOrGroupOwnerId },
+        { skip: feedType !== 'group'},
+    );
 
     const getQuery = () => {
         switch (feedType) {
@@ -48,8 +52,8 @@ const useFeedPosts = (feedType: FeedType, profileOrGroupOwnerId?: number) => {
                 return profileQuery;
             case 'friend':
                 return friendQuery;
-            // case 'group':
-            //     return useGetGroupPostsQuery;
+             case 'group':
+                 return groupQuery;
             default:
                 return mainQuery;
         }

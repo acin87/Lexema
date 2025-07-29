@@ -68,6 +68,7 @@ const UserSettings: FC = () => {
                 justifyContent: 'flex-end',
                 position: 'relative',
                 gap: '1rem',
+                width: '20%',
             }}
             component="nav"
         >

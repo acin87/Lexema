@@ -1,7 +1,7 @@
 // const ROUTE_CONFIG_USER_LOGIN = 'login';
 const ROUTE_CONFIG_DIALOGUES_ID = 'dialoguesId';
 
-export const BASE_SITE_URL = 'http:/localhost:5173'
+export const BASE_SITE_URL = 'http:/localhost:5173';
 
 export enum AppRoute {
     HOME = 'home',
@@ -14,6 +14,7 @@ export enum AppRoute {
     MESSEGE = 'message',
     MESSENGER = 'messenger',
     NOT_FOUND = 'not_found',
+    COMMUNITIES = 'communities',
 }
 
 export const SiteAppRoutePath: Record<AppRoute, string> = {
@@ -27,4 +28,5 @@ export const SiteAppRoutePath: Record<AppRoute, string> = {
     [AppRoute.MESSEGE]: `/messenger/:${ROUTE_CONFIG_DIALOGUES_ID}`,
     [AppRoute.MESSENGER]: '/messenger/',
     [AppRoute.NOT_FOUND]: '*',
+    [AppRoute.COMMUNITIES]: '/communities/',
 };

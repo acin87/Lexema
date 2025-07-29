@@ -1,4 +1,4 @@
-export const BASEURL = 'http://localhost:8000'
+export const BASEURL = 'http://localhost:8000';
 
 export enum API {
     FRIENDS = 'api/friends/',
@@ -12,7 +12,7 @@ export enum API {
     REFRESH = 'api/auth/refresh/',
     NOTIFICATIONS = 'api/notifications/',
     ME = 'api/me/',
-    POSTS ='api/posts/',
+    POSTS = 'api/posts/',
     CHILD_COMMENTS = 'api/child_comments/',
     ROOT_COMMENTS = 'api/root_comments/',
     COMMENT = 'api/comments/',
@@ -22,4 +22,5 @@ export enum API {
     USERS = 'api/users/',
     AUTOCOMPLETE = 'api/users/autocomplete/',
     GALLERY = 'api/gallery/',
+    COMMUNITIES = 'api/communities/',
 }

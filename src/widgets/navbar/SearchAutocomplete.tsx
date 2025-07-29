@@ -66,6 +66,7 @@ const SearchAutocomplete: FC = () => {
                     justifyContent: 'center',
                     position: 'relative',
                     width: '53%',
+                    alignItems: 'center',
                 }}
             >
                 <Box

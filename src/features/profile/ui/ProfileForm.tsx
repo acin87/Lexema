@@ -50,7 +50,7 @@ const Input = styled('input')({
  * @param onSubmit Функция-обработчик, вызывается при успешной отправке формы.
  * @returns JSX элемент формы профиля, рендеримый внутри Paper.
  */
-const ProfileForm: FC<ProfileFormProps> = ({ initialData, onSubmit, isLoading, isSuccess }) => {
+const ProfileForm: FC<ProfileFormProps> = ({ initialData, onSubmit, isLoading }) => {
     const {
         control,
         handleSubmit,

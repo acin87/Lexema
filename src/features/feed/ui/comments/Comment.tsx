@@ -92,11 +92,11 @@ const Comment: FC<CommentProps> = ({ comment, user, level }) => {
             <Card className={styles.commentContainer} sx={{ boxShadow: 'none', pb: 0 }}>
                 <CardHeader
                     className={styles.commentHeader}
-                    avatar={<Avatar src={user?.avatar} />}
+                    avatar={<Avatar src={user?.avatar as string} />}
                     title={
                         <Link to={`/profile/${user?.id}`}>
                             <Typography variant="body2" component="span">
-                                {user?.first_name} {user?.last_name} id - {comment.id}
+                                {user?.first_name} {user?.last_name}
                             </Typography>
                         </Link>
                     }

@@ -39,6 +39,8 @@ const PostUI: FC<PostProps> = ({ post, context, group_id }) => {
         postId: post.id,
         authorId: post.author.id,
         isOwner: user_id === post.author.id,
+        isGroupPost: post.group ? true : false,
+        group_id: post.group,
     });
     const { handleDeletePost } = usePostButtonAction({
         context,
@@ -75,11 +77,13 @@ const PostUI: FC<PostProps> = ({ post, context, group_id }) => {
         return <PostSkeleton />;
     }
 
+    const author_full_name = post.author.first_name + ' ' + post.author.last_name;
+
     return (
         <Box ref={ref} className={styles.postContainer}>
             <Card className={styles.postCard}>
                 <CardHeader
-                    avatar={<Avatar src={post.author.avatar} />}
+                    avatar={<Avatar src={post.group ? post.group_info.avatar : post.author.avatar} />}
                     action={
                         <Box className={styles.postHeaderActions}>
                             {!isOwner && <RepostButton original_post_id={post.id} />}
@@ -91,13 +95,13 @@ const PostUI: FC<PostProps> = ({ post, context, group_id }) => {
                         </Box>
                     }
                     title={
-                        <NavLink style={{ textDecoration: 'none' }} to={`/profile/${post.author.id}`}>
-                            {post.author.first_name} {post.author.last_name}
+                        <NavLink style={{ textDecoration: 'none' }} to={post.group ? `/communities/${post.group_info.id}/` : `/profile/${post.author.id}`}>
+                            {post.group ? post.group_info.name : author_full_name}
                         </NavLink>
                     }
                     subheader={
                         <Typography variant="caption" component="div" sx={{ height: post.signature ? 'auto' : '20px' }}>
-                            {post.signature ? post.signature : 'Здесь могла быть Ваша подпись'}
+                            {post.group ? '' : post.signature ? post.signature : 'Здесь могла быть Ваша подпись'}
                         </Typography>
                     }
                 />
@@ -115,7 +119,7 @@ const PostUI: FC<PostProps> = ({ post, context, group_id }) => {
                     </CardMedia>
                 )}
                 <CardActions className={styles.postActions}>
-                    <LikeActions post={post} />
+                    <LikeActions post={post} group_id={post.group}/>
                 </CardActions>
                 <Divider />
                 {post.comments_count > 0 && <RootComments postId={post.id} />}
